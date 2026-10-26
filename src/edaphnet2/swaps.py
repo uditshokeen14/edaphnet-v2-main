@@ -17,17 +17,31 @@ def _rotation(a, b, s):
     return [(j, a + (j - a + s) % L) for j in range(a, b + 1)]
 
 
-def enumerate_swaps(n):
-    """Return list of (class, moved_pairs) for a batch of size n (identity excluded)."""
+def enumerate_swaps(n, block_shifts=False):
+    """Return list of (class, moved_pairs) for a batch of size n (identity excluded).
+    
+    Default (block_shifts=False): Structured S_tray matching Sec. III-A/IV.
+    For n=24, yields exactly 280 non-identity hypotheses (281 including identity):
+      - S1: 23 adjacent transpositions (j, j+1)
+      - S2: 4 cyclic tray shifts (+-1, +-2 of full tray)
+      - S3: 253 non-adjacent pairwise transpositions (i, j)
+    Total pairwise transpositions = 23 + 253 = C(24, 2) = 276.
+    """
     hyps = []
     for j in range(n - 1):
         hyps.append(("S1", [(j, j + 1), (j + 1, j)]))
-    for s, min_len in ((1, 3), (2, 5)):
-        for L in range(min_len, n + 1):
-            for a in range(0, n - L + 1):
-                b = a + L - 1
+    if block_shifts:
+        for s, min_len in ((1, 3), (2, 5)):
+            for L in range(min_len, n + 1):
+                for a in range(0, n - L + 1):
+                    b = a + L - 1
+                    for sign in (+1, -1):
+                        hyps.append(("S2", _rotation(a, b, sign * s)))
+    else:
+        for s in (1, 2):
+            if n > s:
                 for sign in (+1, -1):
-                    hyps.append(("S2", _rotation(a, b, sign * s)))
+                    hyps.append(("S2", _rotation(0, n - 1, sign * s)))
     for i in range(n):
         for j in range(i + 2, n):
             hyps.append(("S3", [(i, j), (j, i)]))
