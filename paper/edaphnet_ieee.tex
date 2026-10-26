@@ -27,7 +27,7 @@
         Armaan~Srivastava,~\IEEEmembership{Student Member,~IEEE,}
         Udit~Shokeen,~\IEEEmembership{Student Member,~IEEE,}
         and~Priya~Saminathan,~\IEEEmembership{Senior Member,~IEEE}%
-\thanks{Manuscript received October 2, 2026; revised October 24, 2026. This research was conducted at the School of Computer Science and Engineering, Vellore Institute of Technology, Vellore 632014, Tamil Nadu, India. (\emph{Corresponding author: Sudeep Sharma}.)}%
+\thanks{Manuscript received October 2, 2026; revised October 26, 2026. This research was conducted at the School of Computer Science and Engineering, Vellore Institute of Technology, Vellore 632014, Tamil Nadu, India. (\emph{Corresponding author: Sudeep Sharma}.)}%
 \thanks{Sudeep Sharma (Reg. No. 23BDS0315) is with the School of Computer Science and Engineering, Vellore Institute of Technology, Vellore 632014, India (e-mail: sudeep.sharma2023@vitstudent.ac.in).}%
 \thanks{Armaan Srivastava (Reg. No. 23BCE2318) is with the School of Computer Science and Engineering, Vellore Institute of Technology, Vellore 632014, India (e-mail: armaan.srivastava2023@vitstudent.ac.in).}%
 \thanks{Udit Shokeen (Reg. No. 23BCB0001) is with the School of Computer Science and Engineering, Vellore Institute of Technology, Vellore 632014, India (e-mail: udit.shokeen2023@vitstudent.ac.in).}%
@@ -40,9 +40,9 @@
 \maketitle
 
 \begin{abstract}
-High-throughput analytical laboratories in agriculture, environmental chemistry, and clinical testing drive safety-critical decisions, from regional fertilizer prescriptions and soil carbon accounting to clinical diagnostics. However, printed analytical reports are subject to silent human and mechanical errors: physical specimen transpositions (sample swaps) and clerical transcription errors (decimal point slips, transposed digits, unit confusion). Conventional univariate laboratory quality control (e.g., autoverification and delta checks) requires longitudinal historical trajectories and cannot detect specimen swaps where results are internally plausible for another specimen. In this paper, we propose \textbf{EdaphNet}, a cyber-physical quality assurance framework that couples a joint batch-level probabilistic model with an independent physical optical observation (a ``witness'') of the sample. The witness ranges from a commodity smartphone RGB photograph to a laboratory Vis-NIR spectrometer. The framework conducts exact joint inference over structured tray-permutation subgroups $\mathcal{S}_{\text{tray}} \subset \mathcal{S}_n$ and a formal library of typed corruption operators $\mathcal{C}$, producing an error suspicion ranking, root-cause fault attribution, and recommended corrections. 
+High-throughput analytical laboratories in agriculture, environmental chemistry, and clinical testing drive safety-critical decisions, from regional fertilizer prescriptions and soil carbon accounting to clinical diagnostics. However, printed analytical reports are subject to silent human and mechanical errors: physical specimen transpositions (sample swaps) and clerical transcription errors (decimal point slips, transposed digits, unit confusion). Conventional univariate laboratory quality control (e.g., autoverification and delta checks) requires longitudinal historical trajectories and cannot detect specimen swaps where results are internally plausible for another specimen. In this paper, we propose \textbf{EdaphNet}, a cyber-physical quality assurance framework that couples a joint batch-level probabilistic model with an independent physical optical observation (a ``witness'') of the sample. The witness ranges from a commodity smartphone RGB photograph to a laboratory Vis-NIR spectrometer. The framework conducts joint inference over structured tray-permutation subgroups $\mathcal{S}_{\text{tray}} \subset \mathcal{S}_n$ (exact within the candidate set $\mathcal{S}_{\text{tray}}$) and a formal library of typed corruption operators $\mathcal{C}$, producing an error suspicion ranking, root-cause fault attribution, and recommended corrections. 
 
-In a pre-registered benchmark on $19{,}746$ real soil samples from the Kellog Soil Survey Laboratory (KSSL) and $3{,}473$ samples from the ICRAF-ISRIC spectral library ($23{,}219$ soils total), we evaluate the system across a sensor ladder with controlled false discovery rates (FDR). Empirical results establish that an RGB color witness provides an advantage of $+10.3$ percentage points ($95\%$ CI: $[+0.064, +0.139]$) over competitive supervised baselines in isolating swapped specimens, but exhibits reduced sensitivity to isolated numeric typos. At the injected equal error mix, overall recall is equivalent to supervised baselines ($+0.014$ $[-0.008, +0.038]$), crossing over into a decisive advantage once swaps represent $\ge 60\text{--}70\%$ of batch failures. With a spectrometer witness, the method outperforms all existing baselines across all error categories by $+9.2$ percentage points ($+0.092$ $[+0.069, +0.113]$). For root-cause fault attribution, the model achieves $97\text{--}100\%$ accuracy in identifying the exact error mechanism, against $24\text{--}29\%$ for standard rule-based heuristics. Furthermore, we reveal and formalize a fundamental limitation in conformal outlier testing: calibration sample re-use (pseudo-replication) causes silent conformal FDR collapse (inflating empirical FDR from $0\%$ to $>57\%$), and we delineate exact finite-sample operational bounds for high-throughput batch testing.
+In a pre-registered benchmark on $19{,}746$ real soil samples from the Kellogg Soil Survey Laboratory (KSSL) and $3{,}473$ samples from the ICRAF-ISRIC spectral library ($23{,}219$ soils total), we evaluate the system across a sensor ladder with controlled false discovery rates (FDR). Empirical results establish that an RGB color witness provides an advantage of $+10.3$ percentage points ($95\%$ CI: $[+0.064, +0.139]$) over competitive supervised baselines in isolating swapped specimens, but exhibits reduced sensitivity to isolated numeric typos. At the injected equal error mix, overall recall is equivalent to supervised baselines ($+0.014$ $[-0.008, +0.038]$), crossing over into a decisive advantage once swaps represent $\ge 60\text{--}70\%$ of batch failures. With a spectrometer witness, the method outperforms all existing baselines across all error categories by $+9.2$ percentage points ($+0.092$ $[+0.069, +0.113]$). For root-cause fault attribution, the model achieves $97\text{--}100\%$ accuracy in identifying the exact error mechanism, against $24\text{--}29\%$ for standard rule-based heuristics. Furthermore, we reveal a critical vulnerability in conformal outlier testing: calibration sample re-use (pseudo-replication) causes silent conformal FDR collapse (inflating empirical FDR to $57\text{--}92\%$), whereas restricting calibration to one score per distinct physical sample reliably restores empirical FDR control ($\le 0.09$, nominal $q = 0.10$).
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -50,7 +50,7 @@ Analytical laboratory quality control, cyber-physical systems, sample permutatio
 \end{IEEEkeywords}
 
 \section{Introduction}
-\IEEEPARstart{H}{igh-throughput} analytical laboratories form the quantitative bedrock of modern agriculture, environmental monitoring, industrial chemical processing, and clinical medicine. In agronomy, laboratory soil reports (quantifying pH, organic carbon, cation exchange capacity, and primary nutrients) dictate high-capital decisions: multi-ton fertilizer allocation, lime remediation, and verifiable carbon credit underwriting. Despite extensive internal calibration standards, physical batch processing remains vulnerable to silent errors. Recent empirical studies conducted by the North American Proficiency Testing (NAPT) program revealed that across eight commercial service laboratories, $28\%$ of reported soil organic carbon observations fell entirely outside the acceptable proficiency bounds \cite{napt2025proficiency}.
+\IEEEPARstart{H}{igh-throughput} analytical laboratories form the quantitative bedrock of modern agriculture, environmental monitoring, industrial chemical processing, and clinical medicine. In agronomy, laboratory soil reports (quantifying pH, organic carbon, cation exchange capacity, and primary nutrients) dictate high-capital decisions: multi-ton fertilizer allocation, lime remediation, and verifiable carbon credit underwriting. Despite extensive internal calibration standards, physical batch processing remains vulnerable to silent errors. Recent empirical studies across commercial analytical service laboratories revealed that inconsistent sample preparation and lack of independent physical verification induce large errors in reported soil organic carbon, with extensive inter-laboratory variability \cite{even2025large}.
 
 Laboratory errors fall into two distinct structural failure modes:
 \begin{enumerate}
@@ -58,7 +58,7 @@ Laboratory errors fall into two distinct structural failure modes:
     \item \textbf{Numerical Value Corruptions:} Human transcription slips or automated parsing glitches inject typed corruptions, such as orders-of-magnitude decimal shifts ($\times 10$ or $\div 10$), unit misclassifications (ppm vs. mg/100g), digit transpositions ($0.16 \leftrightarrow 0.61$), or column interchanges.
 \end{enumerate}
 
-Existing laboratory quality assurance (QA) frameworks are fundamentally unequipped to resolve this duality. In clinical pathology, automated ``delta-checks'' compare current measurements against a patient's historical longitudinal time series \cite{westgard2020laboratory, kim2018machine}. In environmental and agricultural testing, historical baselines rarely exist for an incoming batch. Furthermore, univariate range checks ($B_0$) and agronomic consistency rules ($B_1$) are structurally blind to sample swaps because swapped samples satisfy marginal domain constraints.
+Existing laboratory quality assurance (QA) frameworks are fundamentally unequipped to resolve this duality. In clinical pathology, automated ``delta-checks'' compare current measurements against a patient's historical longitudinal time series \cite{westgard2020laboratory, rosenbaum2018machine}. In environmental and agricultural testing, historical baselines rarely exist for an incoming batch. Furthermore, univariate range checks ($B_0$) and agronomic consistency rules ($B_1$) are structurally blind to sample swaps because swapped samples satisfy marginal domain constraints.
 
 \begin{figure}[!t]
 \centering
@@ -69,31 +69,31 @@ Existing laboratory quality assurance (QA) frameworks are fundamentally unequipp
 
 To address this challenge, we introduce a cyber-physical testing paradigm: capturing an independent, non-contact optical observation of each physical specimen—termed a \textbf{physical witness} $w_i$—prior to destructive chemical digestion. The witness may be acquired via an inexpensive RGB camera (e.g., an optical phone sensor mounted over the laboratory tray) or a continuous diffuse reflectance Vis-NIR spectrometer. Because the optical witness is captured directly from the physical matter, its data stream cannot be corrupted by downstream analytical or data-entry errors. 
 
-In this work, we propose \textbf{EdaphNet}, a joint batch-level probabilistic verification framework. Rather than evaluating specimens in isolation, EdaphNet performs exact Bayesian joint inference over the combinatorial space of structured sample permutations ($\mathcal{S}_{\text{tray}}$) and typed value-corruption operators ($\mathcal{C}$). We rigorously evaluate the framework on $23{,}219$ real soil samples from global repositories under pre-registered hypotheses.
+In this work, we propose \textbf{EdaphNet}, a joint batch-level probabilistic verification framework. Rather than evaluating specimens in isolation, EdaphNet performs Bayesian joint inference over the combinatorial space of structured sample permutations ($\mathcal{S}_{\text{tray}}$) and typed value-corruption operators ($\mathcal{C}$). Within the structured candidate set $\mathcal{S}_{\text{tray}}$, the posterior evaluation is computed exactly. We rigorously evaluate the framework on $23{,}219$ real soil samples from global repositories under pre-registered hypotheses.
 
 \subsection{Key Contributions}
 The primary contributions of this paper are:
 \begin{enumerate}
-    \item \textbf{Joint Permutation-Corruption Inference Architecture:} We formulate the analytical report verification problem as joint Bayesian inference over batch permutation groups and typed corruption operators, yielding exact batch Maximum A Posteriori (MAP) scores, root-cause fault explanations, and repaired values.
+    \item \textbf{Joint Permutation-Corruption Inference Architecture:} We formulate the analytical report verification problem as joint Bayesian inference over batch permutation groups and typed corruption operators, yielding exact batch Maximum A Posteriori (MAP) scores within candidate subgroup $\mathcal{S}_{\text{tray}}$, root-cause fault explanations, and repaired values.
     \item \textbf{Sensor-Ladder Detectability Characterization:} We present a systematic detectability analysis spanning a ladder of sensor modalities: from uninformative witnesses ($W_0$) and noisy smartphone RGB proxies ($W_1$, $\Delta E \in \{0, 2, 4, 8\}$) to continuous Vis-NIR spectroscopy ($W_3$). We delineate the precise boundary conditions governing when low-cost optical sensing is sufficient.
-    \item \textbf{Root-Cause Fault Attribution:} We establish that while state-of-the-art supervised anomaly classifiers (e.g., Cleanlab \cite{zhou2023cleanlab}) merely flag suspicious samples, EdaphNet correctly diagnoses the specific fault mechanism (identifying the exact swap partner or numerical corruption type) with $97\text{--}100\%$ accuracy.
-    \item \textbf{Methodological Conformal Calibration Bounds:} We prove and empirically demonstrate that conformal false discovery rate (FDR) control collapses when calibration samples are replicated across evaluation batches (pseudo-replication). We establish distribution-free finite-sample operational bounds for high-throughput batch testing.
+    \item \textbf{Root-Cause Fault Attribution:} We establish that while state-of-the-art supervised anomaly classifiers (e.g., Cleanlab \cite{zhou2024detecting}) merely flag suspicious samples, EdaphNet correctly diagnoses the specific fault mechanism (identifying the exact swap partner or numerical corruption type) with $97\text{--}100\%$ accuracy.
+    \item \textbf{Empirical Conformal Calibration Analysis:} We identify and empirically characterize a critical failure mode where conformal false discovery rate (FDR) control collapses when calibration samples are replicated across evaluation batches (pseudo-replication), and we demonstrate distribution-free non-replicated calibration protocols for high-throughput batch testing.
 \end{enumerate}
 
 \section{Related Work}
-A comprehensive systematic literature search was executed following PRISMA guidelines across IEEE Xplore, Scopus, Web of Science, and PubMed (documented in the repository search log). Prior art spans five relevant fields:
+A targeted literature survey across IEEE Xplore, Scopus, Web of Science, and PubMed examined prior art across five relevant fields:
 
 \subsection{Optical Soil Sensing and Smartphone Colorimetry}
-Optical diffuse reflectance spectroscopy (Vis-NIR, 350--2500 nm) has been widely adopted for rapid non-destructive soil assessment \cite{viscarra2016global, baryeh2023optical}. Recent initiatives have developed mobile smartphone colorimetry (e.g., LandPKS \cite{landpks2020app}) to estimate soil organic carbon (SOC) and soil texture using standardized color cards. However, existing optical sensing methods are deployed exclusively as \emph{predictive estimators}. EdaphNet inverts this paradigm: using optical sensing as an independent \emph{verification witness} to audit high-precision wet-chemistry lab reports.
+Optical diffuse reflectance spectroscopy (Vis-NIR, 350--2500 nm) has been widely adopted for rapid non-destructive soil assessment \cite{viscarra2016global, safanelli2025ossl}. Recent initiatives have developed mobile smartphone colorimetry (e.g., LandPKS \cite{herrick2020landpks}) to estimate soil organic carbon (SOC) and soil texture using standardized color cards. However, existing optical sensing methods are deployed exclusively as \emph{predictive estimators}. EdaphNet inverts this paradigm: using optical sensing as an independent \emph{verification witness} to audit high-precision wet-chemistry lab reports.
 
 \subsection{Autoverification and Delta Checks in Laboratory QA}
-Industrial process patents (e.g., US Patent 8,352,394 \cite{dorn1999laboratory}) describe checking lab values against model predictions. In clinical chemistry, autoverification rules and multi-analyte machine-learning delta checks detect ``wrong-blood-in-tube'' (WBIT) errors by comparing fresh draws against historical patient archives \cite{kim2018machine}. In environmental and agricultural soil testing, specimens are sampled cross-sectionally without historical patient records; EdaphNet overcomes this by leveraging batch-level physical constraints.
+Industrial process patents (e.g., US Patent 8,352,394 \cite{stephenson2013patent}) describe checking lab values against model predictions. In clinical chemistry, autoverification rules and multi-analyte machine-learning delta checks detect ``wrong-blood-in-tube'' (WBIT) errors by comparing fresh draws against historical patient archives \cite{westgard2020laboratory, rosenbaum2018machine}. In environmental and agricultural soil testing, specimens are sampled cross-sectionally without historical patient records; EdaphNet overcomes this by leveraging batch-level physical constraints.
 
 \subsection{Specimen Mislabelling in Genomics}
-In high-throughput genetics, sample mix-ups are detected by matching two distinct data modalities (e.g., SNP microarrays and RNA sequencing) derived from the same subject (Broman et al. \cite{broman2014sample}). While genomic matching relies on near-deterministic genetic signatures ($R^2 \approx 1.0$), agricultural soil witnesses are noisy, low-dimensional, and weak ($R^2 \in [0.25, 0.72]$), requiring joint probabilistic treatment with transcription error libraries.
+In high-throughput genetics, sample mix-ups are detected by matching two distinct data modalities (e.g., SNP microarrays and RNA sequencing) derived from the same subject (Broman et al. \cite{broman2015sample}). While genomic matching relies on near-deterministic genetic signatures ($R^2 \approx 1.0$), agricultural soil witnesses are noisy, low-dimensional, and weak: smartphone color witnesses account for at most $\sim 16\%$ of variance ($R^2 \le 0.16$) for mineral, cation, and texture properties on ICRAF, rising to $\sim 71\%$ ($R^2 \approx 0.71$) for soil organic carbon on KSSL. Selective uncertainty rejection strategies \cite{schmidinger2026selective} underscore the need for joint probabilistic treatment with transcription error libraries.
 
 \subsection{Label Error Detection and Conformal Outlier Testing}
-Data-centric artificial intelligence methods, notably confident learning and Cleanlab (Zhou et al. \cite{zhou2023cleanlab}), identify label noise in regression and classification tasks. Distribution-free outlier detection using conformal p-values combined with the Benjamini-Hochberg (BH) procedure has been formalized by Bates et al. \cite{bates2023conformal} and Jin \& Cand\`es \cite{jin2023selection}. EdaphNet integrates conformal FDR control but reveals a critical failure mode: pseudo-replication under sample re-use.
+Data-centric artificial intelligence methods, notably confident learning and Cleanlab (Zhou et al. \cite{zhou2024detecting}), identify label noise in numerical data and regression tasks. Distribution-free outlier detection using conformal p-values combined with the Benjamini-Hochberg (BH) procedure \cite{benjamini1995controlling} has been formalized by Bates et al. \cite{bates2023conformal} and Jin \& Cand\`es \cite{jin2023selection}; foundational conformal prediction theory is established by Vovk et al. \cite{vovk2005algorithmic} and Angelopoulos \& Bates \cite{angelopoulos2023conformal}. EdaphNet integrates conformal FDR control but reveals a critical operational vulnerability: pseudo-replication under sample re-use.
 
 \begin{table*}[!t]
 \centering
@@ -104,11 +104,11 @@ Data-centric artificial intelligence methods, notably confident learning and Cle
 \textbf{Framework} & \textbf{Batch-Level Joint} & \textbf{Physical Sensor} & \textbf{Permutation} & \textbf{Typed Numerical} & \textbf{Calibrated} & \textbf{Root-Cause} \\
  & \textbf{Inference} & \textbf{Witness} & \textbf{Matching ($\pi$)} & \textbf{Corruptions ($\mathcal{C}$)} & \textbf{FDR Control} & \textbf{Attribution} \\
 \midrule
-Rule Checks ($B_0$, $B_1$) \cite{napt2025proficiency} & No & No & No & Heuristic & No & $\approx 25\%$ \\
-Clinical Delta Checks \cite{kim2018machine} & Longitudinal Only & No & Pairwise & No & Empirical & No \\
-Genomic Matching \cite{broman2014sample} & Yes & High-Dim DNA & Pairwise & No & No & Swap Only \\
-Cleanlab / Label-Error \cite{zhou2023cleanlab} & No & Covariates & No & Continuous Residual & Heuristic & No \\
-Conformal Outlier Testing \cite{bates2023conformal} & No & Covariates & No & No & Distribution-Free & No \\
+Rule Checks ($B_0$, $B_1$) \cite{westgard2020laboratory} & No & No & No & Heuristic & No & $\approx 25\%$ \\
+Clinical Delta Checks \cite{rosenbaum2018machine} & Longitudinal Only & No & Pairwise & No & Empirical & No \\
+Genomic Matching \cite{broman2015sample} & Yes & High-Dim DNA & Pairwise & No & No & Swap Only \\
+Cleanlab / Label-Error \cite{zhou2024detecting} & No & Covariates & No & Continuous Residual & Heuristic & No \\
+Conformal Outlier Testing \cite{bates2023conformal, jin2023selection} & No & Covariates & No & No & Distribution-Free & No \\
 \textbf{EdaphNet (Proposed)} & \textbf{Yes} & \textbf{RGB / Vis-NIR} & \textbf{Structured $\mathcal{S}_{\text{tray}}$} & \textbf{Formal Library $\mathcal{C}$} & \textbf{Distribution-Free} & \textbf{97--100\%} \\
 \bottomrule
 \end{tabular}
@@ -124,11 +124,11 @@ A reported batch $R$ may deviate from ground truth via two operations:
 \begin{enumerate}
     \item \textbf{Permutation Group $\mathcal{S}_{\text{tray}}$:} Let $\pi: \{1, \dots, n\} \to \{1, \dots, n\}$ be a bijection mapping reported index $j$ to physical sample index $i = \pi(j)$. While the full symmetric group has size $n!$, physical laboratory mistakes follow structured mechanics. We define $\mathcal{S}_{\text{tray}}$ as the union of:
     \begin{itemize}
-        \item \emph{Identity:} $\pi_0(j) = j$ (no swap).
-        \item \emph{Adjacent Transpositions:} $\pi_{\text{adj}}(j, j+1)$ modeling local vial misplacements.
-        \item \emph{Cyclic Tray Shifts:} Cyclic block rotations by $\pm 1$ and $\pm 2$ positions, modeling 12-well or 24-well pipetting row-shifts.
-        \item \emph{Pairwise Transpositions:} Arbitrary sample transpositions $(j, k)$ across the tray.
+        \item \emph{Identity:} $\pi_0(j) = j$ ($1$ permutation, no swap).
+        \item \emph{Pairwise Transpositions:} All $\binom{n}{2} = 276$ transpositions $(j, k)$ for $n=24$, which directly subsume the $n-1 = 23$ adjacent swaps $\pi_{\text{adj}}(j, j+1)$ modeling local vial misplacements.
+        \item \emph{Cyclic Tray Shifts:} Cyclic block rotations by $\pm 1$ and $\pm 2$ positions ($4$ permutations), modeling full-tray or pipetting row-shifts.
     \end{itemize}
+    In total, $|\mathcal{S}_{\text{tray}}| = 1 + 276 + 4 = 281$ unique candidate permutations for a standard 24-well batch.
     \item \textbf{Corruption Operator Library $\mathcal{C}$:} For each report $r_j$, a property value $p \in \{1, \dots, P\}$ may be subjected to an operator $T_c \in \mathcal{C}$, such that $r_j = T_c(r_j^*)$:
     \begin{itemize}
         \item Decimal scale shifts: $T_{\times 10}(x) = 10x$, $T_{\div 10}(x) = 0.1x$.
@@ -190,12 +190,12 @@ For any candidate pairing between report $r_j$ and physical sample position $i$,
 where $\phi(\cdot; \mu, \Sigma)$ denotes the multivariate Gaussian density, and $|J|$ is the Jacobian determinant of the inverse corruption and latent coordinate transform. 
 
 \subsection{Exact Posterior Permutation Inference}
-Given the structured hypothesis space $\mathcal{S}_{\text{tray}}$, the posterior probability of permutation $\pi$ given the entire batch tuple $(R, W)$ is computed analytically:
+Given structured hypothesis space $\mathcal{S}_{\text{tray}}$, the posterior probability of permutation $\pi$ given the entire batch tuple $(R, W)$ is computed analytically within $\mathcal{S}_{\text{tray}}$:
 \begin{equation}
 P(\pi \mid R, W) \propto P(\pi) \cdot \prod_{j=1}^n \frac{\mathcal{L}(j, \pi(j))}{\mathcal{L}(j, j)}
 \label{eq:permutation_posterior}
 \end{equation}
-where prior $P(\pi)$ penalizes complex permutations. Because $|\mathcal{S}_{\text{tray}}| \approx \mathcal{O}(n^2)$, exact normalization is achieved in $<250$ milliseconds on commodity hardware, bypassing MCMC convergence ambiguities.
+where prior $P(\pi)$ penalizes complex permutations. Because $|\mathcal{S}_{\text{tray}}| = 281$ for a 24-well rack, exact normalization within $\mathcal{S}_{\text{tray}}$ executes in $18$ milliseconds on commodity hardware (measured on an AMD Ryzen 5 7520U workstation, 4 cores, 2.80 GHz), bypassing MCMC convergence ambiguities.
 
 \subsection{Attribution and Report Repair}
 For every sample $j$ flagged as anomalous, the engine outputs an explicit fault attribution tuple:
@@ -207,7 +207,7 @@ For every sample $j$ flagged as anomalous, the engine outputs an explicit fault 
 \end{equation}
 and outputs the reconstructed report $\hat{r}_j = T_{\hat{c}}^{-1}(r_j)$.
 
-\section{Conformal Calibration and The Pseudo-Replication Theorem}
+\section{Conformal Calibration and Pseudo-Replication}
 
 \subsection{Distribution-Free False Discovery Rate Control}
 To guarantee rigorous risk bounds, suspicion scores $s_j$ are converted into conformal $p$-values against a verified clean calibration repository $\mathcal{D}_{\text{cal}} = \{(r_k^{\text{cal}}, w_k^{\text{cal}})\}_{k=1}^N$. For each test score $s_j$, the conformal $p$-value is defined as:
@@ -215,24 +215,25 @@ To guarantee rigorous risk bounds, suspicion scores $s_j$ are converted into con
 p_j = \frac{1}{N + 1} \left( 1 + \sum_{k=1}^N \mathbf{1}\{s_k^{\text{cal}} \ge s_j\} \right)
 \label{eq:conformal_p}
 \end{equation}
-Applying the Benjamini-Hochberg (BH) procedure at nominal level $q = 0.10$ guarantees that under exchangeability, the False Discovery Rate satisfies:
+Applying the Benjamini-Hochberg (BH) procedure \cite{benjamini1995controlling} at nominal level $q = 0.10$ guarantees that under exchangeability \cite{vovk2005algorithmic, angelopoulos2023conformal, candes2018panning}, the False Discovery Rate satisfies:
 \begin{equation}
 \text{FDR} = \mathbb{E}\left[ \frac{|\text{False Alarms}|}{\max(1, |\text{Flagged Reports}|)} \right] \le q
 \end{equation}
+Under distribution or covariate shift, conformal guarantees can be extended via weighted conformality \cite{tibshirani2019conformal, storkey2009dataset}.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig4_pool_size.png}
-\caption{Empirical verification of the Conformal Calibration Theorem. In Step 5, reusing calibration soils across simulated batches resulted in catastrophic FDR failure (realized FDR $40\text{--}90\%$). Enforcing non-replicated calibration restores FDR control ($<10\%$), but reveals that statistical power depends on pool size relative to calibration denominator $N$.}
+\caption{Empirical verification of the Conformal Calibration Theorem. In Step 5, reusing calibration soils across simulated batches resulted in catastrophic FDR failure (realized FDR $57\text{--}92\%$). Enforcing non-replicated calibration (one score per distinct physical sample) restores FDR control ($\le 0.09$, nominal $q = 0.10$), but reveals that statistical power depends on pool size relative to calibration denominator $N$.}
 \label{fig:pool_size}
 \end{figure}
 
 \subsection{The Pseudo-Replication Failure Mode}
 During initial development (Step 5, documented in doc 17), empirical FDR broke down catastrophically for all evaluated baselines, reaching realized false alarm rates of $57\text{--}92\%$. Investigation revealed an experiment design flaw in calibration sampling:
 
-\textbf{Methodological Finding 1 (Calibration Pseudo-Replication):} \emph{When a finite set of $N_{\text{unique}}$ clean calibration specimens is repeatedly sampled to form synthetic calibration batches, exchangeability is violated. Re-sampling the same physical sample scores creates artificial ties and dependencies in the empirical distribution of $s^{\text{cal}}$. Conformal $p$-values become discrete and over-confident, causing the Benjamini-Hochberg threshold to collapse and inflating realized FDR by up to an order of magnitude.}
+\textbf{Methodological Finding 1 (Calibration Pseudo-Replication):} \emph{When a finite set of $N_{\text{unique}}$ clean calibration specimens is repeatedly sampled to form synthetic calibration batches, exchangeability is violated. Re-sampling the same physical sample scores creates artificial ties and dependencies in the empirical distribution of $s^{\text{cal}}$. Conformal $p$-values become discrete and over-confident, causing the Benjamini-Hochberg threshold to collapse and inflating realized FDR to $57\text{--}92\%$.}
 
-\emph{Correction:} To preserve distribution-free validity, each unique physical calibration sample must contribute \textbf{exactly one score} to $\mathcal{D}_{\text{cal}}$. When de-duplicated ($N \approx 2{,}800$ unique locations on KSSL), empirical FDR drops back below nominal $q = 0.10$ for all methods (Fig.~\ref{fig:pool_size}).
+\emph{Correction:} To preserve distribution-free validity, each unique physical calibration sample must contribute \textbf{exactly one score} to $\mathcal{D}_{\text{cal}}$. When de-duplicated ($N \approx 2{,}800$ unique locations on KSSL), empirical FDR drops back below nominal $q = 0.10$ ($\le 0.09$, specifically $0.000\text{--}0.073$) for all methods (Fig.~\ref{fig:pool_size}).
 
 \section{Experimental Benchmark Setup}
 
@@ -256,26 +257,26 @@ To evaluate the impact of optical sensor resolution, we implement a four-rung se
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig1_witness_r2.png}
-\caption{Cross-validated coefficient of determination ($R^2$) across the sensor witness ladder on unseen geographic locations. Commodity RGB smartphone color explains up to $72\%$ of organic carbon variance on KSSL, but drops to $\le 16\%$ for minerals, texture, and potassium on ICRAF.}
+\caption{Cross-validated coefficient of determination ($R^2$) across the sensor witness ladder on unseen geographic locations. Commodity RGB smartphone color explains up to $71\%$ of organic carbon variance on KSSL, but drops to $\le 16\%$ for minerals, texture, and potassium on ICRAF.}
 \label{fig:witness_r2}
 \end{figure}
 
 \subsection{Baselines}
 We compare EdaphNet against seven distinct baseline QA engines:
 \begin{itemize}
-    \item \textbf{$B_0$ (Range Filter):} Univariate quantile boundaries per property.
+    \item \textbf{$B_0$ (Range Filter):} Univariate quantile boundaries per property \cite{westgard2020laboratory}.
     \item \textbf{$B_1$ (Agronomic Consistency):} Domain heuristics (e.g., $\text{SOC} \le C_{\text{tot}}$, $\text{Clay} + \text{Sand} \le 100$).
     \item \textbf{$B_2$ (Laboratory Generative Density):} Multivariate Gaussian and Student-$t$ density without optical witnesses.
     \item \textbf{$B_3$ (Univariate Witness Checker):} Per-property witness residual checks.
-    \item \textbf{$B_4$ (Genomic-Style Swap Matcher):} Hungarian matching on optical witness features.
+    \item \textbf{$B_4$ (Genomic-Style Swap Matcher):} Hungarian matching on optical witness features \cite{broman2015sample}.
     \item \textbf{$B_5$ (Supervised Gradient-Boosted Classifier):} Multi-analyte LightGBM classifier trained on injected errors.
-    \item \textbf{$B_7$ (Cleanlab):} Confident learning label-error regression score \cite{zhou2023cleanlab}.
+    \item \textbf{$B_7$ (Cleanlab):} Confident learning label-error regression score \cite{zhou2024detecting}.
 \end{itemize}
 
 \section{Empirical Results and Analysis}
 
 \subsection{Primary Pre-Registered KSSL Benchmark}
-The primary pre-registered evaluation criterion was defined prior to execution (Amendment v2, doc 18): \emph{Recall at a $5\%$ re-test budget across $50$-batch pools over 5 random seeds}. The results are summarized in Table~\ref{tab:kssl_results} and Fig.~\ref{fig:kssl_recall}.
+The primary evaluation criterion was specified in a pre-registered protocol prior to unblinding test evaluations: \emph{Recall at a $5\%$ re-test budget across $50$-batch pools over 5 random seeds}. The results are summarized in Table~\ref{tab:kssl_results} and Fig.~\ref{fig:kssl_recall}.
 
 \begin{table}[!t]
 \centering
@@ -360,7 +361,7 @@ Guided by these findings, we formulate a two-stage operational policy for analyt
 Empirical smoke tests of this hybrid policy on KSSL ($W_1$, $\Delta E = 2$) demonstrate balanced performance: achieving $0.20\text{--}0.25$ swap recall and $0.222$ numerical recall, completely eliminating the single-checker deficit.
 
 \subsection{Computational Complexity and Throughput}
-For a standard $n = 24$ sample rack, computing cell likelihoods $\ell(j, i)$ requires $\mathcal{O}(n^2 \cdot |\mathcal{C}| \cdot P)$ operations. The structured permutation group $|\mathcal{S}_{\text{tray}}| \approx 1 + 23 + 44 + \binom{24}{2} = 344$ hypotheses. On an Intel Core i7 workstation, full batch inference executes in \textbf{184 milliseconds}, enabling real-time verification before chemical analysis.
+For a standard $n = 24$ sample rack, computing cell likelihoods $\ell(j, i)$ requires $\mathcal{O}(n^2 \cdot |\mathcal{C}| \cdot P)$ operations. The structured permutation group $|\mathcal{S}_{\text{tray}}| = 1 + 276 + 4 = 281$ unique candidate hypotheses for a 24-well tray. On an AMD Ryzen 5 7520U workstation (4 cores, 8 threads, 2.80 GHz), full batch inference executes in \textbf{18 milliseconds} (17.9 $\pm$ 1.2 ms), enabling real-time verification before chemical analysis.
 
 \section{Conclusion}
 This paper presented EdaphNet, a cyber-physical quality assurance framework for analytical laboratories that unites joint batch permutation-corruption inference with optical physical witnesses. Through extensive pre-registered benchmarks on $23{,}219$ real soil samples, we delineated the boundary conditions of optical verification: low-cost RGB smartphone colorimetry provides a potent $+10.3$ percentage point boost in catching physical specimen swaps, while laboratory spectroscopy achieves $+9.2$ percentage points higher overall error recall with $97\text{--}100\%$ root-cause explanation accuracy. Furthermore, we demonstrated that conformal FDR guarantees require non-replicated calibration to avoid pseudo-replication collapse. Future work includes field validation with in-situ Indian agricultural soil trays and real-time robotic integration.
