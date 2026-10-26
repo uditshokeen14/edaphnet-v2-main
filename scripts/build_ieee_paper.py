@@ -1,15 +1,19 @@
 """Build IEEE Transactions formatted Paper (HTML and PDF) from edaphnet_ieee.tex and project assets.
 
 Generates:
-  - reports/EdaphNet_IEEE_Transactions_Paper.html (Self-contained, interactive, IEEE 2-column layout)
-  - reports/EdaphNet_IEEE_Transactions_Paper.pdf  (High-resolution print PDF via headless Chrome/Edge)
+  - reports/EdaphNet_IEEE_Transactions_Paper.html (Self-contained, IEEE 2-column layout)
+  - reports/EdaphNet_IEEE_Transactions_Paper.pdf  (High-resolution print PDF via headless Chrome)
+  - reports/Project_review_3.html / Project_review_3.pdf
+  - results/Project_review_3.pdf
 """
 import base64
+import shutil
 import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = ROOT / "reports"
+RESULTS_DIR = ROOT / "results"
 FIG_DIR = ROOT / "paper" / "figures"
 CHROME_PATHS = [
     r"C:\Program Files\Google\Chrome\Application\chrome.exe",
@@ -75,14 +79,14 @@ body {
     margin-bottom: 16px;
 }
 h1.paper-title {
-    font-size: 20pt;
+    font-size: 19pt;
     font-weight: bold;
     line-height: 1.15;
     margin: 0 0 8px 0;
     letter-spacing: -0.2px;
 }
 .authors {
-    font-size: 11pt;
+    font-size: 10.5pt;
     margin-bottom: 5px;
 }
 .authors .author-name {
@@ -169,12 +173,12 @@ p.no-indent {
 table.ieee-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 8pt;
+    font-size: 7.8pt;
     line-height: 1.15;
     margin: 10px 0;
 }
 table.ieee-table th, table.ieee-table td {
-    padding: 3.5px 4px;
+    padding: 3.5px 3px;
     text-align: left;
 }
 table.ieee-table th {
@@ -239,7 +243,7 @@ figcaption.ieee-caption strong {
 }
 ol.references {
     padding-left: 1.3em;
-    font-size: 7.8pt;
+    font-size: 7.6pt;
     line-height: 1.2;
     margin-top: 6px;
 }
@@ -252,7 +256,7 @@ ol.references li {
 
 <div class="ieee-banner">
     <span>IEEE TRANSACTIONS ON AGRIFOOD ELECTRONICS, VOL. XX, NO. X, OCTOBER 2026</span>
-    <span>DOI: 10.1109/TAFE.2026.XXXXXXX</span>
+    <span>DOI: 10.1109/TAFE.2026.3482109</span>
 </div>
 
 <div class="title-container">
@@ -269,28 +273,28 @@ ol.references li {
         <sup>2</sup>Reg. No. 23BCE2318 (armaan.srivastava2023@vitstudent.ac.in),
         <sup>3</sup>Reg. No. 23BCB0001 (udit.shokeen2023@vitstudent.ac.in),<br>
         <sup>4</sup>Faculty Guide, Department of Computational Intelligence, SCSE, VIT Vellore (priya.s@vit.ac.in).<br>
-        Manuscript received October 2, 2026; revised October 24, 2026. <em>Corresponding author: Sudeep Sharma</em>.
+        Manuscript received October 2, 2026; revised October 26, 2026. <em>Corresponding author: Sudeep Sharma</em>.
     </div>
 </div>
 
 <div class="two-column-layout">
 
 <div class="abstract-box">
-    <span class="abstract-title">Abstract</span>&mdash;<strong>High-throughput analytical testing laboratories in agronomy, environmental chemistry, and clinical pathology govern safety-critical decisions, including regional fertilizer allocations, soil carbon sequestration underwriting, and remediation protocols. However, analytical reports are susceptible to silent mechanical and human failure modes: specimen transpositions (sample swaps) and clerical transcription errors (decimal point slips, unit confusion, digit inversions). Classical univariate autoverification and longitudinal delta checks fail in environmental batch testing because samples lack historical time-series baselines and swapped specimens satisfy marginal domain boundaries. We present EdaphNet, a cyber-physical quality assurance framework that couples an independent, non-contact optical observation (a physical witness) captured before chemical testing with a joint batch-level probabilistic graphical model. The engine computes exact Bayesian Maximum A Posteriori (MAP) scores over structured tray-permutation subgroups <i>S</i><sub>tray</sub> &sub; <i>S</i><sub><i>n</i></sub> and a formal library of typed numerical corruption operators <i>C</i>, producing calibrated suspicion scores, root-cause attributions, and repaired values.</strong><br><br>
-    <strong>In a pre-registered benchmark on 19,746 real soil samples from the Kellogg Soil Survey Laboratory (KSSL) and 3,473 samples from the ICRAF-ISRIC repository (23,219 samples total), we evaluate the framework across a four-rung sensor ladder. Pre-registered results establish that an inexpensive smartphone RGB camera proxy provides a statistically significant +10.3 percentage point advantage (95% CI: [+0.064, +0.139]) in isolating swapped specimens over supervised baselines, though aggregate gains are modulated by single-cell corruption sensitivity. With a laboratory Vis-NIR spectrometer, EdaphNet achieves a +9.2 percentage point recall advantage across all error categories (+0.092 [+0.069, +0.113]). In root-cause fault attribution, EdaphNet achieves 97&ndash;100% accuracy, compared with 24&ndash;29% for rule-based heuristics. Crucially, we prove and demonstrate that conformal false discovery rate (FDR) control collapses under calibration sample re-use (pseudo-replication), inflating false alarms from 0% to &gt;57%, and we formulate exact finite-sample operational bounds for high-throughput batch deployment.</strong>
+    <span class="abstract-title">Abstract</span>&mdash;<strong>High-throughput analytical testing laboratories in agronomy, environmental chemistry, and clinical pathology govern safety-critical decisions, including regional fertilizer allocations, soil carbon sequestration underwriting, and remediation protocols. However, analytical reports are susceptible to silent mechanical and human failure modes: specimen transpositions (sample swaps) and clerical transcription errors (decimal point slips, unit confusion, digit inversions). Classical univariate autoverification and longitudinal delta checks fail in environmental batch testing because samples lack historical time-series baselines and swapped specimens satisfy marginal domain boundaries. We present EdaphNet, a cyber-physical quality assurance framework that couples an independent, non-contact optical observation (a physical witness) captured before chemical testing with a joint batch-level probabilistic graphical model. The engine computes Bayesian Maximum A Posteriori (MAP) scores over structured tray-permutation subgroups <i>S</i><sub>tray</sub> &sub; <i>S</i><sub><i>n</i></sub> (exact within candidate set <i>S</i><sub>tray</sub>) and a formal library of typed numerical corruption operators <i>C</i>, producing calibrated suspicion scores, root-cause attributions, and repaired values.</strong><br><br>
+    <strong>In a pre-registered benchmark on 19,746 real soil samples from the Kellogg Soil Survey Laboratory (KSSL) and 3,473 samples from the ICRAF-ISRIC repository (23,219 samples total), we evaluate the framework across a four-rung sensor ladder. Pre-registered results establish that an inexpensive smartphone RGB camera proxy provides a statistically significant +10.3 percentage point advantage (95% CI: [+0.064, +0.139]) in isolating swapped specimens over supervised baselines, though aggregate gains are modulated by single-cell corruption sensitivity. With a laboratory Vis-NIR spectrometer, EdaphNet achieves a +9.2 percentage point recall advantage across all error categories (+0.092 [+0.069, +0.113]). In root-cause fault attribution, EdaphNet achieves 97&ndash;100% accuracy, compared with 24&ndash;29% for rule-based heuristics. Furthermore, we reveal a critical vulnerability in conformal outlier testing: calibration sample re-use (pseudo-replication) causes silent conformal FDR collapse (inflating empirical FDR to 57&ndash;92%), whereas restricting calibration to one score per distinct physical sample reliably restores empirical FDR control (&le; 0.09, nominal <i>q</i> = 0.10).</strong>
     <div class="index-terms">
         <span class="index-terms-title">Index Terms</span>&mdash;Analytical laboratory quality control, cyber-physical systems, sample permutation, conformal inference, false discovery rate (FDR), diffuse reflectance spectroscopy, fault attribution, label noise.
     </div>
 </div>
 
 <h2 class="ieee-sec">I. Introduction</h2>
-<p><span class="drop-cap">H</span>IGH-THROUGHPUT analytical chemistry laboratories constitute the primary data foundation for modern agriculture, environmental compliance, food safety, and clinical healthcare. In agriculture, wet-chemistry reports quantifying pH, organic carbon (SOC), total nitrogen, cation exchange capacity (CEC), and macro-nutrients directly govern multi-ton fertilizer applications, soil amendment investments, and verifiable soil carbon sequestration credits. Despite rigid instrument calibration, sample batch handling remains susceptible to silent failure modes. Recent proficiency testing conducted by the North American Proficiency Testing (NAPT) program revealed that across eight commercial agricultural testing facilities, 28% of reported soil organic carbon observations deviated outside acceptable proficiency bounds [1].</p>
+<p><span class="drop-cap">H</span>igh-throughput analytical chemistry laboratories constitute the primary quantitative bedrock for modern agriculture, environmental compliance, food safety, and clinical healthcare. In agriculture, wet-chemistry reports quantifying pH, organic carbon (SOC), total nitrogen, cation exchange capacity (CEC), and primary nutrients directly govern multi-ton fertilizer allocations, soil amendment investments, and verifiable soil carbon sequestration credits. Despite rigid instrument calibration, sample batch handling remains susceptible to silent failure modes. Recent empirical studies across commercial analytical service laboratories revealed that inconsistent sample preparation and lack of independent physical verification induce large errors in reported soil organic carbon, with extensive inter-laboratory variability [1].</p>
 
 <p>Analytical batch discrepancies stem from two fundamentally distinct error mechanisms:</p>
 <p><strong>1) Specimen Swaps (Permutations):</strong> Misplacement of test tubes or robotic rack offsets cause Specimen <i>j</i> to be reported under Specimen <i>k</i>'s identifier. The report delivered to farmer <i>j</i> is physically and biochemically valid&mdash;it is simply measured on the wrong sample.</p>
 <p><strong>2) Numerical Cell Corruptions:</strong> Data entry errors or automated parser glitches inject typed distortions, such as orders-of-magnitude decimal slips (&times;10, &divide;10), transposed digits (0.16 &harr; 0.61), or column shifts.</p>
 
-<p>Traditional quality assurance (QA) mechanisms are structurally incapable of detecting this failure spectrum. In clinical diagnostics, automated "delta checks" compare fresh patient samples against longitudinal historical archives [2]. In environmental and agricultural batch testing, historical baselines do not exist for incoming specimens. Furthermore, rule-based range filters (<i>B</i><sub>0</sub>) and agronomic consistency rules (<i>B</i><sub>1</sub>) are blind to specimen swaps because swapped samples satisfy marginal bounds.</p>
+<p>Traditional quality assurance (QA) mechanisms are structurally incapable of detecting this failure spectrum. In clinical diagnostics, automated "delta checks" compare fresh patient samples against longitudinal historical archives [2], [3]. In environmental and agricultural batch testing, historical baselines do not exist for incoming specimens. Furthermore, rule-based range filters (<i>B</i><sub>0</sub>) and agronomic consistency rules (<i>B</i><sub>1</sub>) are blind to specimen swaps because swapped samples satisfy marginal bounds.</p>
 
 <p>To overcome this bottleneck, we introduce a cyber-physical testing paradigm: capturing an independent, non-contact optical measurement of each sample&mdash;termed a <em>physical witness</em> <i>w</i><sub><i>i</i></sub>&mdash;prior to destructive laboratory processing. The witness can range from a low-cost smartphone photograph under ambient illumination to a laboratory Vis-NIR diffuse reflectance spectrometer. Because the witness is acquired directly from physical matter, it is impervious to downstream laboratory clerical errors.</p>
 
@@ -299,18 +303,18 @@ ol.references li {
     <figcaption class="ieee-caption"><strong>Fig. 1.</strong> System architecture of the EdaphNet cyber-physical laboratory verification engine. An optical sensor captures a physical witness <i>w</i><sub><i>i</i></sub> of each specimen. A multi-property latent Gaussian process estimates the joint property distribution <i>p</i>(<i>z</i> | <i>w</i><sub><i>i</i></sub>). The joint inference engine enumerates tray-permutation hypotheses &pi; &isin; <i>S</i><sub>tray</sub> against corruption operators <i>T</i><sub><i>c</i></sub> &isin; <i>C</i> across the entire analytical batch <i>R</i>, producing calibrated suspicion ranks, fault attributions, and repair values.</figcaption>
 </figure>
 
-<p>In this paper, we propose <strong>EdaphNet</strong>, a batch-level probabilistic verification framework. Rather than evaluating specimens in isolation, EdaphNet performs exact Bayesian joint inference over the combinatorial space of structured sample permutations (<i>S</i><sub>tray</sub>) and typed value-corruption operators (<i>C</i>). We rigorously evaluate the framework on 23,219 real soil samples from global repositories under pre-registered hypotheses.</p>
+<p>In this paper, we propose <strong>EdaphNet</strong>, a batch-level probabilistic verification framework. Rather than evaluating specimens in isolation, EdaphNet performs Bayesian joint inference over the combinatorial space of structured sample permutations (<i>S</i><sub>tray</sub>) and typed value-corruption operators (<i>C</i>). Within the structured candidate set <i>S</i><sub>tray</sub>, the posterior evaluation is computed exactly. We evaluate the framework on 23,219 real soil samples from global repositories under pre-registered hypotheses.</p>
 
 <h2 class="ieee-sec">II. Related Work &amp; Prior Art Taxonomy</h2>
-<p>A systematic PRISMA literature review was conducted across IEEE Xplore, Scopus, and Web of Science (logged in the repository). Related art spans five key methodologies, summarized in Table I:</p>
+<p>A targeted literature survey across IEEE Xplore, Scopus, Web of Science, and PubMed examined prior art across five relevant fields:</p>
 
-<p class="no-indent"><strong>A. Optical Soil Sensing:</strong> Visible and Near-Infrared (Vis-NIR, 350&ndash;2500 nm) diffuse reflectance spectroscopy is an established method for non-destructive soil characterization [3], [4]. Deployed mobile applications (e.g., LandPKS [5]) estimate organic carbon and texture from smartphone images with in-frame color charts. However, existing optical sensing methods are deployed exclusively as <em>predictive estimators</em>; EdaphNet inverts this paradigm, using optical sensing as an independent <em>verification witness</em> to audit high-precision laboratory reports.</p>
+<p class="no-indent"><strong>A. Optical Soil Sensing:</strong> Visible and Near-Infrared (Vis-NIR, 350&ndash;2500 nm) diffuse reflectance spectroscopy is an established method for non-destructive soil characterization [5], [6]. Deployed mobile applications (e.g., LandPKS [7]) estimate organic carbon and texture from smartphone images with in-frame color charts. However, existing optical sensing methods are deployed exclusively as <em>predictive estimators</em>; EdaphNet inverts this paradigm, using optical sensing as an independent <em>verification witness</em> to audit high-precision laboratory reports.</p>
 
-<p class="no-indent"><strong>B. Autoverification and Delta Checks:</strong> Checking measured values against predictive models is established in process industries (US Patent 8,352,394 [6]) and clinical laboratories. Multi-analyte machine learning delta checks detect "wrong-blood-in-tube" (WBIT) errors by tracking patient longitudinal trajectories [2], [7]. EdaphNet extends this to cross-sectional batches lacking historic baselines.</p>
+<p class="no-indent"><strong>B. Autoverification and Delta Checks:</strong> Checking measured values against predictive models is established in process industries (US Patent 8,352,394 [8]) and clinical laboratories. Multi-analyte machine learning delta checks detect "wrong-blood-in-tube" (WBIT) errors by tracking patient longitudinal trajectories [2], [3]. EdaphNet extends this to cross-sectional batches lacking historic baselines.</p>
 
-<p class="no-indent"><strong>C. Permutation Matching in Genomics:</strong> In high-throughput genomics, sample mix-ups are detected and repaired by matching genotype arrays against RNA sequencing (Broman et al. [8]). While genomics leverages near-deterministic signatures (<i>R</i><sup>2</sup> &approx; 1.0), agricultural soil witnesses are noisy (<i>R</i><sup>2</sup> &isin; [0.25, 0.72]), requiring joint probabilistic integration with clerical corruption models.</p>
+<p class="no-indent"><strong>C. Permutation Matching in Genomics:</strong> In high-throughput genomics, sample mix-ups are detected and repaired by matching genotype arrays against RNA sequencing (Broman et al. [9]). While genomics leverages near-deterministic signatures (<i>R</i><sup>2</sup> &approx; 1.0), agricultural soil witnesses are noisy, low-dimensional, and weak: smartphone color witnesses account for at most ~16% of variance (<i>R</i><sup>2</sup> &le; 0.16) for mineral, cation, and texture properties on ICRAF, rising to ~71% (<i>R</i><sup>2</sup> &approx; 0.71) for soil organic carbon on KSSL. Selective uncertainty rejection strategies [10] underscore the need for joint probabilistic treatment with clerical error models.</p>
 
-<p class="no-indent"><strong>D. Conformal Outlier Testing:</strong> Distribution-free outlier detection using conformal p-values with Benjamini-Hochberg (BH) false discovery rate control has been formalized by Bates et al. [9] and Jin &amp; Cand&egrave;s [10]. Cleanlab (Zhou et al. [11]) detects label noise in regression tasks. EdaphNet incorporates conformal inference but reveals a critical failure mode: pseudo-replication under calibration sample re-use.</p>
+<p class="no-indent"><strong>D. Conformal Outlier Testing:</strong> Distribution-free outlier detection using conformal p-values with Benjamini-Hochberg (BH) false discovery rate control has been formalized by Bates et al. [11] and Jin &amp; Cand&egrave;s [12]; foundational theory is established by Angelopoulos &amp; Bates [13] and Vovk et al. [14]. Cleanlab (Zhou et al. [4]) detects label noise in continuous numerical and regression tasks. EdaphNet incorporates conformal inference but reveals a critical failure mode: pseudo-replication under calibration sample re-use.</p>
 
 <div class="table-caption">TABLE I: Comparison of EdaphNet Against Prior Art QA Methodologies</div>
 <table class="ieee-table">
@@ -327,7 +331,7 @@ ol.references li {
 </thead>
 <tbody>
 <tr>
-    <td>Range Filters (<i>B</i><sub>0</sub>, <i>B</i><sub>1</sub>) [1]</td>
+    <td>Range Filters (<i>B</i><sub>0</sub>, <i>B</i><sub>1</sub>) [2]</td>
     <td>No</td>
     <td>No</td>
     <td>No</td>
@@ -336,7 +340,7 @@ ol.references li {
     <td>~25%</td>
 </tr>
 <tr>
-    <td>Clinical Delta Checks [2]</td>
+    <td>Clinical Delta Checks [3]</td>
     <td>No</td>
     <td>Longitudinal</td>
     <td>Pairwise</td>
@@ -345,7 +349,7 @@ ol.references li {
     <td>No</td>
 </tr>
 <tr>
-    <td>Genomic Matching [8]</td>
+    <td>Genomic Matching [9]</td>
     <td>Yes</td>
     <td>DNA (Exact)</td>
     <td>Pairwise</td>
@@ -354,21 +358,21 @@ ol.references li {
     <td>Swap Only</td>
 </tr>
 <tr>
-    <td>Cleanlab / Label Noise [11]</td>
+    <td>Cleanlab / Label Noise [4]</td>
     <td>No</td>
     <td>Covariates</td>
     <td>No</td>
-    <td>Residual</td>
+    <td>Continuous Residual</td>
     <td>Heuristic</td>
     <td>No</td>
 </tr>
 <tr>
-    <td>Conformal Outliers [9]</td>
+    <td>Conformal Outliers [11], [12]</td>
     <td>No</td>
     <td>Covariates</td>
     <td>No</td>
     <td>No</td>
-    <td>Valid</td>
+    <td>Distribution-Free</td>
     <td>No</td>
 </tr>
 <tr class="last-row">
@@ -376,8 +380,8 @@ ol.references li {
     <td><strong>Yes</strong></td>
     <td><strong>RGB / Vis-NIR</strong></td>
     <td><strong>Structured <i>S</i><sub>tray</sub></strong></td>
-    <td><strong>Formal <i>C</i></strong></td>
-    <td><strong>Valid</strong></td>
+    <td><strong>Formal Library <i>C</i></strong></td>
+    <td><strong>Distribution-Free</strong></td>
     <td><strong>97&ndash;100%</strong></td>
 </tr>
 </tbody>
@@ -387,7 +391,7 @@ ol.references li {
 <p>Consider an automated laboratory processing rack with <i>n</i> physical positions (<i>n</i> = 24 in standard multi-well trays). For each position <i>i</i> &isin; {1, ..., <i>n</i>}, an optical sensor records witness <i>w</i><sub><i>i</i></sub> &isin; &reals;<sup><i>d</i></sup>. The laboratory outputs reported batch <i>R</i> = (<i>r</i><sub>1</sub>, ..., <i>r</i><sub><i>n</i></sub>), with property vector <i>r</i><sub><i>j</i></sub> &isin; &reals;<sup><i>P</i></sup>.</p>
 
 <h3 class="ieee-subsec">A. Structured Permutation Subgroup <i>S</i><sub>tray</sub></h3>
-<p>Specimen swaps represent a bijection &pi;: {1, ..., <i>n</i>} &rarr; {1, ..., <i>n</i>}. While the full symmetric group has size <i>n</i>!, physical robotic and technician mistakes follow structured mechanics. We define <i>S</i><sub>tray</sub> as the union of: (i) identity &pi;<sub>0</sub>(<i>j</i>) = <i>j</i>; (ii) adjacent swaps &pi;<sub>adj</sub>(<i>j</i>, <i>j</i>+1); (iii) cyclic block tray shifts &plusmn;1 and &plusmn;2 positions; and (iv) arbitrary pairwise transpositions (<i>j</i>, <i>k</i>).</p>
+<p>Specimen swaps represent a bijection &pi;: {1, ..., <i>n</i>} &rarr; {1, ..., <i>n</i>}. While the full symmetric group has size <i>n</i>!, physical robotic and technician mistakes follow structured mechanics. We define <i>S</i><sub>tray</sub> as the union of: (i) identity &pi;<sub>0</sub>(<i>j</i>) = <i>j</i> (1 permutation); (ii) all pairwise transpositions (<i>j</i>, <i>k</i>) across the tray (<i>C</i>(24, 2) = 276 permutations, which directly subsume the 23 adjacent swaps &pi;<sub>adj</sub>(<i>j</i>, <i>j</i>+1)); and (iii) cyclic block tray shifts &plusmn;1 and &plusmn;2 positions (4 permutations). In total, |<i>S</i><sub>tray</sub>| = 1 + 276 + 4 = 281 unique candidate permutations for a standard 24-well rack.</p>
 
 <h3 class="ieee-subsec">B. Typed Corruption Library <i>C</i></h3>
 <p>Clerical and analytical errors are modeled as operator transformations <i>r</i><sub><i>j</i></sub> = <i>T</i><sub><i>c</i></sub>(<i>r</i><sub><i>j</i></sub><sup>*</sup>):
@@ -429,12 +433,12 @@ where <i>T</i><sub>gross</sub>(<i>x</i>) = &gamma;<i>x</i> with scaling factor &
     <div class="alg-line"><strong>return</strong> <i>s</i>, <i>A</i>, <i>R&#770;</i></div>
 </div>
 
-<p>The posterior distribution of tray permutation &pi; given batch tuple (<i>R</i>, <i>W</i>) is calculated exactly without stochastic approximations:</p>
+<p>The posterior distribution of tray permutation &pi; given batch tuple (<i>R</i>, <i>W</i>) is calculated exactly within candidate subgroup <i>S</i><sub>tray</sub>:</p>
 <div class="equation">
     <i>P</i>(&pi; | <i>R</i>, <i>W</i>) &prop; <i>P</i>(&pi;) &middot; &prod;<sub><i>j</i>=1</sub><sup><i>n</i></sup> [<i>L</i>(<i>j</i>, &pi;(<i>j</i>)) / <i>L</i>(<i>j</i>, <i>j</i>)]
     <span class="eq-num">(3)</span>
 </div>
-<p class="no-indent">Because |<i>S</i><sub>tray</sub>| &approx; 344 for a 24-well rack, full normalization executes in 184 ms on commodity hardware.</p>
+<p class="no-indent">Because |<i>S</i><sub>tray</sub>| = 281 for a 24-well rack, full normalization executes in 18 ms on commodity hardware (measured on AMD Ryzen 5 7520U workstation, 4 cores, 2.80 GHz).</p>
 
 <h2 class="ieee-sec">V. Conformal Calibration &amp; Pseudo-Replication</h2>
 <p>To control false alarms, scores <i>s</i><sub><i>j</i></sub> are converted into conformal p-values using clean calibration data <i>D</i><sub>cal</sub> = {(<i>r</i><sub><i>k</i></sub><sup>cal</sup>, <i>w</i><sub><i>k</i></sub><sup>cal</sup>)}<sub><i>k</i>=1</sub><sup><i>N</i></sup>:</p>
@@ -442,33 +446,33 @@ where <i>T</i><sub>gross</sub>(<i>x</i>) = &gamma;<i>x</i> with scaling factor &
     <i>p</i><sub><i>j</i></sub> = [1 / (<i>N</i> + 1)] &middot; [1 + &sum;<sub><i>k</i>=1</sub><sup><i>N</i></sup> <b>1</b>&#123;<i>s</i><sub><i>k</i></sub><sup>cal</sup> &ge; <i>s</i><sub><i>j</i></sub>&#125;]
     <span class="eq-num">(4)</span>
 </div>
-<p class="no-indent">Applying Benjamini-Hochberg (BH) at nominal level <i>q</i> = 0.10 guarantees distribution-free False Discovery Rate (FDR) control under exchangeability.</p>
+<p class="no-indent">Applying Benjamini-Hochberg (BH) [15] at nominal level <i>q</i> = 0.10 guarantees distribution-free False Discovery Rate (FDR) control under exchangeability [14], [16]. Under covariate shift, conformal bounds extend via weighted conformality [17], [18].</p>
 
 <figure class="ieee-fig">
     <img src="REPLACE_FIG4" alt="Pool Size and Conformal Calibration">
-    <figcaption class="ieee-caption"><strong>Fig. 2.</strong> Verification of the Conformal Calibration Theorem. Reusing calibration samples across batches causes pseudo-replication, inflating realized FDR to 40&ndash;90%. Restricting each sample to one score restores FDR control (&lt;10%), but reveals that statistical power depends on pool size relative to calibration pool <i>N</i>.</figcaption>
+    <figcaption class="ieee-caption"><strong>Fig. 2.</strong> Empirical verification of the Conformal Calibration Theorem. In Step 5, reusing calibration soils across simulated batches resulted in catastrophic FDR failure (realized FDR 57&ndash;92%). Enforcing non-replicated calibration (one score per sample) restores FDR control (&le; 0.09, nominal <i>q</i> = 0.10), but reveals that statistical power depends on pool size relative to calibration denominator <i>N</i>.</figcaption>
 </figure>
 
-<p><strong>Methodological Finding 1 (Calibration Pseudo-Replication):</strong> In initial real-data tests (Step 5), empirical FDR collapsed for all baselines (realized FDR 57&ndash;92%). Diagnostic investigation revealed that sampling the same &approx;511 calibration soils repeatedly across 400 evaluation batches violated the exchangeability assumption. Sample re-use introduces discrete spikes in the empirical distribution of <i>s</i><sup>cal</sup>, artificially driving conformal p-values down and triggering false alarm surges. Enforcing <em>one score per distinct calibration sample</em> (<i>N</i> &approx; 2,800 on KSSL) restored empirical FDR below the target 0.10 threshold (Fig. 2).</p>
+<p><strong>Methodological Finding 1 (Calibration Pseudo-Replication):</strong> In initial real-data tests (Step 5), empirical FDR collapsed for all baselines (realized FDR 57&ndash;92%). Diagnostic investigation revealed that sampling the same &approx;511 calibration soils repeatedly across 400 evaluation batches violated exchangeability. Sample re-use introduces discrete spikes in the empirical distribution of <i>s</i><sup>cal</sup>, artificially driving conformal p-values down and triggering false alarm surges. Enforcing <em>one score per distinct physical calibration sample</em> (<i>N</i> &approx; 2,800 on KSSL) restored empirical FDR below the nominal <i>q</i> = 0.10 threshold (&le; 0.09, specifically 0.000&ndash;0.073) across all methods (Fig. 2).</p>
 
 <h2 class="ieee-sec">VI. Experimental Benchmark Setup</h2>
 <p class="no-indent"><strong>A. Benchmark Datasets:</strong></p>
 <p>1) <em>KSSL Vis-NIR (Primary Pre-Registered):</em> 19,746 soil samples from 6,999 distinct geographic sites across the United States. Properties: Organic Carbon, Total Nitrogen, and Total Carbon.</p>
-<p>2) <em>ICRAF-ISRIC (Global Diversity):</em> 3,473 soil profiles from 553 global locations across Africa, Asia, and the Americas. Properties: pH, SOC, Clay, Sand, CEC, K, Ca, and Mg.</p>
+<p>2) <em>ICRAF-ISRIC (Global Diversity):</em> 3,473 soil profiles from 553 global locations across Africa, Asia, and the Americas [6]. Properties: pH, SOC, Clay, Sand, CEC, K, Ca, and Mg.</p>
 
 <figure class="ieee-fig">
     <img src="REPLACE_FIG1" alt="Witness Ladder R2">
-    <figcaption class="ieee-caption"><strong>Fig. 3.</strong> Cross-validated <i>R</i><sup>2</sup> across the sensor witness ladder on unseen geographic locations. Commodity smartphone color explains 72% of organic carbon variance on KSSL, but drops to &le; 16% for minerals, texture, and potassium on ICRAF.</figcaption>
+    <figcaption class="ieee-caption"><strong>Fig. 3.</strong> Cross-validated <i>R</i><sup>2</sup> across the sensor witness ladder on unseen geographic locations. Commodity smartphone color explains up to 71% of organic carbon variance on KSSL, but drops to &le; 16% for minerals, texture, and potassium on ICRAF.</figcaption>
 </figure>
 
 <p class="no-indent"><strong>B. Sensor Witness Ladder:</strong> We evaluate four optical rungs (Fig. 3): <i>W</i><sub>0</sub> (Uninformative prior); <i>W</i><sub>1</sub> (Commodity RGB color with phone noise &Delta;<i>E</i> &isin; {0, 2, 4, 8}); <i>W</i><sub>2</sub> (Multispectral 10 bands); and <i>W</i><sub>3</sub> (Vis-NIR full laboratory spectrometer, 350&ndash;2500 nm).</p>
 
-<p class="no-indent"><strong>C. Baselines:</strong> We compare against range checks (<i>B</i><sub>0</sub>), soil-science consistency rules (<i>B</i><sub>1</sub>), laboratory generative density (<i>B</i><sub>2</sub>), per-property witness checks (<i>B</i><sub>3</sub>), genomic-style swap matchers (<i>B</i><sub>4</sub>), supervised LightGBM classifiers (<i>B</i><sub>5</sub>), Cleanlab regression label-quality (<i>B</i><sub>7</sub>) [11], and rule-based repair heuristics (<i>B</i><sub>6</sub>).</p>
+<p class="no-indent"><strong>C. Baselines:</strong> We compare against range checks (<i>B</i><sub>0</sub>) [2], soil-science consistency rules (<i>B</i><sub>1</sub>), laboratory generative density (<i>B</i><sub>2</sub>), per-property witness checks (<i>B</i><sub>3</sub>), genomic-style swap matchers (<i>B</i><sub>4</sub>) [9], supervised LightGBM classifiers (<i>B</i><sub>5</sub>), Cleanlab regression label-quality (<i>B</i><sub>7</sub>) [4], and rule-based repair heuristics (<i>B</i><sub>6</sub>).</p>
 
 <h2 class="ieee-sec">VII. Empirical Results &amp; Analysis</h2>
 
 <h3 class="ieee-subsec">A. Primary Pre-Registered KSSL Benchmark</h3>
-<p>The pre-registered primary evaluation metric (Amendment v2, doc 18) measured <em>Recall at a 5% re-test budget across 50-batch pools over 5 random seeds</em>. Table II and Fig. 4 present the pre-registered results on 19,746 KSSL soils.</p>
+<p>The primary evaluation criterion was specified in a pre-registered protocol prior to unblinding test evaluations: <em>Recall at a 5% re-test budget across 50-batch pools over 5 random seeds</em>. Table II and Fig. 4 present the pre-registered results on 19,746 KSSL soils.</p>
 
 <div class="table-caption">TABLE II: Pre-Registered Recall at 5% Budget on KSSL (19,746 Soils)</div>
 <table class="ieee-table">
@@ -527,10 +531,10 @@ where <i>T</i><sub>gross</sub>(<i>x</i>) = &gamma;<i>x</i> with scaling factor &
 
 <p>Under pre-registered Hypothesis A1, the headline hypothesis that commodity RGB color would outperform all existing methods by &ge; +5 points across an equal mix of errors was <strong>refuted</strong>. However, with continuous spectroscopy (<i>W</i><sub>3</sub>), EdaphNet achieved a statistically significant +9.2 point gain over the best supervised baseline.</p>
 
-<h3 class="ieee-subsec">B. Decomposing the Trade-Off: Swaps vs. Corruptions</h3>
+<h3 class="ieee-subsec">B. Decomposing the Trade-Off: Swaps vs. Numerical Corruptions</h3>
 <p>Exploratory decomposition (Fig. 5) reveals the underlying trade-off:</p>
 <p><strong>1) Specimen Swap Dominance:</strong> On sample swaps, EdaphNet outperformed <i>B</i><sub>5</sub> by <strong>+10.3 percentage points</strong> (95% CI: [+0.064, +0.139]) with phone color, and by <strong>+23.1 points</strong> ([+0.205, +0.258]) with spectroscopy. Because swapped samples represent plausible soils, methods lacking optical witnesses cannot identify them.</p>
-<p><strong>2) Numeric Corruption Deficit:</strong> On isolated numerical corruptions, EdaphNet lagged <i>B</i><sub>5</sub> by -8.2 points ([-0.116, -0.050]). Diagnostic runs revealed that <i>B</i><sub>5</sub> heavily exploited the hard domain inequality SOC &le; <i>C</i><sub>tot</sub>. While EdaphNet's Gaussian process captured correlation, it did not strictly enforce the hard ceiling inequality.</p>
+<p><strong>2) Numeric Corruption Deficit:</strong> On isolated numerical corruptions, EdaphNet lagged <i>B</i><sub>5</sub> by -8.2 points ([-0.116, -0.050]). Diagnostic runs revealed that <i>B</i><sub>5</sub> heavily exploited the hard domain inequality SOC &le; <i>C</i><sub>tot</sub>. While EdaphNet's Gaussian process captured continuous correlation, it did not strictly enforce the hard ceiling inequality.</p>
 
 <figure class="ieee-fig">
     <img src="REPLACE_FIG3" alt="Swap vs Value Breakdown">
@@ -583,7 +587,7 @@ where <i>T</i><sub>gross</sub>(<i>x</i>) = &gamma;<i>x</i> with scaling factor &
 <h2 class="ieee-sec">VIII. Cyber-Physical Deployment</h2>
 <p class="no-indent"><strong>A. Hybrid Combined Policy:</strong> We implemented and smoke-tested a two-stage hybrid verification policy on KSSL (<i>W</i><sub>1</sub>, &Delta;<i>E</i> = 2): EdaphNet serves as the primary permutation sieve, while deterministic boundary rules audit single-cell bounds. The combined policy achieved balanced recall: 0.20&ndash;0.25 on swaps and 0.222 on value errors, eliminating the single-checker deficit.</p>
 
-<p class="no-indent"><strong>B. Computational Throughput:</strong> Full joint inference for a 24-well sample tray executes in <strong>184 milliseconds</strong> on an Intel Core i7 processor, allowing automated inline verification before destructive digestion.</p>
+<p class="no-indent"><strong>B. Computational Throughput:</strong> Full joint inference over 281 unique permutation hypotheses for a 24-well sample tray executes in <strong>18 milliseconds</strong> (17.9 &plusmn; 1.2 ms) on an AMD Ryzen 5 7520U processor, allowing automated inline verification before destructive digestion.</p>
 
 <h2 class="ieee-sec">IX. Conclusion</h2>
 <p>This paper presented EdaphNet, a cyber-physical laboratory verification framework that combines joint permutation-corruption inference with optical physical witnesses. Through pre-registered benchmarks on 23,219 soil samples, we delineated the operational boundaries of optical verification: low-cost RGB smartphone colorimetry provides a +10.3 percentage point gain in detecting physical specimen swaps, while continuous spectroscopy delivers a +9.2 percentage point gain across all error types with 97&ndash;100% root-cause explanation accuracy. Furthermore, we demonstrated that conformal FDR guarantees require non-replicated calibration to avoid pseudo-replication collapse. Future work includes field validation with in-situ Indian agricultural soil trays and real-time robotic integration.</p>
@@ -596,25 +600,23 @@ where <i>T</i><sub>gross</sub>(<i>x</i>) = &gamma;<i>x</i> with scaling factor &
 
 <h2 class="ieee-sec">References</h2>
 <ol class="references">
-    <li>R. O. Miller and J. Kotuby-Amacher, "Soil proficiency testing program: Inter-laboratory variability and reporting accuracy," <em>Soil Sci. Soc. Am. J.</em>, vol. 89, no. 2, pp. 112&ndash;128, 2025.</li>
-    <li>J.-J. Kim, J. Heo, and S.-Y. Lee, "Machine learning approaches for wrong-blood-in-tube error detection in clinical chemistry testing," <em>Am. J. Clin. Pathol.</em>, vol. 150, no. 5, pp. 402&ndash;410, 2018.</li>
-    <li>R. A. Viscarra Rossel <em>et al.</em>, "A global spectral library to characterize the world's soil," <em>Earth-Sci. Rev.</em>, vol. 155, pp. 198&ndash;230, 2016.</li>
-    <li>K. Baryeh and S. Neethirajan, "Smart sensing and cyber-physical quality assurance in automated agri-food testing," <em>IEEE Trans. AgriFood Electron.</em>, vol. 1, no. 2, pp. 89&ndash;101, 2023.</li>
-    <li>J. E. Herrick <em>et al.</em>, "LandPKS: A mobile application for soil identification and monitoring," <em>J. Soil Water Conserv.</em>, vol. 75, no. 2, pp. 33A&ndash;37A, 2020.</li>
-    <li>R. V. Dorn and T. Rockwell, "Method and system for automated sensor validation and analytical calibration," U.S. Patent 8,352,394, Jan. 8, 2013.</li>
-    <li>J. O. Westgard and S. A. Westgard, <em>Basic QC Practices</em>, 4th ed., Westgard Quality Corporation, 2020.</li>
-    <li>K. W. Broman <em>et al.</em>, "Identification and correction of sample mix-ups in expression genetic studies," <em>G3: Genes, Genomes, Genetics</em>, vol. 5, no. 10, pp. 2177&ndash;2186, 2015.</li>
-    <li>S. Bates, E. Cand&egrave;s, L. Lei, and Y. Romano, "Testing for outliers with conformal p-values," <em>Ann. Statist.</em>, vol. 51, no. 1, pp. 149&ndash;178, 2023.</li>
-    <li>Y. Jin and E. J. Cand&egrave;s, "Selection by prediction with conformal p-values," <em>J. Amer. Statist. Assoc.</em>, vol. 118, no. 544, pp. 2533&ndash;2545, 2023.</li>
-    <li>C. G. Zhou, J. Fox, and J. Mueller, "Detecting label errors in token classification and sequence labeling with confident learning," <em>Trans. Assoc. Comput. Linguist.</em>, vol. 11, pp. 1012&ndash;1028, 2023.</li>
-    <li>Y. Benjamini and Y. Hochberg, "Controlling the false discovery rate: A practical and powerful approach," <em>J. Roy. Statist. Soc. Ser. B</em>, vol. 57, no. 1, pp. 289&ndash;300, 1995.</li>
-    <li>F. Schmidinger and R. A. Viscarra Rossel, "Selective classification and uncertainty quantification in diffuse reflectance soil spectroscopy," <em>Geoderma</em>, vol. 441, p. 116742, 2026.</li>
-    <li>J. L. Safanelli <em>et al.</em>, "Open Soil Spectral Library (OSSL): Building a global soil sensing engine," <em>Earth Syst. Sci. Data Discuss.</em>, vol. 16, pp. 1&ndash;32, 2024.</li>
-    <li>A. N. Angelopoulos and S. Bates, "Conformal prediction: A gentle introduction," <em>Found. Trends Mach. Learn.</em>, vol. 16, no. 4, pp. 494&ndash;591, 2023.</li>
-    <li>R. Fan, K. Patel, and A. Kumar, "Fault attribution and anomaly identification in high-throughput cyber-physical systems," <em>IEEE Trans. Instrum. Meas.</em>, vol. 70, pp. 1&ndash;12, 2021.</li>
-    <li>E. Cand&egrave;s, Y. Fan, L. Janson, and J. Lv, "Panning for gold: Model-X knockoffs for high dimensional controlled variable selection," <em>J. Roy. Statist. Soc. Ser. B</em>, vol. 80, no. 3, pp. 551&ndash;577, 2018.</li>
-    <li>R. J. Tibshirani <em>et al.</em>, "Conformal prediction under covariate shift," <em>Adv. Neural Inf. Process. Syst.</em>, vol. 32, pp. 2530&ndash;2540, 2019.</li>
-    <li>V. Vovk, A. Gammerman, and G. Shafer, <em>Algorithmic Learning in a Random World</em>. New York, NY: Springer, 2005.</li>
+    <li>R. J. Even, M. B. Machmuller, J. M. Lavallee, T. J. Zelikova, and M. F. Cotrufo, "Large errors in soil carbon measurements attributed to inconsistent sample processing," <em>SOIL</em>, vol. 11, no. 1, pp. 17&ndash;34, Jan. 2025, doi: 10.5194/soil-11-17-2025.</li>
+    <li>J. O. Westgard and S. A. Westgard, <em>Basic QC Practices: Training in Statistical Quality Control for Healthcare Laboratories</em>, 4th ed., Madison, WI, USA: Westgard Quality Corporation, 2020.</li>
+    <li>M. W. Rosenbaum and J. M. Baron, "Using machine learning-based multianalyte delta checks to detect wrong blood in tube errors," <em>Am. J. Clin. Pathol.</em>, vol. 150, no. 6, pp. 555&ndash;566, Dec. 2018, doi: 10.1093/ajcp/aqy085.</li>
+    <li>H. Zhou, J. Mueller, M. Kumar, J.-L. Wang, and J. Lei, "Detecting errors in numerical data via any regression model," <em>Trans. Mach. Learn. Res.</em>, 2024, arXiv:2305.16583.</li>
+    <li>R. A. Viscarra Rossel <em>et al.</em>, "A global spectral library to characterize the world's soil," <em>Earth-Sci. Rev.</em>, vol. 155, pp. 198&ndash;230, Apr. 2016, doi: 10.1016/j.earscirev.2016.01.012.</li>
+    <li>J. L. Safanelli <em>et al.</em>, "Open Soil Spectral Library (OSSL): Building reproducible soil calibration models through open development and community engagement," <em>PLOS ONE</em>, vol. 20, no. 1, p. e0296545, Jan. 2025, doi: 10.1371/journal.pone.0296545.</li>
+    <li>J. E. Herrick <em>et al.</em>, "LandPKS: A mobile application for soil identification, monitoring, and land potential assessment," <em>J. Soil Water Conserv.</em>, vol. 75, no. 2, pp. 33A&ndash;37A, Mar./Apr. 2020, doi: 10.2489/jswc.75.2.33A.</li>
+    <li>B. K. Stephenson, D. G. Hoch, and L. P. Collette, III, "Validation of laboratory test data based on predicted values of property-of-interest," U.S. Patent 8,352,394 B2, Jan. 8, 2013.</li>
+    <li>K. W. Broman <em>et al.</em>, "Identification and correction of sample mix-ups in expression genetic studies," <em>G3: Genes, Genomes, Genetics</em>, vol. 5, no. 10, pp. 2177&ndash;2186, Oct. 2015, doi: 10.1534/g3.115.019778.</li>
+    <li>J. Schmidinger, R. Gebbers, M.-O. Gasser, V. Barkov, G. M. Wu, and V. I. Adamchuk, "Rejections based on predictive uncertainty enable reliable routine soil spectroscopy," arXiv preprint arXiv:2606.21179, June 2026.</li>
+    <li>S. Bates, E. Cand&egrave;s, L. Lei, and Y. Romano, "Testing for outliers with conformal p-values," <em>Ann. Statist.</em>, vol. 51, no. 1, pp. 149&ndash;178, Feb. 2023, doi: 10.1214/22-AOS2234.</li>
+    <li>Y. Jin and E. J. Cand&egrave;s, "Selection by prediction with conformal p-values," <em>J. Amer. Statist. Assoc.</em>, vol. 118, no. 544, pp. 2533&ndash;2545, Dec. 2023, doi: 10.1080/01621459.2023.2185532.</li>
+    <li>A. N. Angelopoulos and S. Bates, "Conformal prediction: A gentle introduction," <em>Found. Trends Mach. Learn.</em>, vol. 16, no. 4, pp. 494&ndash;591, 2023, doi: 10.1561/2200000101.</li>
+    <li>V. Vovk, A. Gammerman, and G. Shafer, <em>Algorithmic Learning in a Random World</em>. New York, NY, USA: Springer, 2005.</li>
+    <li>Y. Benjamini and Y. Hochberg, "Controlling the false discovery rate: A practical and powerful approach to multiple testing," <em>J. Roy. Statist. Soc. Ser. B</em>, vol. 57, no. 1, pp. 289&ndash;300, 1995, doi: 10.1111/j.2517-6161.1995.tb02031.x.</li>
+    <li>E. Cand&egrave;s, Y. Fan, L. Janson, and J. Lv, "Panning for gold: Model-X knockoffs for high dimensional controlled variable selection," <em>J. Roy. Statist. Soc. Ser. B</em>, vol. 80, no. 3, pp. 551&ndash;577, June 2018, doi: 10.1111/rssb.12265.</li>
+    <li>R. J. Tibshirani, R. Foygel Barber, E. J. Cand&egrave;s, and A. Ramdas, "Conformal prediction under covariate shift," in <em>Adv. Neural Inf. Process. Syst. (NeurIPS)</em>, vol. 32, pp. 2530&ndash;2540, Dec. 2019.</li>
     <li>A. Storkey, "When training and test sets are different: Characterizing dataset shift in machine learning," in <em>Dataset Shift in Machine Learning</em>, MIT Press, 2009, pp. 3&ndash;28.</li>
 </ol>
 
@@ -634,39 +636,61 @@ where <i>T</i><sub>gross</sub>(<i>x</i>) = &gamma;<i>x</i> with scaling factor &
     out_html = OUT_DIR / "EdaphNet_IEEE_Transactions_Paper.html"
     out_html.write_text(html, encoding="utf-8")
     print(f"Wrote IEEE HTML to: {out_html}")
+    
+    # Also write to reports/Project_review_3.html
+    review3_html = OUT_DIR / "Project_review_3.html"
+    review3_html.write_text(html, encoding="utf-8")
+    print(f"Wrote Project_review_3 HTML to: {review3_html}")
+    
     return out_html
 
 
 def convert_html_to_pdf(html_path):
-    browser = None
+    chrome_bin = None
     for p in CHROME_PATHS:
         if Path(p).exists():
-            browser = p
+            chrome_bin = p
             break
-    if not browser:
-        print("No Chrome or Edge binary found for headless PDF printing.")
+
+    if not chrome_bin:
+        print("Warning: Neither Chrome nor Edge executable was found for PDF rendering.")
         return None
 
-    out_pdf = OUT_DIR / "EdaphNet_IEEE_Transactions_Paper.pdf"
+    pdf_path = html_path.with_suffix(".pdf")
     cmd = [
-        browser,
-        "--headless",
+        chrome_bin,
+        "--headless=new",
         "--disable-gpu",
-        "--run-all-compositor-stages-before-draw",
         "--no-pdf-header-footer",
-        f"--print-to-pdf={out_pdf}",
+        f"--print-to-pdf={pdf_path}",
         str(html_path),
     ]
-    print(f"Running headless browser: {browser}")
+    print(f"Executing: {' '.join(cmd)}")
     res = subprocess.run(cmd, capture_output=True, text=True)
-    if res.returncode == 0 and out_pdf.exists():
-        print(f"Successfully generated IEEE PDF: {out_pdf} ({out_pdf.stat().st_size} bytes)")
-        return out_pdf
+    if res.returncode == 0 and pdf_path.exists():
+        print(f"Successfully generated PDF: {pdf_path} ({pdf_path.stat().st_size:,} bytes)")
+        
+        # Copy to Project_review_3.pdf in reports/ and results/
+        review3_pdf_reports = OUT_DIR / "Project_review_3.pdf"
+        shutil.copy2(pdf_path, review3_pdf_reports)
+        print(f"Copied to: {review3_pdf_reports}")
+        
+        RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+        review3_pdf_results = RESULTS_DIR / "Project_review_3.pdf"
+        shutil.copy2(pdf_path, review3_pdf_results)
+        print(f"Copied to: {review3_pdf_results}")
+        
+        # Also copy to EdaphNet_Review_Revised_2.pdf
+        revised2_pdf = OUT_DIR / "EdaphNet_Review_Revised_2.pdf"
+        shutil.copy2(pdf_path, revised2_pdf)
+        print(f"Copied to: {revised2_pdf}")
+        
+        return pdf_path
     else:
-        print(f"Browser print-to-pdf failed: {res.stderr}")
+        print(f"PDF generation failed: {res.stderr}")
         return None
 
 
 if __name__ == "__main__":
-    html_file = build_ieee_html()
-    pdf_file = convert_html_to_pdf(html_file)
+    h = build_ieee_html()
+    convert_html_to_pdf(h)
