@@ -44,178 +44,171 @@ def build_ieee_html():
 <meta charset="UTF-8">
 <title>Cyber-Physical Quality Assurance of Analytical Laboratories: Joint Permutation-Corruption Inference with Low-Cost Optical Witnesses and Conformal Calibration Bounds</title>
 <style>
-@page {{
+@page {
     size: letter;
-    margin: 0.65in 0.55in 0.65in 0.55in;
-}}
-body {{
+    margin: 0.58in 0.52in 0.58in 0.52in;
+}
+body {
     font-family: 'Times New Roman', Times, serif;
-    font-size: 9.5pt;
-    line-height: 1.18;
+    font-size: 9.3pt;
+    line-height: 1.15;
     color: #111;
     margin: 0;
     padding: 0;
     background: #fff;
-}}
-.ieee-banner {{
+}
+.ieee-banner {
     font-size: 7.5pt;
     color: #555;
     border-bottom: 0.5pt solid #888;
     padding-bottom: 2px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
-}}
-.title-container {{
+}
+.title-container {
     text-align: center;
-    margin-bottom: 14px;
-}}
-h1.paper-title {{
-    font-size: 19pt;
+    margin-bottom: 12px;
+}
+h1.paper-title {
+    font-size: 18.5pt;
     font-weight: bold;
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
     line-height: 1.15;
     letter-spacing: -0.2px;
-}}
-.authors {{
-    font-size: 10.5pt;
-    margin-bottom: 4px;
-}}
-.author-name {{
+}
+.authors {
+    font-size: 10.2pt;
+    margin-bottom: 3px;
+}
+.author-name {
     font-weight: normal;
-}}
-.author-member {{
+}
+.author-member {
     font-style: italic;
-    font-size: 9pt;
-}}
-.affiliations {{
-    font-size: 8.5pt;
+    font-size: 8.8pt;
+}
+.affiliations {
+    font-size: 8.2pt;
     color: #333;
     font-style: italic;
-    line-height: 1.25;
-    margin-bottom: 12px;
-}}
-.two-column-layout {{
+    line-height: 1.22;
+    margin-bottom: 10px;
+}
+.two-column-layout {
     column-count: 2;
     column-gap: 0.22in;
-    column-rule: 0.5pt solid #ddd;
     text-align: justify;
     text-justify: inter-word;
-}}
-.abstract-box {{
-    background: #fafafa;
-    border: 0.5pt solid #ccc;
-    padding: 8px 10px;
-    margin-bottom: 10px;
+}
+.abstract-container {
     font-size: 8.5pt;
-    line-height: 1.2;
-}}
-.abstract-title {{
-    font-weight: bold;
-    font-style: italic;
-}}
-.index-terms {{
-    margin-top: 5px;
+    line-height: 1.18;
+    margin-bottom: 6px;
+    text-align: justify;
+}
+.index-terms {
+    margin-top: 4px;
     font-size: 8.5pt;
-}}
-.index-terms-title {{
-    font-weight: bold;
-    font-style: italic;
-}}
-h2.ieee-sec {{
-    font-size: 9.8pt;
+}
+h2.ieee-sec {
+    font-size: 9.3pt;
     font-weight: bold;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin: 10px 0 4px 0;
-    break-after: avoid;
-}}
-h3.ieee-subsec {{
-    font-size: 9.2pt;
-    font-weight: bold;
-    font-style: italic;
     margin: 8px 0 3px 0;
     break-after: avoid;
-}}
-p {{
+}
+h3.ieee-subsec {
+    font-size: 8.8pt;
+    font-weight: bold;
+    font-style: italic;
+    margin: 6px 0 2px 0;
+    break-after: avoid;
+}
+p {
     text-indent: 1.2em;
-    margin: 0 0 4px 0;
-}}
-p.no-indent {{
+    margin: 0 0 3px 0;
+}
+p.no-indent {
     text-indent: 0;
-}}
-.drop-cap {{
+}
+.drop-cap {
     float: left;
-    font-size: 28pt;
+    font-size: 26pt;
     line-height: 0.8;
     padding-top: 2px;
-    padding-right: 3px;
+    padding-right: 4px;
     padding-bottom: 0;
     font-family: 'Times New Roman', Times, serif;
     font-weight: bold;
-}}
-div.equation {{
+}
+div.equation {
     text-align: center;
-    margin: 6px 0;
+    margin: 4px 0;
     font-style: italic;
     position: relative;
-}}
-div.equation span.eq-num {{
+}
+div.equation span.eq-num {
     float: right;
     font-style: normal;
-}}
-table.ieee-table {{
+}
+.wide-element {
+    column-span: all;
+    margin: 8px 0;
+}
+table.ieee-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 7.8pt;
-    margin: 8px 0;
+    font-size: 7.5pt;
+    margin: 6px 0;
     page-break-inside: avoid;
-}}
-table.ieee-table th {{
+}
+table.ieee-table th {
     border-top: 1pt solid #000;
     border-bottom: 0.5pt solid #000;
-    padding: 3px 2px;
-    text-align: center;
-    font-weight: bold;
-}}
-table.ieee-table td {{
     padding: 2.5px 2px;
     text-align: center;
+    font-weight: bold;
+}
+table.ieee-table td {
+    padding: 2px 2px;
+    text-align: center;
     border-bottom: 0.5pt solid #eee;
-}}
-table.ieee-table tr.last-row td {{
+}
+table.ieee-table tr.last-row td {
     border-bottom: 1pt solid #000;
-}}
-.table-caption {{
-    font-size: 8pt;
+}
+.table-caption {
+    font-size: 7.8pt;
     text-align: center;
     font-weight: bold;
-    margin-top: 6px;
+    margin-top: 5px;
     margin-bottom: 2px;
     text-transform: uppercase;
-}}
-figure.ieee-fig {{
-    margin: 10px 0;
+}
+figure.ieee-fig {
+    margin: 6px 0;
     text-align: center;
     page-break-inside: avoid;
-}}
-figure.ieee-fig img {{
+}
+figure.ieee-fig img {
     max-width: 100%;
     height: auto;
     display: block;
-    margin: 0 auto 4px auto;
-}}
-figcaption.ieee-caption {{
-    font-size: 8pt;
+    margin: 0 auto 3px auto;
+}
+figcaption.ieee-caption {
+    font-size: 7.8pt;
     text-align: justify;
-    line-height: 1.2;
+    line-height: 1.18;
     color: #222;
-}}
-figcaption.ieee-caption strong {{
+}
+figcaption.ieee-caption strong {
     font-weight: bold;
-}}
-.algorithm-block {{
+}
+.algorithm-block {
     border-top: 1pt solid #000;
     border-bottom: 1pt solid #000;
     padding: 6px 4px;
@@ -223,32 +216,32 @@ figcaption.ieee-caption strong {{
     font-size: 8.5pt;
     line-height: 1.25;
     background: #fafafa;
-}}
-.alg-header {{
+}
+.alg-header {
     font-weight: bold;
     border-bottom: 0.5pt solid #888;
     padding-bottom: 3px;
     margin-bottom: 4px;
-}}
-.alg-line {{
+}
+.alg-line {
     margin-left: 1.4em;
     text-indent: -1.4em;
-}}
-.alg-num {{
+}
+.alg-num {
     font-weight: normal;
     color: #666;
     display: inline-block;
     width: 1.5em;
-}}
-ol.references {{
+}
+ol.references {
     padding-left: 1.3em;
     font-size: 7.6pt;
     line-height: 1.2;
     margin-top: 6px;
-}}
-ol.references li {{
+}
+ol.references li {
     margin-bottom: 4px;
-}}
+}
 </style>
 </head>
 <body>
@@ -278,11 +271,13 @@ ol.references li {{
 
 <div class="two-column-layout">
 
-<div class="abstract-box">
-    <span class="abstract-title">Abstract</span>&mdash;<strong>High-throughput analytical testing laboratories in agronomy, environmental chemistry, and clinical pathology govern safety-critical decisions, including regional fertilizer allocations, soil carbon sequestration underwriting, and remediation protocols. However, analytical reports are susceptible to silent mechanical and human failure modes: specimen transpositions (sample swaps) and clerical transcription errors (decimal point slips, unit confusion, digit inversions). Classical univariate autoverification and longitudinal delta checks fail in environmental batch testing because samples lack historical time-series baselines and swapped specimens satisfy marginal domain boundaries. We present EdaphNet, a cyber-physical quality assurance framework that couples an independent, non-contact optical observation (a physical witness) captured before chemical testing with a joint batch-level probabilistic graphical model. The engine computes Bayesian Maximum A Posteriori (MAP) scores over structured tray-permutation subgroups <i>S</i><sub>tray</sub> &sub; <i>S</i><sub><i>n</i></sub> (exact within candidate set <i>S</i><sub>tray</sub>) and a formal library of typed numerical corruption operators <i>C</i>, producing calibrated suspicion scores, root-cause attributions, and repaired values.</strong><br><br>
-    <strong>The framework is evaluated on 19,746 real soil samples from the Kellogg Soil Survey Laboratory (KSSL) and 3,473 samples from the ICRAF-ISRIC repository (23,219 samples total) across a conceptual four-rung sensor ladder (<i>W</i><sub>0</sub>&ndash;<i>W</i><sub>3</sub>), with three sensor tiers (<i>W</i><sub>0</sub>, <i>W</i><sub>1</sub>, <i>W</i><sub>3</sub>) empirically benchmarked on KSSL under pre-registered evaluation protocols. In confirmatory testing, the primary pre-registered hypothesis A1&mdash;that a commodity smartphone camera proxy would outperform the best existing baseline in overall error recall across an equal mix of errors&mdash;was refuted (+0.014 [&minus;0.008, +0.038] with good phone optics &Delta;<i>E</i> = 2). In contrast, with continuous laboratory Vis-NIR spectroscopy (<i>W</i><sub>3</sub>), EdaphNet achieves a statistically significant confirmatory gain of +9.2 percentage points (+0.092 [+0.069, +0.113], <i>p</i> &lt; 0.001) across all error categories. An exploratory post-hoc sub-analysis establishes that commodity phone optics provide a decisive +10.3 percentage point advantage (95% CI: [+0.064, +0.139]) specifically in isolating physical specimen swaps, offset by a &minus;8.2 percentage point deficit on isolated numerical value slips; the method crosses into an overall advantage once swaps comprise &ge; 60&ndash;70% of batch failures. For root-cause fault attribution, EdaphNet achieves 84&ndash;92% accuracy in simulation, 89&ndash;98% on ICRAF color data, and 97&ndash;100% on KSSL spectrometer data (against 24&ndash;29% on KSSL and 32&ndash;51% on ICRAF/simulation for rule heuristics), with 87&ndash;99% exact swap-partner identification accuracy under high-information witnesses. Furthermore, we demonstrate that conformal false discovery rate (FDR) control collapses under calibration sample re-use (pseudo-replication, inflating realized FDR to 57&ndash;92%), whereas restricting calibration to one score per distinct physical sample reliably restores empirical FDR control (0.000&ndash;0.090 in pre-registered 50-batch pools, and 0.03&ndash;0.11 across pool sizes 1 to 50 batches, nominal <i>q</i> = 0.10).</strong>
+<div class="abstract-container">
+    <p class="no-indent"><strong><em>Abstract</em>&mdash;High-throughput analytical testing laboratories in agronomy, environmental chemistry, and clinical pathology govern safety-critical decisions, including regional fertilizer allocations, soil carbon sequestration underwriting, and remediation protocols. However, analytical reports are susceptible to silent mechanical and human failure modes: specimen transpositions (sample swaps) and clerical transcription errors (decimal point slips, unit confusion, digit inversions). Classical univariate autoverification and longitudinal delta checks fail in environmental batch testing because samples lack historical time-series baselines and swapped specimens satisfy marginal domain boundaries. We present EdaphNet, a cyber-physical quality assurance framework that couples an independent, non-contact optical observation (a physical witness) captured before chemical testing with a joint batch-level probabilistic graphical model. The engine computes Bayesian Maximum A Posteriori (MAP) scores over structured tray-permutation subgroups <i>S</i><sub>tray</sub> &sub; <i>S</i><sub><i>n</i></sub> (exact within candidate set <i>S</i><sub>tray</sub>) and a formal library of typed numerical corruption operators <i>C</i>, producing calibrated suspicion scores, root-cause attributions, and repaired values.</strong></p>
+
+    <p><strong>The framework is evaluated on 19,746 real soil samples from the Kellogg Soil Survey Laboratory (KSSL) and 3,473 samples from the ICRAF-ISRIC repository (23,219 samples total) across a conceptual four-rung sensor ladder (<i>W</i><sub>0</sub>&ndash;<i>W</i><sub>3</sub>), with three sensor tiers (<i>W</i><sub>0</sub>, <i>W</i><sub>1</sub>, <i>W</i><sub>3</sub>) empirically benchmarked on KSSL under pre-registered evaluation protocols. In confirmatory testing, the primary pre-registered hypothesis A1&mdash;that a commodity smartphone camera proxy would outperform the best existing baseline in overall error recall across an equal mix of errors&mdash;was refuted (+0.014 [&minus;0.008, +0.038] with good phone optics &Delta;<i>E</i> = 2). In contrast, with continuous laboratory Vis-NIR spectroscopy (<i>W</i><sub>3</sub>), EdaphNet achieves a statistically significant confirmatory gain of +9.2 percentage points (+0.092 [+0.069, +0.113], <i>p</i> &lt; 0.001) across all error categories. An exploratory post-hoc sub-analysis establishes that commodity phone optics provide a decisive +10.3 percentage point advantage (95% CI: [+0.064, +0.139]) specifically in isolating physical specimen swaps, offset by a &minus;8.2 percentage point deficit on isolated numerical value slips; the method crosses into an overall advantage once swaps comprise &ge; 60&ndash;70% of batch failures. For root-cause fault attribution, EdaphNet achieves 84&ndash;92% accuracy in simulation, 89&ndash;98% on ICRAF color data, and 97&ndash;100% on KSSL spectrometer data (against 24&ndash;29% on KSSL and 32&ndash;51% on ICRAF/simulation for rule heuristics), with 87&ndash;99% exact swap-partner identification accuracy under high-information witnesses. Furthermore, we demonstrate that conformal false discovery rate (FDR) control collapses under calibration sample re-use (pseudo-replication, inflating realized FDR to 57&ndash;92%), whereas restricting calibration to one score per distinct physical sample reliably restores empirical FDR control (0.000&ndash;0.090 in pre-registered 50-batch pools, and 0.03&ndash;0.11 across pool sizes 1 to 50 batches, nominal <i>q</i> = 0.10).</strong></p>
+
     <div class="index-terms">
-        <span class="index-terms-title">Index Terms</span>&mdash;Analytical laboratory quality control, cyber-physical systems, sample permutation, conformal inference, false discovery rate (FDR), diffuse reflectance spectroscopy, fault attribution, label noise.
+        <p class="no-indent"><strong><em>Index Terms</em>&mdash;</strong>Analytical laboratory quality control, cyber-physical systems, sample permutation, conformal inference, false discovery rate (FDR), diffuse reflectance spectroscopy, fault attribution, label noise.</p>
     </div>
 </div>
 
@@ -315,6 +310,7 @@ ol.references li {{
 
 <p class="no-indent"><strong>D. Conformal Outlier Testing:</strong> Distribution-free outlier detection using conformal p-values with Benjamini-Hochberg (BH) false discovery rate control has been formalized by Bates et al. [11] and Jin &amp; Cand&egrave;s [12]; foundational theory is established by Angelopoulos &amp; Bates [13] and Vovk et al. [14]. Cleanlab (Zhou et al. [4]) detects label noise in continuous numerical and regression tasks. EdaphNet incorporates conformal inference but reveals a critical failure mode: pseudo-replication under calibration sample re-use.</p>
 
+<div class="wide-element">
 <div class="table-caption">TABLE I: Comparison of EdaphNet Against Prior Art QA Methodologies</div>
 <table class="ieee-table">
 <thead>
@@ -385,6 +381,7 @@ ol.references li {{
 </tr>
 </tbody>
 </table>
+</div>
 
 <h2 class="ieee-sec">III. Mathematical Problem Formulation</h2>
 <p>Consider an automated laboratory processing rack with <i>n</i> physical positions (<i>n</i> = 24 in standard multi-well trays). For each position <i>i</i> &isin; {1, ..., <i>n</i>}, an optical sensor records witness <i>w</i><sub><i>i</i></sub> &isin; &reals;<sup><i>d</i></sup>. The laboratory outputs reported batch <i>R</i> = (<i>r</i><sub>1</sub>, ..., <i>r</i><sub><i>n</i></sub>), with property vector <i>r</i><sub><i>j</i></sub> &isin; &reals;<sup><i>P</i></sup>.</p>
@@ -620,13 +617,13 @@ where <i>T</i><sub>gross</sub>(<i>x</i>) = &gamma;<i>x</i> with scaling factor &
 </body>
 </html>
 """
-    # Replace placeholders with base64 strings
-    html = html.replace("REPLACE_FIG0", fig0)
-    html = html.replace("REPLACE_FIG1", fig1)
-    html = html.replace("REPLACE_FIG2", fig2)
-    html = html.replace("REPLACE_FIG3", fig3)
-    html = html.replace("REPLACE_FIG4", fig4)
-    html = html.replace("REPLACE_FIG5", fig5)
+    # Replace placeholders with base64 data URIs
+    html = html.replace("REPLACE_FIG0", f"data:image/png;base64,{fig0}")
+    html = html.replace("REPLACE_FIG1", f"data:image/png;base64,{fig1}")
+    html = html.replace("REPLACE_FIG2", f"data:image/png;base64,{fig2}")
+    html = html.replace("REPLACE_FIG3", f"data:image/png;base64,{fig3}")
+    html = html.replace("REPLACE_FIG4", f"data:image/png;base64,{fig4}")
+    html = html.replace("REPLACE_FIG5", f"data:image/png;base64,{fig5}")
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out_html = OUT_DIR / "EdaphNet_IEEE_Transactions_Paper.html"

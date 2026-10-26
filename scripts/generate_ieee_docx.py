@@ -7,6 +7,7 @@ from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.section import WD_SECTION_START
 from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import nsdecls, qn
 
@@ -14,6 +15,26 @@ ROOT = Path(__file__).resolve().parents[1]
 REPORTS_DIR = ROOT / "reports"
 RESULTS_DIR = ROOT / "results"
 FIG_DIR = ROOT / "docs" / "paper" / "figures"
+
+
+def set_section_columns(section, num_cols=2, space_dxa=360):
+    sectPr = section._sectPr
+    cols = sectPr.xpath('./w:cols')
+    if cols:
+        cols[0].set(qn('w:num'), str(num_cols))
+        if num_cols > 1:
+            cols[0].set(qn('w:space'), str(space_dxa))
+            cols[0].set(qn('w:equalWidth'), '1')
+        else:
+            if qn('w:space') in cols[0].attrib:
+                del cols[0].attrib[qn('w:space')]
+    else:
+        cols_elm = OxmlElement('w:cols')
+        cols_elm.set(qn('w:num'), str(num_cols))
+        if num_cols > 1:
+            cols_elm.set(qn('w:space'), str(space_dxa))
+            cols_elm.set(qn('w:equalWidth'), '1')
+        sectPr.append(cols_elm)
 
 
 def set_cell_margins(cell, top=50, bottom=50, left=60, right=60):
@@ -48,14 +69,15 @@ def set_cell_borders(cell, top=None, bottom=None, left=None, right=None):
 def create_document():
     doc = Document()
 
-    # Page setup - standard IEEE 0.65 in margins
-    for section in doc.sections:
-        section.top_margin = Inches(0.65)
-        section.bottom_margin = Inches(0.65)
-        section.left_margin = Inches(0.6)
-        section.right_margin = Inches(0.6)
-        section.page_width = Inches(8.5)
-        section.page_height = Inches(11.0)
+    # Page setup - standard IEEE margins: top/bottom 0.7in, left/right 0.625in
+    sec1 = doc.sections[0]
+    sec1.top_margin = Inches(0.7)
+    sec1.bottom_margin = Inches(0.7)
+    sec1.left_margin = Inches(0.625)
+    sec1.right_margin = Inches(0.625)
+    sec1.page_width = Inches(8.5)
+    sec1.page_height = Inches(11.0)
+    set_section_columns(sec1, num_cols=1)
 
     # Base style
     style_normal = doc.styles['Normal']
@@ -80,7 +102,7 @@ def create_document():
         "Joint Permutation-Corruption Inference with Low-Cost Optical Witnesses and Conformal Calibration Bounds"
     )
     r_title.bold = True
-    r_title.font.size = Pt(18)
+    r_title.font.size = Pt(20)
 
     # Author Block
     p_auth = doc.add_paragraph()
@@ -126,28 +148,26 @@ def create_document():
     r_corr.font.size = Pt(8)
     r_corr.font.color.rgb = RGBColor(0x66, 0x66, 0x66)
 
-    # Abstract Box
-    tbl_abs = doc.add_table(rows=1, cols=1)
-    tbl_abs.alignment = WD_TABLE_ALIGNMENT.CENTER
-    cell_abs = tbl_abs.rows[0].cells[0]
-    cell_abs.width = Inches(7.3)
-    set_cell_borders(
-        cell_abs,
-        top={'val': 'single', 'sz': 4, 'color': '888888'},
-        bottom={'val': 'single', 'sz': 4, 'color': '888888'},
-        left={'val': 'single', 'sz': 4, 'color': '888888'},
-        right={'val': 'single', 'sz': 4, 'color': '888888'}
-    )
-    set_cell_margins(cell_abs, top=120, bottom=120, left=140, right=140)
+    # Section 2 - Continuous Two-Column Body
+    sec2 = doc.add_section(WD_SECTION_START.CONTINUOUS)
+    sec2.top_margin = Inches(0.7)
+    sec2.bottom_margin = Inches(0.7)
+    sec2.left_margin = Inches(0.625)
+    sec2.right_margin = Inches(0.625)
+    sec2.page_width = Inches(8.5)
+    sec2.page_height = Inches(11.0)
+    set_section_columns(sec2, num_cols=2, space_dxa=360)
 
-    p_a = cell_abs.paragraphs[0]
-    p_a.paragraph_format.line_spacing = 1.15
-    p_a.paragraph_format.space_after = Pt(4)
-    r_at = p_a.add_run("Abstract—")
+    # Abstract & Index Terms in Column 1
+    p_abs = doc.add_paragraph()
+    p_abs.paragraph_format.line_spacing = 1.15
+    p_abs.paragraph_format.space_after = Pt(4)
+    p_abs.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    r_at = p_abs.add_run("Abstract—")
     r_at.bold = True
     r_at.italic = True
-    r_at.font.size = Pt(8.5)
-    r_ab = p_a.add_run(
+    r_at.font.size = Pt(9)
+    r_ab = p_abs.add_run(
         "High-throughput analytical testing laboratories in agronomy, environmental chemistry, and clinical pathology govern safety-critical decisions, "
         "including regional fertilizer allocations, soil carbon sequestration underwriting, and remediation protocols. However, analytical reports are susceptible "
         "to silent mechanical and human failure modes: specimen transpositions (sample swaps) and clerical transcription errors (decimal point slips, unit confusion, "
@@ -171,50 +191,67 @@ def create_document():
         "to 57–92%), whereas restricting calibration to one score per distinct physical sample reliably restores empirical FDR control (0.000–0.090 in pre-registered "
         "50-batch pools, and 0.03–0.11 across pool sizes 1 to 50 batches, nominal q = 0.10)."
     )
-    r_ab.font.size = Pt(8.5)
+    r_ab.bold = True
+    r_ab.font.size = Pt(9)
 
-    p_idx = cell_abs.add_paragraph()
-    p_idx.paragraph_format.space_before = Pt(4)
+    p_idx = doc.add_paragraph()
+    p_idx.paragraph_format.line_spacing = 1.15
+    p_idx.paragraph_format.space_after = Pt(8)
+    p_idx.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     r_idxt = p_idx.add_run("Index Terms—")
     r_idxt.bold = True
     r_idxt.italic = True
-    r_idxt.font.size = Pt(8.5)
+    r_idxt.font.size = Pt(9)
     r_idx = p_idx.add_run(
         "Analytical laboratory quality control, cyber-physical systems, sample permutation, conformal inference, false discovery rate (FDR), "
         "diffuse reflectance spectroscopy, fault attribution, label noise."
     )
-    r_idx.font.size = Pt(8.5)
-
-    p_sep = doc.add_paragraph()
-    p_sep.paragraph_format.space_after = Pt(6)
+    r_idx.font.size = Pt(9)
 
     def add_heading_1(text):
         p = doc.add_paragraph()
-        p.paragraph_format.space_before = Pt(12)
+        p.paragraph_format.space_before = Pt(10)
         p.paragraph_format.space_after = Pt(3)
         p.paragraph_format.keep_with_next = True
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         r = p.add_run(text)
         r.bold = True
-        r.font.size = Pt(10.5)
+        r.font.size = Pt(10)
         return p
 
     def add_heading_2(text):
         p = doc.add_paragraph()
-        p.paragraph_format.space_before = Pt(8)
+        p.paragraph_format.space_before = Pt(7)
         p.paragraph_format.space_after = Pt(2)
         p.paragraph_format.keep_with_next = True
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
         r = p.add_run(text)
         r.bold = True
         r.italic = True
-        r.font.size = Pt(10)
+        r.font.size = Pt(9.5)
         return p
 
-    def add_body_p(text):
+    def add_heading_3(text):
         p = doc.add_paragraph()
-        p.paragraph_format.space_after = Pt(4)
+        p.paragraph_format.space_before = Pt(5)
+        p.paragraph_format.space_after = Pt(2)
+        p.paragraph_format.keep_with_next = True
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        r = p.add_run(text)
+        r.bold = True
+        r.italic = True
+        r.font.size = Pt(9.5)
+        return p
+
+    def add_body_p(text, indent=True):
+        p = doc.add_paragraph()
+        p.paragraph_format.space_after = Pt(2.5)
         p.paragraph_format.line_spacing = 1.15
         p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        if indent:
+            p.paragraph_format.first_line_indent = Inches(0.18)
         r = p.add_run(text)
+        r.font.size = Pt(9.5)
         return p
 
     def add_figure(img_path, caption_text):
@@ -222,24 +259,30 @@ def create_document():
             p_img = doc.add_paragraph()
             p_img.alignment = WD_ALIGN_PARAGRAPH.CENTER
             p_img.paragraph_format.space_before = Pt(6)
-            p_img.paragraph_format.space_after = Pt(3)
-            doc.add_picture(str(img_path), width=Inches(6.2))
+            p_img.paragraph_format.space_after = Pt(2)
+            doc.add_picture(str(img_path), width=Inches(3.35))
             
             p_cap = doc.add_paragraph()
             p_cap.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-            p_cap.paragraph_format.left_indent = Inches(0.2)
-            p_cap.paragraph_format.right_indent = Inches(0.2)
-            p_cap.paragraph_format.space_after = Pt(8)
+            p_cap.paragraph_format.space_after = Pt(6)
             r = p_cap.add_run(caption_text)
-            r.font.size = Pt(8.5)
+            r.font.size = Pt(8)
             r.italic = False
 
     # -------------------------------------------------------------
     # I. INTRODUCTION
     # -------------------------------------------------------------
     add_heading_1("I. INTRODUCTION")
-    add_body_p(
-        "High-throughput analytical testing laboratories serve as the empirical foundation for agriculture, clinical diagnostics, "
+    p_intro = doc.add_paragraph()
+    p_intro.paragraph_format.space_after = Pt(2.5)
+    p_intro.paragraph_format.line_spacing = 1.15
+    p_intro.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    p_intro.paragraph_format.first_line_indent = Inches(0)
+    r_cap = p_intro.add_run("H")
+    r_cap.bold = True
+    r_cap.font.size = Pt(22)
+    r_intro = p_intro.add_run(
+        "igh-throughput analytical testing laboratories serve as the empirical foundation for agriculture, clinical diagnostics, "
         "environmental safety, and industrial chemical processing. In agricultural soil analysis, laboratory measurements of pH, organic carbon (SOC), "
         "total nitrogen (N), cation exchange capacity (CEC), and primary nutrients dictate high-stakes agronomic decisions, including regional fertilizer "
         "application, soil amendments, and verifiable carbon credit underwriting. Despite extensive internal quality controls and instrument calibrations, "
@@ -247,6 +290,7 @@ def create_document():
         "revealed that sample-processing differences (sieving, grinding, drying, and analytical quantification) induce extensive inter-laboratory "
         "variability in reported soil organic carbon [1]."
     )
+    r_intro.font.size = Pt(9.5)
     add_body_p(
         "Analytical batch errors fall into two fundamentally distinct structural failure modes:\n"
         "1) Specimen Swaps (Permutations): Misplacement of physical sample containers or automated tray rotations cause Sample j to be reported under "
@@ -324,7 +368,17 @@ def create_document():
         "formalizing the sampling requirements necessary to guarantee finite-sample valid FDR control."
     )
 
-    # TABLE I - Formatted to 7.0 inches width with explicit column widths
+    # Section break to 1 column for wide Table I
+    sec_t1 = doc.add_section(WD_SECTION_START.CONTINUOUS)
+    sec_t1.top_margin = Inches(0.7)
+    sec_t1.bottom_margin = Inches(0.7)
+    sec_t1.left_margin = Inches(0.625)
+    sec_t1.right_margin = Inches(0.625)
+    sec_t1.page_width = Inches(8.5)
+    sec_t1.page_height = Inches(11.0)
+    set_section_columns(sec_t1, num_cols=1)
+
+    # TABLE I - Formatted to 7.25 inches width across the page
     p_t1_title = doc.add_paragraph()
     p_t1_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_t1_title.paragraph_format.space_before = Pt(8)
@@ -335,7 +389,7 @@ def create_document():
 
     table1 = doc.add_table(rows=7, cols=6)
     table1.alignment = WD_TABLE_ALIGNMENT.CENTER
-    col_widths = [Inches(1.7), Inches(1.0), Inches(1.0), Inches(1.1), Inches(1.1), Inches(1.1)]
+    col_widths = [Inches(1.75), Inches(1.05), Inches(1.05), Inches(1.15), Inches(1.1), Inches(1.15)]
 
     t1_data = [
         ["Methodology", "Batch Joint Inference", "Physical Witness", "Permutation Model (pi)", "Typed Error Library (C)", "Root-Cause Attribution"],
@@ -363,7 +417,17 @@ def create_document():
             set_cell_margins(cell, top=40, bottom=40, left=40, right=40)
 
     p_post_t1 = doc.add_paragraph()
-    p_post_t1.paragraph_format.space_after = Pt(8)
+    p_post_t1.paragraph_format.space_after = Pt(6)
+
+    # Section break back to 2 columns
+    sec_after_t1 = doc.add_section(WD_SECTION_START.CONTINUOUS)
+    sec_after_t1.top_margin = Inches(0.7)
+    sec_after_t1.bottom_margin = Inches(0.7)
+    sec_after_t1.left_margin = Inches(0.625)
+    sec_after_t1.right_margin = Inches(0.625)
+    sec_after_t1.page_width = Inches(8.5)
+    sec_after_t1.page_height = Inches(11.0)
+    set_section_columns(sec_after_t1, num_cols=2, space_dxa=360)
 
     # -------------------------------------------------------------
     # III. PROBLEM FORMULATION
@@ -591,6 +655,7 @@ def create_document():
 
     table2 = doc.add_table(rows=6, cols=5)
     table2.alignment = WD_TABLE_ALIGNMENT.CENTER
+    t2_widths = [Inches(0.85), Inches(0.55), Inches(0.65), Inches(0.55), Inches(0.75)]
     t2_data = [
         ["Witness Modality", "EdaphNet Recall", "Best Baseline", "Difference", "95% Bootstrap CI"],
         ["W_0 (Prior Only)", "0.238", "0.271 (B_5)", "-0.033", "[-0.049, -0.016]"],
@@ -602,17 +667,18 @@ def create_document():
     for row_idx, row in enumerate(table2.rows):
         for col_idx, cell in enumerate(row.cells):
             cell.text = t2_data[row_idx][col_idx]
+            cell.width = t2_widths[col_idx]
             cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
-            cell.paragraphs[0].paragraph_format.space_after = Pt(2)
-            cell.paragraphs[0].paragraph_format.space_before = Pt(2)
+            cell.paragraphs[0].paragraph_format.space_after = Pt(1.5)
+            cell.paragraphs[0].paragraph_format.space_before = Pt(1.5)
             for r in cell.paragraphs[0].runs:
-                r.font.size = Pt(8)
+                r.font.size = Pt(7.2)
                 if row_idx == 0 or row_idx == 5:
                     r.bold = True
             top_b = {'val': 'single', 'sz': 8, 'color': '000000'} if row_idx == 0 else ({'val': 'single', 'sz': 4, 'color': '888888'} if row_idx in [1, 5] else None)
             bot_b = {'val': 'single', 'sz': 8, 'color': '000000'} if row_idx == 5 else ({'val': 'single', 'sz': 4, 'color': '000000'} if row_idx == 0 else None)
             set_cell_borders(cell, top=top_b, bottom=bot_b)
-            set_cell_margins(cell, top=60, bottom=60, left=60, right=60)
+            set_cell_margins(cell, top=30, bottom=30, left=30, right=30)
 
     p_post_t2 = doc.add_paragraph()
     p_post_t2.paragraph_format.space_after = Pt(6)
@@ -665,6 +731,7 @@ def create_document():
 
     table3 = doc.add_table(rows=4, cols=4)
     table3.alignment = WD_TABLE_ALIGNMENT.CENTER
+    t3_widths = [Inches(0.95), Inches(0.8), Inches(0.8), Inches(0.8)]
     t3_data = [
         ["Dataset & Setting", "Fault Type (EdaphNet)", "Swap-Partner Accuracy", "Rule Heuristic (B6)"],
         ["Simulation (T0)", "84% – 92%", "86% – 98%", "32% – 50%"],
@@ -674,17 +741,18 @@ def create_document():
     for row_idx, row in enumerate(table3.rows):
         for col_idx, cell in enumerate(row.cells):
             cell.text = t3_data[row_idx][col_idx]
+            cell.width = t3_widths[col_idx]
             cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
-            cell.paragraphs[0].paragraph_format.space_after = Pt(2)
-            cell.paragraphs[0].paragraph_format.space_before = Pt(2)
+            cell.paragraphs[0].paragraph_format.space_after = Pt(1.5)
+            cell.paragraphs[0].paragraph_format.space_before = Pt(1.5)
             for r in cell.paragraphs[0].runs:
-                r.font.size = Pt(8)
+                r.font.size = Pt(7.5)
                 if row_idx == 0 or row_idx == 3:
                     r.bold = True
             top_b = {'val': 'single', 'sz': 8, 'color': '000000'} if row_idx == 0 else ({'val': 'single', 'sz': 4, 'color': '888888'} if row_idx in [1, 3] else None)
             bot_b = {'val': 'single', 'sz': 8, 'color': '000000'} if row_idx == 3 else ({'val': 'single', 'sz': 4, 'color': '000000'} if row_idx == 0 else None)
             set_cell_borders(cell, top=top_b, bottom=bot_b)
-            set_cell_margins(cell, top=60, bottom=60, left=60, right=60)
+            set_cell_margins(cell, top=30, bottom=30, left=30, right=30)
 
     p_post_t3 = doc.add_paragraph()
     p_post_t3.paragraph_format.space_after = Pt(6)
@@ -777,11 +845,13 @@ def create_document():
     ]
     for ref in refs:
         p_ref = doc.add_paragraph()
-        p_ref.paragraph_format.left_indent = Inches(0.3)
-        p_ref.paragraph_format.first_line_indent = Inches(-0.3)
-        p_ref.paragraph_format.space_after = Pt(3)
+        p_ref.paragraph_format.left_indent = Inches(0.22)
+        p_ref.paragraph_format.first_line_indent = Inches(-0.22)
+        p_ref.paragraph_format.space_after = Pt(2.5)
+        p_ref.paragraph_format.line_spacing = 1.15
+        p_ref.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         r = p_ref.add_run(ref)
-        r.font.size = Pt(8.5)
+        r.font.size = Pt(8.0)
 
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -790,6 +860,7 @@ def create_document():
     out_targets = [
         REPORTS_DIR / "Project_review_3.docx",
         RESULTS_DIR / "Project_review_3.docx",
+        REPORTS_DIR / "EdaphNet_Review_Revised_2.docx",
         RESULTS_DIR / "EdaphNet_Review_Revised_2.docx",
         REPORTS_DIR / "EdaphNet_Review_Revised.docx",
         RESULTS_DIR / "EdaphNet_Review_Revised.docx",
