@@ -1,0 +1,10 @@
+method,recall_all,recall_swap,recall_value
+Full,0.3448,0.45,0.1111
+P1_fusion_student,0.3103,0.4,0.1111
+P1_fusion_gauss,0.2759,0.35,0.1111
+P2_split_gauss,0.2069,0.2,0.2222
+P2_split_student,0.2069,0.2,0.2222
+B2_student_t,0.1379,0.05,0.3333
+B2_gauss,0.069,0.0,0.2222
+B0_range,0.069,0.0,0.2222
+B1_rules,0.069,0.0,0.2222

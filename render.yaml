@@ -1,0 +1,24 @@
+services:
+  # Native Web Application (Recommended for mobile/camera field use)
+  - type: web
+    name: edaphnet-field-assistant
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements-deploy.txt
+    startCommand: python app/server.py --port $PORT --host 0.0.0.0
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+
+  # Optional Streamlit Dashboard
+  - type: web
+    name: edaphnet-streamlit-dashboard
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements-deploy.txt
+    startCommand: streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9

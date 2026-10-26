@@ -1,0 +1,13 @@
+order,samples,profiles,test,cal,median_OC
+Alfisol,581,99,189,66,0.38
+unknown,579,96,198,100,0.45
+Inceptisol,473,92,168,96,0.55
+Oxisol,402,67,168,58,0.55
+Ultisol,389,62,154,50,0.4
+Mollisol,263,49,70,23,0.74
+Entisol,260,48,104,41,0.35
+Andisol,175,35,53,41,2.83
+Vertisol,150,29,50,20,0.4
+Spodosol,124,20,49,6,0.68
+Aridisol,71,14,27,10,0.24
+Gelisol,6,1,6,0,0.565

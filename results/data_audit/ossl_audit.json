@@ -1,0 +1,57 @@
+{
+  "evidence_tag": "DATA AUDIT (descriptive)",
+  "files_md5": [
+    "e24b94605b0061add400cf3b617f1f18 *ossl_soillab_L1_v1.2.csv.gz",
+    "e8c640a9e7b6f15c2dec0a7d2e445716 *ossl_soilsite_L0_v1.2.csv.gz",
+    "8543cf2265bced21e6a4aab3758207f6 *ossl_visnir_L0_v1.2.csv.gz"
+  ],
+  "visnir_rows_joined_with_lab": 135418,
+  "after_licence_filter": 94654,
+  "excluded_licences": [
+    "JRC License Agreement"
+  ],
+  "wavelength_columns": 1076,
+  "wavelength_first_last": [
+    "scan_visnir.350_ref",
+    "scan_visnir.2500_ref"
+  ],
+  "combinations": {
+    "core8": {
+      "samples": 45541,
+      "groups": 9688,
+      "by_dataset": {
+        "KSSL.SSL": 45541
+      }
+    },
+    "core8+EC": {
+      "samples": 25208,
+      "groups": 5175,
+      "by_dataset": {
+        "KSSL.SSL": 25208
+      }
+    },
+    "core8+P_a274": {
+      "samples": 10999,
+      "groups": 2736,
+      "by_dataset": {
+        "KSSL.SSL": 10999
+      }
+    },
+    "core8-Ca": {
+      "samples": 45541,
+      "groups": 9688,
+      "by_dataset": {
+        "KSSL.SSL": 45541
+      }
+    },
+    "pH+OC+N+clay+sand": {
+      "samples": 50214,
+      "groups": 11307,
+      "by_dataset": {
+        "KSSL.SSL": 48281,
+        "AFSIS1.SSL": 1888,
+        "SERBIA.SSL": 45
+      }
+    }
+  }
+}

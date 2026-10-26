@@ -1,0 +1,2 @@
+sample_code,field_id,region,village_or_site,lat_deg,lon_deg,sampling_date,depth_cm_top,depth_cm_bottom,land_use,crop_last_season,soil_type_local_name,collector,consent_ref,air_dried_date,sieved_2mm,photographed,lab_batch_id,lab_name,is_duplicate_of_code_in_key,notes
+EDN-F01-S01,F01,,,,,,0,15,,,,,,,,,,,,

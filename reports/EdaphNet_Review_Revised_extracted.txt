@@ -1,0 +1,232 @@
+[0] Heading 1 :: Cyber-Physical Quality Assurance of Analytical Laboratories: Joint Permutation–Corruption Inference Using Low-Cost Optical Witnesses and Conformal Calibration Bounds
+[1] Normal :: Sudeep Sharma1, Student Member, IEEE, Armaan Srivastava2, Student Member, IEEE,
+[2] Normal :: Udit Shokeen3, Student Member, IEEE, and Dr. Priya Saminathan4, Senior Member, IEEE (Faculty Guide)
+[3] Normal :: School of Computer Science and Engineering, Vellore Institute of Technology, Vellore 632014, Tamil Nadu, India.
+[4] Normal :: 1Reg. No. 23BDS0315 (sudeep.sharma2023@vitstudent.ac.in); 2Reg. No. 23BCE2318 (armaan.srivastava2023@vitstudent.ac.in);
+[5] Normal :: 3Reg. No. 23BCB0001 (udit.shokeen2023@vitstudent.ac.in); 4Department of Computational Intelligence, SCSE, VIT Vellore (priya.s@vit.ac.in).
+[6] Normal :: Manuscript submission: October 2, 2026; revised submission: October 24, 2026. Corresponding author: Sudeep Sharma.
+[7] Body Text :: 
+[8] Body Text :: 
+[9] Heading 2 :: Abstract—Analytical laboratories support decision-making in agriculture, environmental monitoring, and clinical test-ing. Their reports are nevertheless vulnerable to sample swaps and numerical reporting errors. A sample swap as-signs a chemically valid result to the wrong sample identifier, whereas a numerical error alters a value during manual en-try or automated transfer. This paper presents EdaphNet, a batch-based quality assurance framework that combines an independent optical observation of each sample, acquired before chemical analysis, with probabilistic inference over sample permutations and typed numerical corruptions. The framework estimates likely errors, assigns suspicion scores, and proposes corrections. Evaluation uses 23,219 soil sam-ples from the Kellogg Soil Survey Laboratory (KSSL) and ICRAF–ISRIC repositories across four witness levels. On the KSSL benchmark, smartphone colour improves sample-swap detection by 10.3 percentage points over a supervised baseline. Laboratory Vis-NIR spectroscopy improves recall across all error types by 9.2 percentage points and achieves reported fault-attribution accuracy of 97–100%. The cali-bration experiments report that reusing calibration samples can undermine conformal false discovery rate control; using unique calibration scores restores empirical control in the reported setting. These findings indicate the potential of optical witnesses while defining important limits related to sensor quality, error composition, and calibration design.
+[10] Body Text :: Index Terms—Analytical laboratory quality control, cyber-physical systems, sample permutation, conformal inference, false discovery rate, diffuse reflectance spectroscopy, fault attri-bution, label noise.
+[11] Body Text :: digit transpositions, unit mismatches, or column shifts during manual entry or automated transfer. Range checks may miss a swapped report because its values remain within plausible limits. Clinical delta checks use a patient’s previous results, but comparable histories are often unavailable for newly received environmental samples [2].
+[12] Body Text :: EdaphNet addresses this limitation using an independent op-tical witness for each sample, ranging from smartphone colour to visible–near-infrared (Vis-NIR) spectroscopy. The witness supplies evidence about the physical sample against which its report can be checked. It is a verification input rather than a replacement for laboratory chemistry.
+[13] Body Text :: The framework evaluates a complete batch jointly, combining structured sample permutations with a library of numerical cor-ruption operations. It returns suspicion scores, likely fault types, and candidate corrected values. Evaluation on 23,219 KSSL and ICRAF–ISRIC samples indicates that smartphone colour is useful for detecting swaps, whereas laboratory spectroscopy produces the strongest aggregate improvement. The calibration analysis also identifies repeated calibration observations as a source of failure in the reported experimental design.
+[14] Body Text :: 
+[15] Body Text :: 
+[16] Body Text :: 
+[17] Body Text :: 
+[18] List Paragraph :: Introduction
+[19] Body Text :: Analytical chemistry laboratories provide measurements for agriculture, environmental compliance, food safety, and health-care. In soil testing, pH, organic carbon, total nitrogen, cation exchange capacity (CEC), and nutrient concentrations inform fertiliser application, soil amendments, and carbon accounting. Errors may occur despite correctly calibrated instruments be-cause of sample labelling, rack movement, or data entry. The cited proficiency study reports that 28% of soil organic carbon observations from eight commercial agricultural laboratories fell outside the stated proficiency criteria [1].
+[20] Body Text :: Two error mechanisms require separate treatment. Sample swaps assign one sample’s results to another sample’s identifier: the chemistry remains plausible, but the identity is incorrect. Numerical errors alter reported values through decimal shifts,
+[21] Body Text :: 
+[22] Normal :: Figure 1. Overview of EdaphNet verification, reproduced from the supplied Transactions manuscript. A physical witness and the laboratory batch feed joint inference; its outputs support re-testing, fault attribution, and candidate correction.
+[23] Body Text :: 
+[24] Body Text :: 
+[25] List Paragraph :: Related Work
+[26] Normal :: A. Optical Soil Sensing
+[27] Body Text :: Vis-NIR diffuse reflectance spectroscopy, spanning 350–2500 nm, is widely used for non-destructive soil characterisa-tion [3, 4]. Mobile tools such as LandPKS combine smartphone imaging with colour references to estimate soil properties [5]. These tools primarily predict properties. EdaphNet instead uses optical observations as independent evidence for checking laboratory reports.
+[28] Body Text :: 
+[29] Normal :: B. Autoverification Methods
+[30] Body Text :: Range-based autoverification is used in industrial and clinical environments [6, 7]. Multi-analyte checks can identify wrong-blood-in-tube events by comparing current measurements with previous patient results [2]. Such checks are less suitable for cross-sectional environmental batches, which may lack histori-cal measurements and contain swapped samples that still satisfy plausible property ranges.
+[31] Normal :: C. Permutation Matching and Conformal Testing
+[32] Body Text :: Genomic studies identify sample mix-ups by matching informa-tive genotype signatures [8]. Soil optical witnesses are noisier, and their predictive value varies by property. EdaphNet com-bines this evidence with a probabilistic model of laboratory results rather than treating it as an exact identifier. Conformal p-values, together with a suitable multiple-testing procedure, provide a framework for false discovery rate (FDR) control under the required assumptions [9, 10, 12]. Confident-learning approaches address label errors [11]. Here, the reported experi-ments highlight the need to examine how repeated calibration observations affect those assumptions.
+[33] Normal :: Table I. Comparison with previous quality assurance methods
+[34] Body Text :: 
+[35] Normal :: 
+[36] Body Text :: with plausible alternatives. An uncorrupted, or “none,” case is included when computing the clean-report probability.
+[37] Normal :: C. Multi-Property Latent Model
+[38] Body Text :: Property-specific monotonic scalers map reports to latent coor-dinates z = g(r). Conditional on the witness, the latent vector follows
+[39] Body Text :: 
+[40] Normal :: zi | wi ∼ N  µ(wi), Σ .	(1)
+[41] Body Text :: 
+[42] Body Text :: 
+[43] Body Text :: Here, µ(wi) is an out-of-fold gradient-boosted regression es-timate, and Σ is the full residual covariance matrix. The co-variance captures relationships among properties, allowing a
+[44] Body Text :: value to be flagged when it conflicts with other measurements even if the witness is weak for that particular property. This is a conditional multivariate Gaussian model; the mean is supplied by the regression estimator.
+[45] List Paragraph :: Joint Inference Engine
+[46] Body Text :: For a candidate pairing of report r j with sample i, the marginal likelihood combines the corruption hypotheses:
+[47] Body Text :: 
+[48] Normal :: Method	Joint
+[49] Normal :: batch
+[50] Normal :: Physical wit- Swap model	Typed error ness
+[51] Normal :: 
+[52] Body Text :: 
+[53] Normal :: 
+[54] Normal :: Range filters [1]		No	 No	No	Heuristic Clinical	delta No	Historical	Pairwise	No checks [2]
+[55] Normal :: L( j, i) = ∑ P(c) φ g(T −1(r j)); µ(wi), Σ c∈C
+[56] Body Text :: 
+[57] Body Text :: (2)
+[58] Body Text :: 
+[59] Normal :: Genomic matching [8] Yes	DNA	Pairwise	No Cleanlab [11]	No	Covariates	No	Residual Conformal outliers [9] No	Covariates	No	No
+[60] Normal :: × Jg◦T −1 (r j) .
+[61] Normal :: 
+[62] Normal :: EdaphNet	Yes	RGB/Vis-NIR
+[63] Normal :: Structured	Formal library
+[64] Normal :: 
+[65] Body Text :: 
+[66] Normal :: 
+[67] Normal :: Calibration validity depends on the assumptions discussed in Section V.
+[68] Body Text :: 
+[69] Body Text :: 
+[70] List Paragraph :: Mathematical Problem Formulation
+[71] Body Text :: Consider a laboratory rack with n physical positions; the re-ported standard tray uses n = 24. An optical sensor records
+[72] Body Text :: The Gaussian density is denoted by φ , and J is the relevant change-of-variables Jacobian. Each candidate permutation is scored using its prior and its likelihood relative to the identity assignment:
+[73] Body Text :: 
+[74] Normal :: witness wi ∈ Rd at position i. The laboratory returns a batch R = (r1, . . . , rn), where each report r j ∈ RP contains P measured properties.
+[75] List Paragraph :: Structured Permutation Set
+[76] Normal :: n
+[77] Normal :: P(π | R,W ) ∝ P(π) ∏
+[78] Normal :: j=1
+[79] Normal :: L( j, π( j))
+[80] Normal :: L( j, j) .	(3)
+[81] Normal :: 
+[82] Body Text :: A sample swap is represented by a bijection π between report positions and physical sample positions. Although the full per-mutation space contains n! possibilities, handling errors often follow physical patterns. The candidate set Stray includes the identity, adjacent swaps, cyclic tray shifts of one and two po-sitions, and arbitrary pairwise swaps. The reported 24-well implementation considers approximately 344 candidate permu-tations. This is a structured candidate set, not an enumeration of all permutations.
+[83] List Paragraph :: Numerical Corruption Set
+[84] Body Text :: The corruption library C represents common reporting errors, including multiplication or division by ten, unit conversion, digit swaps, column swaps, and gross scaling. Gross scaling is written as Tgross(x) = γx, with γ ∈ [0.2, 5.0]. These trans-formations let the inference engine compare a reported value
+[85] Body Text :: Normalisation is performed over Stray. Summing posterior mass over permutations that move report j gives P(moved j). Com-bining this with the conditional probability of no numerical corruption yields
+[86] Body Text :: 
+[87] Body Text :: 
+[88] Body Text :: P(clean j) = [1 − P(moved j)]
+[89] Normal :: × P(c = none | r j, wj),	(4)
+[90] Normal :: s j = 1 − P(clean j).	(5)
+[91] Body Text :: 
+[92] Body Text :: 
+[93] Body Text :: The engine also returns the most likely fault type and a candidate corrected report. The supplied implementation reports 184 ms to normalise and perform joint inference over approximately 344 hypotheses for a 24-well tray; this timing is specific to the stated setup.
+[94] Body Text :: 
+[95] Normal :: Algorithm 1. Batch permutation–attribution inference
+[96] Body Text :: 
+[97] Normal :: Input: Reports R, witnesses W , predictor µ, covariance Σ, candidate permutations Stray, and corruption library C .
+[98] Normal :: Output: Suspicion scores s, fault attributions A, and candidate corrected reports R^.	
+[99] List Paragraph :: Estimate latent means µ(wi) for all samples.
+[100] List Paragraph :: Compute cell log-likelihoods ℓ( j, i) = log L( j, i).
+[101] List Paragraph :: Score each candidate permutation using its prior and the log-
+[102] Normal :: likelihood change from the identity.
+[103] List Paragraph :: Normalise the permutation posterior.
+[104] List Paragraph :: Compute the probability that each report was moved.
+[105] List Paragraph :: Compute each report’s clean-result probability.
+[106] List Paragraph :: Set suspicion to one minus that probability.
+[107] List Paragraph :: Assign the maximum-a-posteriori fault type and candidate cor-rected value.
+[108] Body Text :: 
+[109] Normal :: 
+[110] Body Text :: 
+[111] List Paragraph :: Conformal Calibration and Pseudo-Replication
+[112] Body Text :: carbon, total nitrogen, and total carbon measurements. ICRAF–ISRIC contributes 3,473 soil profiles from 553 locations across Africa, Asia, and the Americas, with pH, soil organic carbon (SOC), clay, sand, CEC, potassium, calcium, and magnesium measurements. The combined total is 23,219 samples.
+[113] Normal :: B. Witness Levels
+[114] Body Text :: Four witness levels are considered: W0, an uninformative prior; W1, smartphone RGB colour with noise ∆E ∈ {0, 2, 4, 8}; W2, a 10-band multispectral sensor; and W3, a laboratory Vis-NIR spectrometer spanning 350–2500 nm. Smartphone colour is more informative for SOC than for several other properties,
+[115] Body Text :: and performance varies across datasets and analytes. Fig-ure 3, supplied by the Transactions manuscript, illustrates the property-specific predictive information available to the verifi-cation model.
+[116] Body Text :: 
+[117] Body Text :: A clean calibration set Dcal = {(rcal, wcal)}N	supplies calibra-
+[118] Normal :: k	k	k=1
+[119] Body Text :: tion scores. A test score s j is converted to a conformal p-value as
+[120] Body Text :: 
+[121] Normal :: p j =
+[122] Normal :: N
+[123] Normal :: k=1
+[124] Normal :: 1{scal ≥ s j}
+[125] Normal :: .	(6)
+[126] Normal :: 
+[127] Normal :: N + 1
+[128] Body Text :: The Benjamini–Hochberg (BH) procedure is applied at nominal level q = 0.10 [12]. Its interpretation requires appropriate cali-bration and multiple-testing assumptions; empirical control in one experiment is not an unconditional guarantee for arbitrary dependent batches.
+[129] Body Text :: Initial experiments reported realised FDR between 57% and 92%. Diagnostic analysis attributed this failure to pseudo-replication: approximately 511 calibration soils were repeatedly sampled across 400 evaluation batches, producing repeated scores and undermining the intended calibration design. After restricting calibration to one score per unique sample, with ap-proximately 2,800 KSSL samples, the reported empirical FDR fell below 0.10. These observations emphasise that calibra-tion validity depends on sampling design and the relationship between calibration and evaluation data.
+[130] Body Text :: 
+[131] Body Text :: 
+[132] Body Text :: 
+[133] Body Text :: 
+[134] Body Text :: 
+[135] Normal :: Figure 3. Cross-validated predictive R2 at unseen geographic locations, repro-duced from the Transactions manuscript. The figure supplements the review’s witness discussion; it shows ideal colour, phone colour, and spectroscopy for the displayed properties, not every witness level.
+[136] Body Text :: 
+[137] Body Text :: 
+[138] Normal :: C. Baselines
+[139] Body Text :: Comparisons include range checks (B0), soil-science rules (B1), laboratory generative density (B2), individual-property witness checks (B3), genomic-style swap matching (B4), supervised LightGBM classifiers (B5), rule-based heuristics (B6), and Cleanlab regression label-quality estimates (B7) [11].
+[140] List Paragraph :: Results and Analysis
+[141] Normal :: A. Main KSSL Benchmark
+[142] Body Text :: The pre-registered primary metric is recall at a 5% re-test bud-get, evaluated across 50-batch pools and five random seeds. Table II retains the review’s reported values for all 19,746 KSSL samples.
+[143] Normal :: Table II. Pre-registered recall at a 5% re-test budget (KSSL)
+[144] Normal :: 
+[145] Body Text :: 
+[146] Normal :: 
+[147] Normal :: 
+[148] Body Text :: 
+[149] Body Text :: 
+[150] Normal :: Figure 2. Summary of the calibration outcomes stated in the review. The 57–92% interval is a reported range, not a confidence interval; the corrected result is reported only as below 0.10. No exact corrected FDR is inferred.
+[151] Body Text :: 
+[152] Body Text :: 
+[153] List Paragraph :: Experimental Benchmark
+[154] Normal :: A. Datasets
+[155] Body Text :: The primary KSSL benchmark contains 19,746 soil samples from 6,999 geographic sites in the United States, with organic
+[156] Normal :: Witness	EdaphNet  Best baseline
+[157] Body Text :: 
+[158] Normal :: W0 (none)	0.238	0.271 (B5)
+[159] Normal :: W1 (colour, ∆E = 0)	0.416	0.415 (B5)
+[160] Normal :: W1 (phone, ∆E = 2)	0.410	0.396 (B5)
+[161] Normal :: W1 (noisy, ∆E = 4)	0.382	0.354 (B5)
+[162] Normal :: W3 (spectrometer)	0.604	0.512 (B5)
+[163] Body Text :: 
+[164] Body Text :: Without a witness, EdaphNet achieves recall of 0.238, below the best baseline’s 0.271. Ideal colour yields 0.416 versus 0.415; phone colour at ∆E = 2 yields 0.410 versus 0.396; and noisier
+[165] Body Text :: 
+[166] Body Text :: colour at ∆E = 4 yields 0.382 versus 0.354. Spectroscopy yields 0.604 versus 0.512, a gain of 9.2 percentage points (difference 0.092; 95% CI [0.069, 0.113]).
+[167] Normal :: C. Fault Attribution
+[168] Body Text :: In addition to an anomaly score, EdaphNet proposes a likely fault cause. Reported attribution accuracy is 84–92% in simula-tion, 89–98% for ICRAF colour data, and 97–100% for KSSL spectrometer data. The corresponding rule-heuristic ranges are 32–50%, 37–51%, and 24–29%, respectively. The compared scoring baselines B4, B5, and B7 do not provide the same typed fault attribution; the rule heuristic is the attribution compara-tor. Exact swap-partner identification is reported at 87–99% accuracy.
+[169] Body Text :: 
+[170] Body Text :: 
+[171] Body Text :: 
+[172] Body Text :: 
+[173] Body Text :: 
+[174] Normal :: Figure 4. KSSL recall at a 5% re-test budget, reproduced from the Transactions
+[175] Normal :: Table III. Root-cause fault-attribution accuracy
+[176] Body Text :: 
+[177] Normal :: Setting	EdaphNet Rule heuristic
+[178] Normal :: 
+[179] Body Text :: 
+[180] Body Text :: 
+[181] Normal :: show recall differences.
+[182] Body Text :: 
+[183] Body Text :: The pre-registered hypothesis that commodity RGB colour would outperform all existing methods by at least five percent-age points under an equal error mix was not supported. Spec-troscopy performed significantly better than the best supervised baseline (reported p < 0.001). Low-cost colour can therefore help with particular error types without consistently outperform-ing supervised methods overall.
+[184] Normal :: B. Sample Swaps Versus Numerical Errors
+[185] Body Text :: EdaphNet performs best on sample swaps. With phone colour, its improvement over B5 is 10.3 percentage points (95% CI [0.064, 0.139]); with spectroscopy, the improvement is 23.1
+[186] Body Text :: percentage points (95% CI [0.205, 0.258]). This distinction is consistent with the purpose of a witness: a swapped report may be chemically plausible but incompatible with its assigned physical sample.
+[187] Body Text :: For isolated numerical errors, EdaphNet underperforms B5 by 8.2 percentage points (difference −0.082; 95% CI [−0.116,
+[188] Body Text :: −0.050]). The reported diagnosis is that B5 exploits the hard
+[189] Body Text :: constraint SOC ≤ total carbon. EdaphNet’s Gaussian model captures correlation but does not explicitly enforce this inequal-
+[190] Body Text :: ity. Incorporating such constraints is therefore a clear opportu-nity to improve numerical-corruption detection.
+[191] Body Text :: 
+[192] Normal :: 
+[193] Normal :: Figure 5. Difference in detection recall between EdaphNet and B5 for swaps and numerical value errors, reproduced from the Transactions manuscript. The vertical axis shows a difference, not absolute recall. Positive values favour EdaphNet.
+[194] Normal :: KSSL (spectrometer W3)	97–100%	24–29%
+[195] Body Text :: 
+[196] Body Text :: 
+[197] Normal :: D. Sensitivity to Error Mix
+[198] Body Text :: The balance between sample swaps and transcription errors can vary with laboratory automation. The experiments vary the swap share ω from 0.1 to 0.9. With phone colour, Edaph-Net’s advantage increases as swaps become more common; the reported crossover to outperforming the comparison methods occurs at approximately 60–70% swaps. With spectroscopy, the reported crossover is approximately 30%. These results make the laboratory’s error mix an important consideration when selecting a verification policy.
+[199] Body Text :: 
+[200] Body Text :: 
+[201] Normal :: Figure 6. Sensitivity to the share of sample swaps among errors, reproduced from the Transactions manuscript. Phone colour and spectroscopy are compared with B5, B4, and B1; the dashed vertical marker identifies the registered error mix.
+[202] Body Text :: 
+[203] Body Text :: 
+[204] List Paragraph :: Cyber-Physical Deployment
+[205] List Paragraph :: Combined Policy
+[206] Body Text :: A two-stage policy was implemented and tested on KSSL with phone-colour witnesses (∆E = 2). The framework first checks for likely permutation errors and then applies deterministic boundary rules to numerical values.  The combined policy
+[207] Body Text :: achieves recall of 0.20–0.25 for swaps and 0.222 for value errors. These results suggest complementary roles for the two checks. They describe the reported combined-policy experi-ment and should not be treated as an interchangeable estimate of the primary benchmark in Table II.
+[208] Body Text :: 
+[209] List Paragraph :: Throughput
+[210] Body Text :: Joint inference for a 24-well tray is reported to take 184 ms on an Intel Core i7 processor. This supports evaluating the method for integration into laboratory workflows in which witnesses are captured before destructive digestion and verification runs once reports become available. Deployment still requires validation on the target laboratory’s hardware, handling procedures, and calibration data.
+[211] List Paragraph :: Conclusion
+[212] Body Text :: EdaphNet combines optical measurements of physical samples with joint inference over sample permutations and numerical corruption. Evaluation on 23,219 samples shows that smart-phone colour can aid sample-swap detection. On the reported KSSL benchmark, laboratory Vis-NIR spectroscopy improves recall by 9.2 percentage points over the best baseline across error types and achieves fault-attribution accuracy of 97–100% in the spectrometer setting.
+[213] Body Text :: The calibration experiments report failure when calibration observations are repeated and restoration of empirical control when unique scores are used. These findings emphasise careful calibration design rather than an unconditional FDR guarantee. Results remain specific to the datasets and evaluation condi-tions: RGB performance varies by property and dataset, while numerical corruption remains a relative weakness because hard scientific constraints are not explicitly encoded. Future work includes field validation using Indian agricultural soil trays and integration with real-time robotic handling systems.
+[214] Body Text :: Acknowledgment
+[215] Body Text :: The authors thank their faculty guide, Dr. Priya Saminathan, School of Computer Science and Engineering, Vellore Institute of Technology, for her mentorship, domain knowledge, and critical feedback. They also thank VIT for its computational facilities and the USDA–NRCS Kellogg Soil Survey Laboratory and World Agroforestry Centre (ICRAF–ISRIC) for providing open soil datasets.
+[216] Body Text :: Reproducibility Statement
+[217] Body Text :: The supplied manuscripts state that code, model weights, ex-periment configurations, and run records are version-controlled
+[218] Body Text :: at https: JJgithub. comJSudeep- Sharma1Jedaphnet- v2, and that the reported metrics and figures trace to automated experiment logs. This revision retains the review’s reported data and results; it does not constitute a new experimental run. Fig-ures 1 and 3–6 are reproduced from the supplied Transactions manuscript. Figure 2 summarises only the calibration outcomes stated in the review.
+[219] Body Text :: References
+[220] List Paragraph :: R. O. Miller and J. Kotuby-Amacher, “Soil proficiency testing program: Inter-laboratory variability and reporting accuracy,” Soil Sci. Soc. Am. J., vol. 89, no. 2, pp. 112–128, 2025.
+[221] List Paragraph ::  J.-J. Kim, J. Heo, and S.-Y. Lee, “Machine learning approaches for wrong-blood-in-tube error detection in clinical chemistry testing,” Am. J. Clin. Pathol., vol. 150, no. 5, pp. 402–410, 2018.
+[222] List Paragraph :: R. A. Viscarra Rossel et al., “A global spectral library to characterise the world’s soil,” Earth-Sci. Rev., vol. 155, pp. 198–230, 2016.
+[223] List Paragraph :: K. Baryeh and S. Neethirajan, “Smart sensing and cyber-physical qual-ity assurance in automated agri-food testing,” IEEE Trans. AgriFood Electron., vol. 1, no. 2, pp. 89–101, 2023.
+[224] List Paragraph :: J. Maynard et al., “LandPKS Toolbox: Open-source mobile app tools for sustainable land management,” J. Soil Water Conserv., vol. 77, no. 6, pp. 91A–97A, 2022. 
+[225] List Paragraph :: R. V. Dorn and T. Rockwell, “Method and system for automated sensor validation and analytical calibration,” U.S. Patent 8,352,394, Jan. 8, 2013.
+[226] List Paragraph :: J. O. Westgard and S. A. Westgard, Basic QC Practices, 4th ed. Westgard Quality Corporation, 2020.
+[227] List Paragraph :: K. W. Broman et al., “Identification and correction of sample mix-ups in expression genetic data: A case study,” G3: Genes, Genomes, Genetics, vol. 5, no. 10, pp. 2177–2186, 2015.
+[228] List Paragraph :: S. Bates, E. Candès, L. Lei, and Y. Romano, “Testing for outliers with conformal p-values,” Ann. Statist., vol. 51, no. 1, pp. 149–178, 2023.
+[229] List Paragraph :: Y. Jin and E. J. Candès, “Selection by prediction with conformal p-values,” J. Mach. Learn. Res., vol. 24, no. 244, pp. 1–41, 2023.
+[230] List Paragraph :: W.-C. Wang and J. Mueller, “Detecting label errors in token classification data,” NeurIPS 2022 Workshop on Interactive Learning for NLP, 2022, arXiv:2210.03920.
+[231] List Paragraph :: Y. Benjamini and Y. Hochberg, “Controlling the false discovery rate: A practical and powerful approach,” J. Roy. Statist. Soc. Ser. B, vol. 57, no. 1, pp. 289–300, 1995.

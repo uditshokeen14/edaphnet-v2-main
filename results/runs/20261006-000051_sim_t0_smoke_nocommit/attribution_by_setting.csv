@@ -1,0 +1,9 @@
+seed,ordering,lambda,cal_mode,swap_flagged,swap_kind_ok,swap_partner_ok,value_flagged,value_kind_ok,value_op_ok,b6_value_flagged,b6_op_ok,swap_kind_acc,swap_partner_acc,value_kind_acc,value_op_acc,b6_op_acc
+11,random,0.0,clean,0,0,0,0,0,0,0,0,,,,,
+11,random,0.0,injected,0,0,0,7,7,6,0,0,,,1.0,0.8571428571428571,
+11,random,2.0,clean,14,14,14,11,11,11,0,0,1.0,1.0,1.0,1.0,
+11,random,2.0,injected,14,14,14,11,11,11,3,0,1.0,1.0,1.0,1.0,0.0
+11,clustered,0.0,clean,0,0,0,10,10,9,7,3,,,1.0,0.9,0.42857142857142855
+11,clustered,0.0,injected,0,0,0,10,10,9,7,3,,,1.0,0.9,0.42857142857142855
+11,clustered,2.0,clean,21,21,21,7,7,6,0,0,1.0,1.0,1.0,0.8571428571428571,
+11,clustered,2.0,injected,21,21,21,7,7,6,0,0,1.0,1.0,1.0,0.8571428571428571,

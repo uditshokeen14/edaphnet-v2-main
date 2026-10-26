@@ -1,0 +1,642 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>EdaphNet Learning Plan</title><style>:root { --ink:#18201d; --mute:#56625c; --line:#d3dbd6; --accent:#1f5f55; --soft:#e5f0ed; --warm:#7d5420; --warmsoft:#f3eadb;
+  --paper:#2f6d4f; --app:#3d5a80; --demo:#8a5a00; --future:#7a4b8a; --rec:#56625c; --tool:#6b6b6b; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); font: 10.4pt/1.5 "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+@page { size: A4; margin: 15mm 14mm 16mm; }
+h1 { font: 700 23pt/1.15 Georgia, "Times New Roman", serif; margin: 0 0 4px; }
+h2 { font: 700 15pt/1.25 Georgia, serif; margin: 22px 0 6px; padding-top: 8px; border-top: 2px solid var(--accent); break-after: avoid; }
+h3 { font: 700 11.5pt/1.3 "Segoe UI", Arial, sans-serif; margin: 14px 0 4px; color: var(--accent); break-after: avoid; }
+p { margin: 5px 0; }
+ul, ol { margin: 4px 0; padding-left: 18px; } li { margin: 2px 0; }
+.sub { color: var(--mute); font-size: 10.5pt; margin-bottom: 10px; }
+.box { background: var(--soft); border-radius: 6px; padding: 9px 13px; margin: 9px 0; break-inside: avoid; }
+.warn { background: var(--warmsoft); }
+table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 9.3pt; break-inside: auto; }
+tr { break-inside: avoid; }
+th { text-align: left; background: #eef2ef; font-weight: 600; padding: 5px 6px; border-bottom: 1px solid var(--line); }
+td { padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.n, th.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+code { font: 8.8pt Consolas, "Courier New", monospace; background: #f1f3f1; padding: 0 3px; border-radius: 3px; word-break: break-word; }
+.tag { display: inline-block; font: 600 7.4pt "Segoe UI", Arial; color: #fff; border-radius: 3px; padding: 1px 5px; white-space: nowrap; }
+.Paper { background: var(--paper); } .App { background: var(--app); } .Demo { background: var(--demo); }
+.Future { background: var(--future); } .Record { background: var(--rec); } .Tool { background: var(--tool); }
+figure { margin: 8px 0 12px; break-inside: avoid; text-align: center; }
+figure img { max-width: 100%; }
+figcaption { font-size: 9pt; color: var(--mute); text-align: left; margin-top: 3px; }
+.flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin: 8px 0; break-inside: avoid; }
+.flow div { border: 1.5px solid var(--accent); border-radius: 6px; padding: 6px; font-size: 8.6pt; background: #fff; }
+.flow b { display: block; color: var(--accent); font-size: 9pt; }
+.arrow-row { text-align: center; color: var(--accent); font-size: 9pt; margin: -2px 0 2px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cover { border-bottom: 3px solid var(--accent); padding-bottom: 8px; margin-bottom: 8px; }
+.small { font-size: 9pt; color: var(--mute); }
+.pb { break-before: page; }
+.ok { color: var(--paper); font-weight: 600; } .bad { color: #a8322a; font-weight: 600; } .mid { color: var(--demo); font-weight: 600; }
+@page { size: A4; margin: 18mm 16mm 18mm;
+  @top-right { content: "EdaphNet · Complete Project Dossier"; font: 8pt Georgia, serif; color: #7a847f; }
+  @bottom-center { content: counter(page); font: 9pt Georgia, serif; color: #444; } }
+@page :first { @top-right { content: none; } @bottom-center { content: none; } }
+body { font: 10.6pt/1.55 Georgia, "Times New Roman", serif; color: #1b2420; }
+h1, h2, h3, h4 { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: #1f5f55; }
+h2 { font-size: 17pt; border-top: none; padding-top: 0; margin: 0 0 8px; break-before: page; }
+h2.nobreak { break-before: auto; margin-top: 18px; }
+h3 { font-size: 12.5pt; color: #1f4f47; margin: 14px 0 5px; }
+h4 { font-size: 10.6pt; color: #1f4f47; margin: 10px 0 3px; }
+p { text-align: justify; margin: 6px 0; }
+table { font: 9pt/1.4 "Segoe UI", Arial, sans-serif; }
+th { background: #e4efeb; color: #1f4f47; }
+.tcap, figcaption { font: 9pt "Segoe UI", Arial, sans-serif; color: #56625c; margin: 10px 0 3px; text-align: left; }
+.tcap b, figcaption b { color: #1b2420; }
+figcaption { text-align: center; }
+.title-page { height: 245mm; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.title-page .name { font: 700 40pt Georgia, serif; color: #1f5f55; margin: 0; }
+.title-page .tag { font-size: 15pt; margin: 6px 0 22px; }
+.title-page .kind { font: 700 13pt "Segoe UI", Arial; color: #56625c; letter-spacing: .05em; margin-bottom: 22px; }
+.title-page .topics { font-size: 10pt; color: #56625c; margin-bottom: 34px; }
+.title-page .who { font-size: 11pt; line-height: 1.8; }
+.title-page .ver { font-size: 9.5pt; color: #7a847f; margin-top: 18px; }
+.toc { font: 10pt/1.55 "Segoe UI", Arial, sans-serif; }
+.toc a { color: #1b2420; text-decoration: none; }
+.toc .l1 { font-weight: 600; margin-top: 5px; }
+.toc .l2 { padding-left: 18px; color: #333; }
+.eq { font: italic 10.2pt "Cambria Math", Cambria, Georgia, serif; text-align: center; margin: 8px 0; }
+.quote { font-size: 9.6pt; color: #56625c; border-left: 3px solid #c9b28c; padding: 4px 10px; margin: 8px 0; }
+ul li, ol li { text-align: left; }
+
+@page { @top-right { content: "EdaphNet · Learning Plan"; font: 8pt Georgia, serif; color: #7a847f; } }
+pre { background: #f3f6f4; border: 1px solid #d3dbd6; border-radius: 5px; padding: 8px 10px; font: 8.2pt/1.35 Consolas, "Courier New", monospace;
+      white-space: pre; overflow: hidden; break-inside: avoid; }
+pre code { background: none; padding: 0; font: inherit; }
+h3 { margin-top: 16px; }
+p strong, li strong { color: #1f4f47; }
+ol, ul { margin: 4px 0 6px; }
+table { margin: 8px 0 12px; }
+</style></head><body><div class="title-page">
+ <div class="name">EdaphNet</div>
+ <div class="tag">Learn the project from scratch</div>
+ <div class="kind">7 DAYS × 2 HOURS · STUDY GUIDE</div>
+ <div class="topics">What every file does · What is inside it · How it works · How the files connect<br>
+ Daily reading · Code exercises · Self-tests</div>
+ <div class="who">Prepared for: [Your name] &nbsp;·&nbsp; Register number: [Roll number]<br>Guide: [Guide name], [Department]</div>
+ <div class="ver">Version 1.0 · 3 October 2026 · companion to the Complete Project Dossier</div>
+</div>
+<h2 id="contents">Contents</h2><div class="toc"><div class="l1"><a href="#the-map-you-are-going-to-learn">The map you are going to learn</a></div><div class="l1"><a href="#day-1-the-big-picture-what-why-and-seeing-it-work">Day 1 — The big picture (what, why, and seeing it work)</a></div><div class="l1"><a href="#day-2-the-data-from-raw-files-to-a-dataset">Day 2 — The data: from raw files to a dataset</a></div><div class="l1"><a href="#day-3-the-witness-what-colour-knows-about-soil">Day 3 — The witness: what colour knows about soil</a></div><div class="l1"><a href="#day-4-errors-and-swaps-what-can-go-wrong-in-a-report">Day 4 — Errors and swaps: what can go wrong in a report</a></div><div class="l1"><a href="#day-5-the-method-how-edaphnet-scores-a-batch">Day 5 — The method: how EdaphNet scores a batch</a></div><div class="l1"><a href="#day-6-experiments-and-statistics-how-a-result-is-produced">Day 6 — Experiments and statistics: how a result is produced</a></div><div class="l1"><a href="#day-7-results-the-paper-and-defending-it">Day 7 — Results, the paper, and defending it</a></div><div class="l1"><a href="#appendix-a-which-file-imports-which-the-links">Appendix A — Which file imports which (the links)</a></div><div class="l1"><a href="#appendix-b-files-you-can-skip-for-the-paper">Appendix B — Files you can skip for the paper</a></div><div class="l1"><a href="#appendix-c-when-you-are-stuck">Appendix C — When you are stuck</a></div></div>
+<p class="small" style="margin-top:14px">Every entry is a clickable link. Day pages start on a new page, so you can print one day at a time.</p><p>This guide teaches you the whole project: what every file does, what is inside it, how it works, and
+how the files connect. Follow it in order. Each day has the same shape:</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Time</th>
+<th>What you do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Read</strong></td>
+<td>30 min</td>
+<td>the documents for the day (they explain the ideas)</td>
+</tr>
+<tr>
+<td><strong>Code</strong></td>
+<td>60 min</td>
+<td>open the files, read the parts named below, run the exercises</td>
+</tr>
+<tr>
+<td><strong>Write</strong></td>
+<td>30 min</td>
+<td>answer the self-test in a notebook, in your own words, without looking</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Setup (once, 10 minutes)</strong></p>
+<ul>
+<li>Open the folder <code>D:\MY DATA\Downloads\new_to_do-main\edaphnet-v2</code> in VS Code.</li>
+<li>
+<p>Open a terminal in VS Code (Ctrl + `) and set the Python you will use:</p>
+<pre><code>$PY = "C:\Program Files\Python314\python.exe"
+</code></pre>
+</li>
+<li>
+<p>Useful VS Code keys: <strong>Ctrl+Click</strong> on a function name jumps to where it is defined; <strong>Ctrl+Shift+F</strong>
+  searches all files; <strong>Ctrl+Shift+V</strong> shows a Markdown file nicely.</p>
+</li>
+<li>
+<p>Rules for reading code: read the <strong>docstring at the top</strong> of each file first, then the <strong>function
+  names</strong>, then only the functions named in this guide. Never read a file top to bottom.</p>
+</li>
+<li>
+<p>To try code, start Python in the project folder (<code>&amp; $PY</code>) and paste the exercise snippets.</p>
+</li>
+</ul>
+<hr />
+<h2 id="the-map-you-are-going-to-learn">The map you are going to learn</h2>
+<pre><code>               ┌──────────────────────── DATA ─────────────────────────┐
+download_ossl.py → data/raw/ossl/*.csv.gz → build_ossl_dataset.py → data/processed/t1_kssl3.npz
+                                     (real_data.py: cleaning, colour from spectra)  │
+                                                                             ▼
+                                    fit_witness_ladder.py → data/processed/witness_kssl3.npz
+                                    (LightGBM witness models: predictions μ and covariance Σ)
+                                                                             │
+               ┌──────────────────────── EXPERIMENT ───────────────────────▼──────────┐
+configs/real_kssl3.yaml → run_real.py ── plants errors (operators.py, swaps.py)
+                                      ── scores batches: inference.py  (the method)
+                                                          baselines.py  (B0–B7)
+                                      ── p-values + BH: conformal.py ; metrics: metrics.py
+                                      ── run record: tracking.py → results/runs/&lt;run&gt;/
+               ┌──────────────────────── ANALYSIS &amp; WRITING ───────────────────────────┐
+results/runs/&lt;run&gt;/predictions.csv.gz → analyse_amendment.py (verdict) → docs/21
+                                      → exploratory_tables.py, rescore_pools.py,
+                                        diag_gross.py, error_mix.py → results/exploratory/ → docs/23, 26
+                                      → make_paper_figures.py → docs/paper/figures/ → docs/paper/draft_v0.md
+</code></pre>
+<p><code>space.py</code> (how values are stored and printed) is used by almost everything. <code>simulate.py</code> and
+<code>properties.py</code> replace the DATA box for the synthetic experiment (<code>run_sim.py</code>).</p>
+<hr />
+<h2 id="day-1-the-big-picture-what-why-and-seeing-it-work">Day 1 — The big picture (what, why, and seeing it work)</h2>
+<p><strong>Goal:</strong> explain in 2 minutes what the project does and why, and run it.</p>
+<p><strong>Read (30 min)</strong></p>
+<ol>
+<li><code>reports/EdaphNet_Project_Dossier.pdf</code>, sections 1–4 (at a glance, problem, objectives, scope).</li>
+<li><code>README.md</code>, sections 1–4 (the problem in simple words, progress, findings).</li>
+</ol>
+<p><strong>Code and run (60 min)</strong></p>
+<ol>
+<li>
+<p>Run the tests, so you know the code works on your laptop:</p>
+<pre><code>&amp; $PY -m pytest -q
+</code></pre>
+<p>Expect <code>34 passed, 1 deselected</code>.</p>
+</li>
+<li>
+<p>Run the command-line demo and read what it prints:</p>
+<pre><code>&amp; $PY scripts/demo.py
+&amp; $PY scripts/demo.py --witness W3
+</code></pre>
+<p>It builds one batch of 24 real KSSL reports, plants a swap and a ×10 error, runs the method, and
+prints the re-test list. Compare the two runs: colour witness vs spectrometer.</p>
+</li>
+<li>
+<p>Run the live demo and press <strong>Guided demo</strong>:</p>
+<pre><code>&amp; $PY scripts/serve_demo.py
+</code></pre>
+<p>Open http://localhost:8000. Watch the four stages. Then click "Make N ×10" and "Report of a
+different soil" yourself and press Run check.</p>
+</li>
+<li>
+<p>Open <code>scripts/demo.py</code> and read only <code>main()</code>. Notice the imports at the top: they tell you which
+    <code>src/edaphnet2</code> modules the demo uses. Write them down; you will meet each one this week.</p>
+</li>
+</ol>
+<p><strong>How the files connect today:</strong> <code>demo.py</code> and <code>serve_demo.py</code> both call <code>run_real.load()</code> to get the
+data and <code>inference.infer_batch()</code> to score a batch. They are thin front ends over the same method.</p>
+<p><strong>Self-test</strong></p>
+<ol>
+<li>What are the two kinds of errors? Give one example of each.</li>
+<li>What is a "witness"? Why can't the laboratory corrupt it?</li>
+<li>Why does a lab need a <em>ranked list</em> instead of checking every report?</li>
+<li>In the demo, which error did colour catch, and which did the spectrometer catch better?</li>
+</ol>
+<hr />
+<h2 id="day-2-the-data-from-raw-files-to-a-dataset">Day 2 — The data: from raw files to a dataset</h2>
+<p><strong>Goal:</strong> know where the soil data comes from, what is real, and how it becomes <code>t1_kssl3.npz</code>.</p>
+<p><strong>Read (30 min)</strong></p>
+<ol>
+<li>Dossier section 9 (datasets) and 9.4 (what is real and what is simulated).</li>
+<li><code>docs/12_data_audit_ossl.md</code>: skim; read §7 (the counting mistake and its correction).</li>
+</ol>
+<p><strong>Code (60 min)</strong></p>
+<ol>
+<li>
+<p><code>scripts/download_ossl.py</code>: read the docstring and <code>main()</code>. It downloads three files and checks
+    each one's MD5 fingerprint against <code>data/ossl_manifest_md5.txt</code>. Why fingerprints? So you know the
+    data is exactly the data the paper used.</p>
+</li>
+<li>
+<p><code>scripts/build_ossl_dataset.py</code>: read the docstring and the <code>argparse</code> lines. It is run twice:
+    <code>--dataset KSSL.SSL --props kssl3</code> and <code>--dataset ICRAF.ISRIC --props icraf8</code>.</p>
+</li>
+<li>
+<p><code>src/edaphnet2/real_data.py</code>, read these:</p>
+<ul>
+<li><code>PROPERTIES</code> and <code>PROPERTY_SETS</code> (near the top): which properties exist, which set each dataset uses.</li>
+<li><code>physical_screen()</code>: removes impossible values (e.g. negative carbon).</li>
+<li><code>class LatentTransform</code> with <code>to_latent()</code> and <code>to_natural()</code>: puts each property on a standard
+ scale (log for carbon, which spans 0.1% to 50%) and back.</li>
+</ul>
+</li>
+<li>
+<p><code>src/edaphnet2/space.py</code>: read <code>class Space</code>, <code>to_latent()</code>, <code>print_values()</code>. <code>print_values()</code>
+    rounds numbers the way a lab report prints them; this matters because a "swapped digits" error
+    happens on the <em>printed</em> number.</p>
+</li>
+<li>
+<p><strong>Exercise</strong>: look at the real dataset.</p>
+<pre><code>import numpy as np, collections
+d = np.load("data/processed/t1_kssl3.npz", allow_pickle=True)
+print(d.files)                       # what is stored
+print(d["names"], d["X"].shape)      # ['OC' 'N' 'Ctot'] (19746, 3)
+print(d["X"][:3])                    # first three reports: OC %, N %, total C %
+print(collections.Counter(d["split"].astype(str)))   # train 9873, cal 2924, test 6949
+</code></pre>
+<p><code>X</code> = laboratory values, <code>full</code> = spectra, <code>lab</code> = colour (CIELAB), <code>groups</code> = location (used for
+splitting), <code>split</code> = train / calibration / test.</p>
+</li>
+</ol>
+<p><strong>How the files connect today:</strong> <code>download_ossl.py</code> → <code>data/raw/ossl/</code> → <code>build_ossl_dataset.py</code>
+(using <code>real_data.py</code>) → <code>data/processed/t1_*.npz</code> + <code>data/splits/*.csv.gz</code>.</p>
+<p><strong>Self-test</strong></p>
+<ol>
+<li>Which parts of the data are real, and which are simulated?</li>
+<li>Why are train and test split by <em>location</em> and not at random?</li>
+<li>What does <code>to_latent()</code> do, and why use a log scale for carbon?</li>
+<li>What was the counting mistake in the data audit, and how was it caught?</li>
+</ol>
+<hr />
+<h2 id="day-3-the-witness-what-colour-knows-about-soil">Day 3 — The witness: what colour knows about soil</h2>
+<p><strong>Goal:</strong> understand how colour is computed from a spectrum, how a witness model predicts soil
+properties, and why colour mainly knows carbon.</p>
+<p><strong>Read (30 min)</strong></p>
+<ol>
+<li><code>docs/14_step4b_witness_ladder.md</code>: the witness ladder and the R² table.</li>
+<li>Dossier sections 10.1 (witness model) and 14.1 (Figure 4).</li>
+</ol>
+<p><strong>Code (60 min)</strong></p>
+<ol>
+<li>
+<p><code>src/edaphnet2/real_data.py</code>: read <code>spectra_to_lab()</code>. It converts a laboratory spectrum to the
+    colour a camera would see (CIELAB, D65 light). <code>coarse_bands()</code> gives the 10-band witness. These are
+    called during the dataset build (<code>build_ossl_dataset.py</code>), which stores colour as <code>lab</code> and bands as
+    <code>bands</code> in <code>t1_kssl3.npz</code>.</p>
+</li>
+<li>
+<p><code>scripts/fit_witness_ladder.py</code>: read the docstring, <code>fit_predict()</code> (one LightGBM model per
+    property) and find where it adds phone-like noise (ΔE 0, 2, 4, 8). It predicts each sample's
+    properties out-of-fold, takes the covariance of the prediction errors as Σ, and writes
+    <code>witness_kssl3.npz</code>: for each rung, <code>__mu</code> (predictions) and <code>__S</code> (covariance).</p>
+</li>
+<li>
+<p><code>src/edaphnet2/witness.py</code> (57 lines, read all of it). This is how the experiments <em>use</em> μ and Σ:</p>
+<ul>
+<li><code>GaussianModel.fit()</code>: learns a mean and covariance (used by the synthetic experiment).</li>
+<li><code>GaussianModel.logpdf_latent()</code>: how likely a report is, given the witness prediction μ.</li>
+<li><code>FixedGaussianModel</code>: the same with Σ taken from the witness file (used by <code>run_real.py</code> and the demos).</li>
+</ul>
+</li>
+<li>
+<p><strong>Exercise</strong>: open the witness file.</p>
+<pre><code>import numpy as np
+w = np.load("data/processed/witness_kssl3.npz", allow_pickle=True)
+print(w.files)          # W0__mu, W0__S, W1_dE0__mu, W1_dE2__mu, ..., W3__mu
+print(w["W1_dE2__S"])   # 3×3 covariance: how OC, N, total C errors move together
+</code></pre>
+</li>
+<li>
+<p>Open <code>results/runs/20261001-234621_witness_ladder_kssl3_8148163/witness_ladder_metrics.csv</code> in
+    Excel or VS Code. Find R² for OC with W1_dE2 (≈ 0.70) and with W3 (spectrometer).</p>
+</li>
+</ol>
+<p><strong>How the files connect today:</strong> <code>build_ossl_dataset.py</code> (with <code>real_data.spectra_to_lab</code>) stores colour
+in <code>t1_kssl3.npz</code> → <code>fit_witness_ladder.py</code> (LightGBM) → <code>witness_kssl3.npz</code> → read by <code>run_real.load()</code>
+→ turned into a <code>witness.FixedGaussianModel</code> for scoring.</p>
+<p><strong>Self-test</strong></p>
+<ol>
+<li>Why does colour predict organic carbon well but pH or potassium poorly?</li>
+<li>What is μ and what is Σ in the witness model? Why does a <em>full</em> Σ help find a single wrong value?</li>
+<li>What does "ΔE 2" mean, and why is calculated colour a <em>best case</em> for a phone?</li>
+<li>What is R², and why is it measured on unseen locations?</li>
+</ol>
+<hr />
+<h2 id="day-4-errors-and-swaps-what-can-go-wrong-in-a-report">Day 4 — Errors and swaps: what can go wrong in a report</h2>
+<p><strong>Goal:</strong> know every error type, how errors are planted, and how swap patterns are listed.</p>
+<p><strong>Read (30 min)</strong></p>
+<ol>
+<li><code>docs/11_problem_specification.md</code>: §2.3 (swap prior) and §2.4 (corruption library).</li>
+<li>Dossier sections 10.2, 10.3 and 10.7.</li>
+</ol>
+<p><strong>Code (60 min)</strong></p>
+<ol>
+<li>
+<p><code>src/edaphnet2/operators.py</code>:</p>
+<ul>
+<li><code>GROUPS</code> (top): decimal, unit, transposition, column_swap, gross.</li>
+<li><code>transpose_candidates(value, decimals)</code>: all numbers made by swapping two adjacent digits.</li>
+<li><code>gross_grid()</code>: the grid of multiplicative factors for gross errors.</li>
+<li>
+<p><code>enumerate_hypotheses()</code>: for one report, every way it <em>could</em> have been corrupted, with prior
+ probabilities. This is the list the method checks.</p>
+</li>
+<li>
+<p><code>apply_random_corruption()</code>: plants one random error (used to make test data).
+2. <code>src/edaphnet2/swaps.py</code> (74 lines, read all):</p>
+</li>
+<li><code>enumerate_swaps(n)</code>: S1 neighbour swaps, S2 tray rotations (shift by 1 or 2), S3 any pair.</li>
+<li><code>log_prior()</code>: the structured prior over swap classes.</li>
+<li><code>random_swap()</code>: plants one swap event.
+3. <code>src/edaphnet2/simulate.py</code>: skim <code>Generator.batch()</code>. Synthetic soils with a witness of chosen
+strength λ, used only for the first experiment.</li>
+</ul>
+</li>
+<li>
+<p><strong>Exercise</strong>:</p>
+<pre><code>import sys; sys.path.insert(0, "src")
+import numpy as np
+from edaphnet2 import swaps, operators
+h = swaps.enumerate_swaps(6)
+print(len(h), h[:2])          # 41 swap hypotheses for a batch of 6
+print(swaps.random_swap(6, np.random.default_rng(1)))   # e.g. ('S2', [3 4 0 1 2 5]) = tray rotation
+print(operators.transpose_candidates(0.16, 2))          # [0.61]
+</code></pre>
+<p>Now try <code>enumerate_swaps(24)</code> and print <code>len(...)</code>: this is how many swap patterns the method
+scores for every real batch.</p>
+</li>
+<li>
+<p>Read <code>tests/test_core.py</code>: <code>test_transposition_is_involution</code> and
+    <code>test_swap_hypotheses_are_permutations</code>. Tests are the best examples of how to use a function.</p>
+</li>
+</ol>
+<p><strong>How the files connect today:</strong> <code>run_real.make_batch()</code> uses <code>operators.apply_random_corruption()</code> and
+<code>swaps.random_swap()</code> to plant errors; <code>inference.py</code> uses <code>operators.enumerate_hypotheses()</code> and
+<code>swaps.enumerate_swaps()</code> to search for them.</p>
+<p><strong>Self-test</strong></p>
+<ol>
+<li>List the five value-error groups with an example each.</li>
+<li>What are S1, S2 and S3? Which one models "the whole tray shifted by one place"?</li>
+<li>What is the difference between <em>planting</em> an error and <em>hypothesising</em> an error?</li>
+<li>Why is the "structured prior" hypothesis (H6) reported as not supported?</li>
+</ol>
+<hr />
+<h2 id="day-5-the-method-how-edaphnet-scores-a-batch">Day 5 — The method: how EdaphNet scores a batch</h2>
+<p><strong>Goal:</strong> explain step by step how <code>infer_batch()</code> turns a batch into scores, explanations and
+corrections, and how the baselines differ.</p>
+<p><strong>Read (30 min)</strong></p>
+<ol>
+<li>Dossier section 10.4 (joint inference, the two equations) and 11 (models, ablations, baselines).</li>
+<li><code>docs/paper/draft_v0.md</code> §4 Method.</li>
+</ol>
+<p><strong>Code (60 min)</strong></p>
+<ol>
+<li>
+<p><code>src/edaphnet2/inference.py</code> (129 lines, the heart of the project; read all of it slowly):</p>
+<ul>
+<li><code>class InferenceConfig</code>: settings (ρ = swap rate, ε = error rate, which parts are switched on).</li>
+<li><code>report_hypotheses()</code>: for each report, the list of possible corruptions (from <code>operators</code>).</li>
+<li>
+<p><code>loglik_matrix()</code>: ℓ(j, i) = how well report j fits sample i's witness, allowing any corruption.
+ This is a matrix: reports × samples.</p>
+</li>
+<li>
+<p><code>infer_batch()</code>: scores every swap hypothesis with log prior + sum of ℓ changes, normalises,
+ then for each report computes P(moved), P(corrupted), the suspicion score, the explanation
+ (<code>kind</code>, <code>partner</code>, <code>value_op</code>) and the correction.</p>
+</li>
+<li>
+<p><code>loglik_none()</code>: the same matrix with no corruption allowed (used by the swap-matcher baseline).
+Draw the flow on paper: report values + witness μ → ℓ matrix → swap posteriors → per-report score.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>src/edaphnet2/baselines.py</code>: for each baseline, read only its docstring:
+    <code>RangeCheck</code> (B0, also B6 repair via <code>attribute()</code>), <code>rule_score</code> (B1), <code>population_score</code> (B2),
+    <code>marginal_witness_score</code> (B3), <code>hungarian_score</code> (B4), <code>RegressionVeracity</code> (a simplified B7 used
+    only on synthetic data), <code>CleanlabOutre</code> (B7 on real data). B5 (supervised LightGBM) lives in <code>scripts/run_real.py</code> → <code>run_setting()</code>.</p>
+</li>
+<li>
+<p>Run the two method tests and read them:</p>
+<pre><code>&amp; $PY -m pytest tests/test_core.py -v -k "decimal_error or swap_detected"
+</code></pre>
+<p><code>test_decimal_error_detected_and_attributed</code> plants a ×10 error and checks the method finds it and
+names it; <code>test_swap_detected_with_strong_witness</code> does the same for a swap.</p>
+</li>
+<li>
+<p>Re-run <code>scripts/demo.py</code> and match each printed column to a field returned by <code>infer_batch()</code>.</p>
+</li>
+</ol>
+<p><strong>How the files connect today:</strong> <code>inference.py</code> imports <code>operators</code>, <code>swaps</code>, <code>space</code>; it receives μ from
+<code>witness_*.npz</code> and a <code>FixedGaussianModel</code> from <code>witness.py</code>. <code>baselines.py</code> imports <code>operators</code> and <code>space</code>. <code>run_real.score_batch()</code> calls it for every
+batch, together with every baseline.</p>
+<p><strong>Self-test</strong></p>
+<ol>
+<li>In your own words: what does ℓ(j, i) measure?</li>
+<li>How does the method decide that report 4 and report 9 were swapped?</li>
+<li>What is the suspicion score? What is the explanation? What is the correction?</li>
+<li>Which baseline is the strongest, and what unfair advantage does it have?</li>
+<li>Why can the method name the error type when B5 cannot?</li>
+</ol>
+<hr />
+<h2 id="day-6-experiments-and-statistics-how-a-result-is-produced">Day 6 — Experiments and statistics: how a result is produced</h2>
+<p><strong>Goal:</strong> understand how an experiment runs, how "errors found at a 5% budget" and false-alarm control
+are computed, and the calibration mistake.</p>
+<p><strong>Read (30 min)</strong></p>
+<ol>
+<li>Dossier sections 12 (experiments), 13 (metrics) and 14.4 (calibration mistake).</li>
+<li><code>docs/decision_log.md</code>: entries D-012, D-016, D-017.</li>
+</ol>
+<p><strong>Code (60 min)</strong></p>
+<ol>
+<li>
+<p><code>configs/real_kssl3.yaml</code>: every setting of the main test (seeds, batch size 24, pools of 50,
+    witness rungs, orderings, error rates). Change nothing; just read it.</p>
+</li>
+<li>
+<p><code>scripts/run_real.py</code>, read in this order:</p>
+<ul>
+<li><code>load()</code>: loads the dataset and witness files.</li>
+<li><code>sample_indices()</code>: picks samples for a batch, random or clustered.</li>
+<li><code>make_batch()</code>: plants errors (Day 4).</li>
+<li><code>score_batch()</code>: runs the method, its ablations and the baselines on one batch (Day 5).</li>
+<li>
+<p><code>run_setting()</code>: one full setting: calibration batches, B5 training, test batches, p-values,
+ metrics. Find the line with <code>recall_at_budget</code>.</p>
+</li>
+<li>
+<p><code>main()</code> and <code>prepare_resume()</code>: loops over settings; resumes safely if interrupted.
+3. <code>src/edaphnet2/conformal.py</code> (28 lines): <code>conformal_pvalues()</code> and <code>benjamini_hochberg()</code>. It is
+used through <code>metrics.py</code>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>src/edaphnet2/metrics.py</code>: <code>recall_at_budget()</code> (the primary metric), <code>detection_metrics()</code>,
+    <code>weighted_conformal_pvalues()</code>, <code>mondrian_pvalues()</code>.</p>
+</li>
+<li>
+<p><code>src/edaphnet2/tracking.py</code>: <code>provenance()</code> records the code version (git commit) and marks a run
+    "clean" or "exploratory"; <code>new_run_dir()</code> names the run folder.</p>
+</li>
+<li>
+<p><strong>Exercise</strong> (false-alarm control on toy numbers):</p>
+<pre><code>import sys; sys.path.insert(0, "src")
+import numpy as np
+from edaphnet2.conformal import conformal_pvalues, benjamini_hochberg
+from edaphnet2.metrics import recall_at_budget
+rng = np.random.default_rng(0)
+cal  = rng.normal(size=1000)                                # scores of 1,000 clean calibration reports
+test = np.r_[rng.normal(size=95), np.full(5, 4.0)]          # 95 clean + 5 erroneous test reports
+p = conformal_pvalues(cal, test)
+print(p[-5:])                                  # the 5 errors get p = 0.001 = 1/(1000+1), the smallest possible
+print(benjamini_hochberg(p, 0.10).sum())       # 7 flagged: 5 errors + 2 false alarms
+scores = np.r_[rng.random(95), np.full(5, 2.0)]
+is_err = np.r_[np.zeros(95, bool), np.ones(5, bool)]
+print(recall_at_budget(scores, is_err, np.zeros(100, int), 0.05, 0)[0])   # 1.0: all 5 errors in the top 5%
+</code></pre>
+<p>Then try the <strong>calibration mistake</strong>: replace <code>cal</code> with <code>np.repeat(cal[:50], 20)</code> (50 samples
+counted 20 times each) and see how the p-values and the number flagged change.</p>
+</li>
+<li>
+<p>Optional quick run (a few minutes): <code>&amp; $PY scripts/run_real.py --config configs/real_kssl3.yaml --smoke</code>
+    and look at the new folder in <code>results/runs/</code>.</p>
+</li>
+</ol>
+<p><strong>How the files connect today:</strong> <code>configs/*.yaml</code> → <code>run_real.py</code> (uses <code>inference</code>, <code>baselines</code>,
+<code>conformal</code>, <code>metrics</code>, <code>tracking</code>) → <code>results/runs/&lt;run&gt;/</code> with <code>config.json</code>, <code>provenance.json</code>,
+<code>metrics_by_setting.csv</code>, <code>predictions.csv.gz</code>.</p>
+<p><strong>Self-test</strong></p>
+<ol>
+<li>What exactly is "recall at a 5% budget"? Why per pool of 50 batches?</li>
+<li>What is a conformal p-value? What is the smallest value it can take?</li>
+<li>What did the calibration mistake do, and how was it fixed?</li>
+<li>Why can BH over a pool of 1,200 reports flag almost nothing, while per batch it works?</li>
+<li>What makes a run record trustworthy (three things)?</li>
+</ol>
+<hr />
+<h2 id="day-7-results-the-paper-and-defending-it">Day 7 — Results, the paper, and defending it</h2>
+<p><strong>Goal:</strong> know every main result, where it comes from, and answer the hard questions.</p>
+<p><strong>Read (30 min)</strong></p>
+<ol>
+<li>
+<p><code>docs/18_preregistered_amendment_v2.md</code> §2 (the rules, written <em>before</em> the test) and
+    <code>docs/21_kssl_preregistered_results.md</code> (the verdict).</p>
+</li>
+<li>
+<p><code>docs/26_review_fixes.md</code> (gross errors, error mix, five seeds).</p>
+</li>
+</ol>
+<p><strong>Code (60 min)</strong></p>
+<ol>
+<li>
+<p><code>scripts/analyse_amendment.py</code>: read the docstring. It applies the pre-registered rules to the run
+    and writes <code>amendment_A1.csv</code>, <code>amendment_verdict.json</code>. Open both in
+    <code>results/runs/20261001-234902_real_kssl3_095deaa/</code>.</p>
+</li>
+<li>
+<p>Skim the docstrings of the exploratory scripts: <code>exploratory_tables.py</code> (swaps vs values,
+    ablations), <code>rescore_pools.py</code> (pool size), <code>diag_gross.py</code> (gross errors), <code>error_mix.py</code> (error mix).
+    Open their CSV outputs in <code>results/exploratory/20261001-234902_real_kssl3_095deaa/</code>.</p>
+</li>
+<li>
+<p><code>scripts/make_paper_figures.py</code>: see that every figure reads a CSV from a run folder; no number is
+    typed by hand. Open the six PNGs in <code>docs/paper/figures/</code>.</p>
+</li>
+<li>
+<p>Read the paper <code>docs/paper/draft_v0.md</code>: Abstract, §7 (results), §8 (discussion and limitations).</p>
+</li>
+<li><strong>Trace one number yourself</strong> (the most useful skill for the viva): pick "+0.092 with a
+    spectrometer" and follow it: paper §7.4 → doc 21 → <code>amendment_A1.csv</code> → <code>run_real.py</code> →
+    <code>inference.py</code>. The same path is written out in <code>reports/EdaphNet_Files_Explained.pdf</code> §2.</li>
+</ol>
+<p><strong>Self-test (say the answers aloud, as if to your guide)</strong></p>
+<ol>
+<li>Explain the project in 2 minutes.</li>
+<li>Is your data real? (Real soils and lab values; planted errors; calculated colour.)</li>
+<li>Why did the main claim fail? (Colour finds more swaps, misses more wrong values; they cancel at a 50/50 mix.)</li>
+<li>What is new? (Joint checking with an independent witness; explanation 97–100%; the error-mix map; the calibration finding.)</li>
+<li>What would you do next? (Real photos, real errors, Indian soils; register amendment v3.)</li>
+<li>What were the mistakes, and what did you learn from them?</li>
+</ol>
+<hr />
+<h2 id="appendix-a-which-file-imports-which-the-links">Appendix A — Which file imports which (the links)</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Imports / uses</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>space.py</code></td>
+<td>—</td>
+<td><code>operators.py</code>, <code>baselines.py</code>, <code>inference.py</code>, <code>run_real.py</code></td>
+</tr>
+<tr>
+<td><code>properties.py</code></td>
+<td>—</td>
+<td><code>simulate.py</code>, <code>witness.py</code>, <code>run_sim.py</code></td>
+</tr>
+<tr>
+<td><code>operators.py</code></td>
+<td><code>space</code></td>
+<td><code>inference.py</code>, <code>baselines.py</code>, <code>simulate.py</code>, <code>run_real.py</code></td>
+</tr>
+<tr>
+<td><code>swaps.py</code></td>
+<td>—</td>
+<td><code>inference.py</code>, <code>simulate.py</code>, <code>run_real.py</code></td>
+</tr>
+<tr>
+<td><code>witness.py</code></td>
+<td><code>properties</code></td>
+<td><code>run_sim.py</code> (GaussianModel); <code>run_real.py</code>, <code>demo.py</code>, <code>serve_demo.py</code> (FixedGaussianModel)</td>
+</tr>
+<tr>
+<td><code>inference.py</code></td>
+<td><code>operators</code>, <code>swaps</code>, <code>space</code></td>
+<td><code>run_sim.py</code>, <code>run_real.py</code>, <code>demo.py</code>, <code>serve_demo.py</code></td>
+</tr>
+<tr>
+<td><code>baselines.py</code></td>
+<td><code>operators</code>, <code>space</code></td>
+<td><code>run_sim.py</code>, <code>run_real.py</code>, <code>demo.py</code></td>
+</tr>
+<tr>
+<td><code>conformal.py</code></td>
+<td>—</td>
+<td><code>metrics.py</code> (and the tests)</td>
+</tr>
+<tr>
+<td><code>metrics.py</code></td>
+<td><code>conformal</code></td>
+<td><code>run_sim.py</code>, <code>run_real.py</code></td>
+</tr>
+<tr>
+<td><code>real_data.py</code></td>
+<td>—</td>
+<td><code>build_ossl_dataset.py</code>, <code>fit_witness_ladder.py</code>, <code>run_real.py</code></td>
+</tr>
+<tr>
+<td><code>simulate.py</code></td>
+<td><code>operators</code>, <code>swaps</code>, <code>properties</code></td>
+<td><code>run_sim.py</code></td>
+</tr>
+<tr>
+<td><code>tracking.py</code></td>
+<td>—</td>
+<td><code>run_sim.py</code>, <code>run_real.py</code>, <code>fit_witness_ladder.py</code></td>
+</tr>
+<tr>
+<td><code>phone.py</code></td>
+<td>—</td>
+<td><code>process_photos.py</code>, <code>serve_demo.py</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>rescore_pools.py</code> and the other analysis scripts read the saved CSV files directly and do not import
+the method.</p>
+<p>(Exact import lines are at the top of each file; Ctrl+Click any name to jump to it.)</p>
+<h2 id="appendix-b-files-you-can-skip-for-the-paper">Appendix B — Files you can skip for the paper</h2>
+<ul>
+<li><code>app/</code>, <code>scripts/app_*.py</code>, <code>data/app_raw/</code>, <code>docs/24</code>, <code>docs/25</code>: the separate farmer app.</li>
+<li><code>phone.py</code>, <code>process_photos.py</code>, <code>templates/</code>, <code>docs/15</code>: for paper 2 (real photos).</li>
+<li><code>demo_site/</code>, <code>serve_demo.py</code>, <code>build_demo_page.py</code>, <code>train_colour_brain.py</code>: demonstrators.</li>
+</ul>
+<p>Learn them later if you want; they do not affect any number in the paper.</p>
+<h2 id="appendix-c-when-you-are-stuck">Appendix C — When you are stuck</h2>
+<ol>
+<li>Read the file's docstring again; most files explain themselves in the first 10 lines.</li>
+<li>Find a test that uses the function (<code>Ctrl+Shift+F</code> in <code>tests/</code>).</li>
+<li>Look the topic up in the glossary (Dossier Appendix B) and in <code>FILE_GUIDE.md</code>.</li>
+<li>Write the question down and bring it to your guide.</li>
+</ol></body></html>

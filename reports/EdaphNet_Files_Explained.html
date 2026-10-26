@@ -1,0 +1,241 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>EdaphNet: Every File Explained</title><style>:root { --ink:#18201d; --mute:#56625c; --line:#d3dbd6; --accent:#1f5f55; --soft:#e5f0ed; --warm:#7d5420; --warmsoft:#f3eadb;
+  --paper:#2f6d4f; --app:#3d5a80; --demo:#8a5a00; --future:#7a4b8a; --rec:#56625c; --tool:#6b6b6b; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); font: 10.4pt/1.5 "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+@page { size: A4; margin: 15mm 14mm 16mm; }
+h1 { font: 700 23pt/1.15 Georgia, "Times New Roman", serif; margin: 0 0 4px; }
+h2 { font: 700 15pt/1.25 Georgia, serif; margin: 22px 0 6px; padding-top: 8px; border-top: 2px solid var(--accent); break-after: avoid; }
+h3 { font: 700 11.5pt/1.3 "Segoe UI", Arial, sans-serif; margin: 14px 0 4px; color: var(--accent); break-after: avoid; }
+p { margin: 5px 0; }
+ul, ol { margin: 4px 0; padding-left: 18px; } li { margin: 2px 0; }
+.sub { color: var(--mute); font-size: 10.5pt; margin-bottom: 10px; }
+.box { background: var(--soft); border-radius: 6px; padding: 9px 13px; margin: 9px 0; break-inside: avoid; }
+.warn { background: var(--warmsoft); }
+table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 9.3pt; break-inside: auto; }
+tr { break-inside: avoid; }
+th { text-align: left; background: #eef2ef; font-weight: 600; padding: 5px 6px; border-bottom: 1px solid var(--line); }
+td { padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.n, th.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+code { font: 8.8pt Consolas, "Courier New", monospace; background: #f1f3f1; padding: 0 3px; border-radius: 3px; word-break: break-word; }
+.tag { display: inline-block; font: 600 7.4pt "Segoe UI", Arial; color: #fff; border-radius: 3px; padding: 1px 5px; white-space: nowrap; }
+.Paper { background: var(--paper); } .App { background: var(--app); } .Demo { background: var(--demo); }
+.Future { background: var(--future); } .Record { background: var(--rec); } .Tool { background: var(--tool); }
+figure { margin: 8px 0 12px; break-inside: avoid; text-align: center; }
+figure img { max-width: 100%; }
+figcaption { font-size: 9pt; color: var(--mute); text-align: left; margin-top: 3px; }
+.flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin: 8px 0; break-inside: avoid; }
+.flow div { border: 1.5px solid var(--accent); border-radius: 6px; padding: 6px; font-size: 8.6pt; background: #fff; }
+.flow b { display: block; color: var(--accent); font-size: 9pt; }
+.arrow-row { text-align: center; color: var(--accent); font-size: 9pt; margin: -2px 0 2px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cover { border-bottom: 3px solid var(--accent); padding-bottom: 8px; margin-bottom: 8px; }
+.small { font-size: 9pt; color: var(--mute); }
+.pb { break-before: page; }
+.ok { color: var(--paper); font-weight: 600; } .bad { color: #a8322a; font-weight: 600; } .mid { color: var(--demo); font-weight: 600; }
+</style></head><body><div class="cover">
+<h1>EdaphNet v2: Every File Explained</h1>
+<div class="sub">What each file is, what it uses, and what it feeds into · 3 October 2026 · repository github.com/Sudeep-Sharma1/edaphnet-v2</div>
+</div>
+
+<div class="box">
+<b>How to read this.</b> Section 1 shows the whole project as one chain, from raw data to the paper. Section 2 traces one
+number from the paper back to the code, so you can see how the files connect. Sections 3 onwards go folder by folder.
+Each file has a coloured tag:
+<span class="tag Paper">Paper</span> used for the paper's results ·
+<span class="tag Record">Record</span> notes what was decided or found ·
+<span class="tag Demo">Demo</span> for showing the project ·
+<span class="tag App">App</span> the separate farmer app, not in the paper ·
+<span class="tag Future">Future</span> for paper 2 (real photos) ·
+<span class="tag Tool">Tool</span> helper.
+</div>
+
+<h2>1. The whole project in one chain</h2>
+<p>Everything in the paper is produced by this chain. Each step reads the output of the step before it.</p>
+<div class="flow" style="grid-template-columns: repeat(3, 1fr);">
+ <div><b>1 Data</b><code>download_ossl.py</code> gets 3 OSSL files into <code>data/raw/</code></div>
+ <div><b>2 Clean datasets</b><code>build_ossl_dataset.py</code> makes <code>data/processed/t1_*.npz</code> and splits</div>
+ <div><b>3 Witness</b><code>fit_witness_ladder.py</code> makes colour/spectrum predictions <code>witness_*.npz</code></div>
+ <div><b>4 Experiments</b><code>configs/*.yaml</code> + <code>run_real.py</code> use the method in <code>src/edaphnet2/</code></div>
+ <div><b>5 Results</b>run folders in <code>results/runs/</code>; analysis scripts write <code>results/exploratory/</code></div>
+ <div><b>6 Writing</b>docs 11–26, figures, <code>docs/paper/draft_v0.md</code>, PDFs in <code>reports/</code></div>
+</div>
+<div class="arrow-row">1 → 2 → 3 → 4 → 5 → 6 (read left to right, top row then bottom row)</div>
+<p>Three side branches use pieces of the chain but do not feed the paper:</p>
+<ul>
+<li><b>Demos:</b> <code>train_colour_brain.py</code> builds a colour model in <code>models/</code>, and <code>serve_demo.py</code> uses it with the method to run <code>demo_site/live.html</code>. <code>build_demo_page.py</code> builds the offline page <code>demo_site/index.html</code> from the run records.</li>
+<li><b>Future (paper 2):</b> <code>phone.py</code> + <code>process_photos.py</code> turn real soil photos into witness values, following the protocol in doc 15 and the sheets in <code>templates/</code>.</li>
+<li><b>App:</b> everything under <code>app/</code> plus the <code>app_*.py</code> scripts and <code>data/app_raw/</code>.</li>
+</ul>
+
+<h2>2. Follow one number from the paper to the code</h2>
+<p>Example: the paper says <b>"with a spectrometer, EdaphNet found +0.092 more errors than the best existing method"</b>.</p>
+<ol>
+<li><b>Paper:</b> <code>docs/paper/draft_v0.md</code> §7.4, table row "Spectrometer".</li>
+<li><b>Document that reports it:</b> <code>docs/21_kssl_preregistered_results.md</code>, the pre-registered verdict.</li>
+<li><b>Rules it was judged by:</b> <code>docs/18_preregistered_amendment_v2.md</code>, written <i>before</i> the test.</li>
+<li><b>Script that computed the verdict:</b> <code>scripts/analyse_amendment.py</code>.</li>
+<li><b>Run folder it read:</b> <code>results/runs/20261001-234902_real_kssl3_095deaa/</code> (<code>amendment_A1.csv</code>, <code>metrics_by_setting.csv</code>).</li>
+<li><b>Settings used:</b> <code>configs/real_kssl3.yaml</code> (copied into the run folder as <code>config.json</code>).</li>
+<li><b>Program that ran it:</b> <code>scripts/run_real.py</code>, which calls the method in <code>src/edaphnet2/inference.py</code> and the baselines in <code>src/edaphnet2/baselines.py</code>.</li>
+<li><b>Data it used:</b> <code>data/processed/t1_kssl3.npz</code> and <code>witness_kssl3.npz</code>, built from <code>data/raw/ossl/</code>.</li>
+<li><b>Proof of the code version:</b> <code>provenance.json</code> in the run folder (commit 095deaa).</li>
+</ol>
+<p class="small">Every other result works the same way. <code>REPRODUCE.md</code> lists the command behind each one.</p>
+
+<h2>3. Top-level files</h2>
+<table>
+<tr><th style="width:22%">File</th><th>What it is (simple words)</th><th style="width:28%">Connected to</th></tr>
+<tr><td><code>README.md</code> <span class="tag Record">Record</span></td><td>The front page: the problem, progress, findings, mistakes corrected, folder guide, data licences.</td><td>Points to every other guide</td></tr>
+<tr><td><code>HANDOVER.md</code> <span class="tag Record">Record</span></td><td>Your to-do list after 5 October: guide meeting, literature search, citations, IP office, Zenodo, submission.</td><td>Faculty report, paper</td></tr>
+<tr><td><code>REPRODUCE.md</code> <span class="tag Paper">Paper</span></td><td>The exact commands from data download to every table and figure.</td><td>All scripts and run folders</td></tr>
+<tr><td><code>HOW_TO_RUN.md</code> <span class="tag Tool">Tool</span></td><td>How to install, test, run demos and experiments; troubleshooting.</td><td>Scripts, demos</td></tr>
+<tr><td><code>FILE_GUIDE.md</code> <span class="tag Record">Record</span></td><td>Short table of all files (this PDF is the long version).</td><td>—</td></tr>
+<tr><td><code>requirements.txt</code>, <code>pytest.ini</code>, <code>pyrefly.toml</code> <span class="tag Tool">Tool</span></td><td>Python packages; test settings; editor type-checker settings.</td><td>tests, editor</td></tr>
+<tr><td><code>.gitignore</code>, <code>.gitattributes</code> <span class="tag Tool">Tool</span></td><td>Keep big/private files off GitHub (raw data, models, app images, <code>invention_log.md</code>); line-ending rules.</td><td>git</td></tr>
+</table>
+
+<h2>4. <code>src/edaphnet2/</code>: the method (the heart of the project)</h2>
+<p>This is the research code. It was <b>frozen at commit 095deaa</b> before the pre-registered test, so the test could not be tuned afterwards.</p>
+<table>
+<tr><th style="width:17%">File</th><th>What it does</th><th style="width:30%">Uses → / used by</th></tr>
+<tr><td><code>inference.py</code> <span class="tag Paper">Paper</span></td><td><b>The method.</b> Looks at a whole batch of 24 reports at once, tries every likely swap and every error type, and gives each report a suspicion score, a most likely explanation and a suggested correction.</td><td>uses <code>operators</code>, <code>swaps</code>, <code>witness</code>, <code>space</code> · used by <code>run_real.py</code>, <code>run_sim.py</code>, demos</td></tr>
+<tr><td><code>operators.py</code> <span class="tag Paper">Paper</span></td><td>The list of value errors: ×10, ÷10, unit mix-up, swapped digits, swapped columns, gross error. Also plants random errors for testing.</td><td>used by <code>inference</code>, <code>simulate</code>, <code>run_real</code></td></tr>
+<tr><td><code>swaps.py</code> <span class="tag Paper">Paper</span></td><td>The swap patterns: neighbours swapped, a whole tray shifted by one or two places, any two samples swapped.</td><td>used by <code>inference</code></td></tr>
+<tr><td><code>witness.py</code> <span class="tag Paper">Paper</span></td><td>Witness models: from colour or spectrum, predict each sample's carbon, nitrogen etc. with an uncertainty.</td><td>used by <code>inference</code>, <code>fit_witness_ladder</code>, <code>serve_demo</code></td></tr>
+<tr><td><code>baselines.py</code> <span class="tag Paper">Paper</span></td><td>The 7 competitors B0–B7 (range checks, soil rules, lab-only model, witness interval, swap matcher, supervised classifier, cleanlab) and B6 rule-based repair.</td><td>used by <code>run_real</code>, <code>run_sim</code></td></tr>
+<tr><td><code>conformal.py</code> <span class="tag Paper">Paper</span></td><td>False-alarm control: turns scores into p-values using clean calibration reports, then Benjamini–Hochberg.</td><td>used by <code>run_real</code>, <code>rescore_pools</code></td></tr>
+<tr><td><code>metrics.py</code> <span class="tag Paper">Paper</span></td><td>How results are measured: errors found when re-testing the top 5%, power, false-alarm rate, per pool of 50 batches.</td><td>used by <code>run_real</code>, <code>run_sim</code></td></tr>
+<tr><td><code>space.py</code> <span class="tag Paper">Paper</span></td><td>How each property is stored and printed (decimal places, log scale), so planted errors look like real printed reports.</td><td>used by almost every module</td></tr>
+<tr><td><code>real_data.py</code> <span class="tag Paper">Paper</span></td><td>Loads the soil data; defines the property sets (ICRAF 8, KSSL 3); computes soil colour from a spectrum.</td><td>used by <code>build_ossl_dataset</code>, <code>run_real</code></td></tr>
+<tr><td><code>properties.py</code>, <code>simulate.py</code> <span class="tag Paper">Paper</span></td><td>Make the synthetic soils, batches and errors for the first test (simulation).</td><td>used by <code>run_sim</code></td></tr>
+<tr><td><code>tracking.py</code> <span class="tag Paper">Paper</span></td><td>Writes the run record: settings, code version, computer, timing. This is what makes every number traceable.</td><td>used by every experiment</td></tr>
+<tr><td><code>phone.py</code> <span class="tag Future">Future</span> <span class="tag Demo">Demo</span></td><td>Real-photo processing: colour-card correction, true soil colour, blur and exposure checks, texture.</td><td>used by <code>process_photos</code>, <code>serve_demo</code></td></tr>
+</table>
+
+<h2>5. <code>scripts/</code>: programs you run</h2>
+<h3>Data and experiments <span class="tag Paper">Paper</span></h3>
+<table>
+<tr><th style="width:24%">File</th><th>What it does</th><th style="width:30%">Reads → writes</th></tr>
+<tr><td><code>download_ossl.py</code></td><td>Downloads the 3 soil data files and checks their fingerprints (MD5).</td><td>internet → <code>data/raw/ossl/</code></td></tr>
+<tr><td><code>ossl_audit.py</code></td><td>Checks the data: what is usable, licences, how many samples per property (doc 12).</td><td>raw data → <code>results/data_audit/</code></td></tr>
+<tr><td><code>build_ossl_dataset.py</code></td><td>Makes the clean ICRAF and KSSL datasets, split by location so test soils come from places never seen in training.</td><td>raw → <code>data/processed/t1_*.npz</code>, <code>data/splits/</code></td></tr>
+<tr><td><code>fit_witness_ladder.py</code></td><td>Trains the colour / bands / spectrum witnesses and measures how much each one knows (R²).</td><td>processed → <code>witness_*.npz</code>, run folder</td></tr>
+<tr><td><code>run_sim.py</code></td><td>Runs the simulation experiment (doc 13).</td><td><code>configs/sim_t0.yaml</code> → run folder</td></tr>
+<tr><td><code>run_real.py</code></td><td>Runs the real-data experiments: plants errors in real reports, runs the method and all baselines, saves every score. Can resume if interrupted.</td><td>config + data → run folder</td></tr>
+<tr><td><code>mismatch_ops.py</code></td><td>Error types the method was <i>not</i> told about (×100, big gross, copied neighbour, dropped digit), for the "unknown errors" test.</td><td>used by <code>run_real.py</code></td></tr>
+<tr><td><code>diag_calibration.py</code></td><td>Found the calibration mistake (the same samples counted many times).</td><td>data → run folder</td></tr>
+</table>
+<h3>Analyses <span class="tag Paper">Paper</span></h3>
+<table>
+<tr><th style="width:24%">File</th><th>What it answers</th><th style="width:30%">Reads → writes</th></tr>
+<tr><td><code>analyse_amendment.py</code></td><td>Did the pre-registered claims pass or fail? (doc 21)</td><td>KSSL run → <code>amendment_*.csv</code></td></tr>
+<tr><td><code>summarise_runs.py</code></td><td>Summary tables of any run.</td><td>run folder → tables</td></tr>
+<tr><td><code>detectability_table.py</code></td><td>Which error types can each witness find? (doc 19)</td><td>run → table</td></tr>
+<tr><td><code>exploratory_tables.py</code></td><td>Swaps vs wrong values; what each part of the method adds (doc 23, doc 26).</td><td>run → <code>results/exploratory/</code></td></tr>
+<tr><td><code>rescore_pools.py</code></td><td>How false-alarm control depends on how many reports are tested at once (Figure 5).</td><td>run → <code>rescore_pools.csv</code></td></tr>
+<tr><td><code>diag_gross.py</code></td><td>Why gross errors are rarely found (doc 26 §1).</td><td>run → <code>gross_*.csv</code></td></tr>
+<tr><td><code>error_mix.py</code></td><td>Who wins as the share of swaps changes; draws Figure 6 (doc 26 §2).</td><td>run → <code>error_mix.csv</code>, figure</td></tr>
+<tr><td><code>make_paper_figures.py</code></td><td>Draws paper Figures 1–5 from the run records (no numbers typed by hand).</td><td>runs → <code>docs/paper/figures/</code></td></tr>
+<tr><td><code>build_report_pdf.py</code></td><td>Turns the paper or progress report into a PDF.</td><td>markdown → <code>reports/*.pdf</code></td></tr>
+</table>
+<h3>Demos, future and app</h3>
+<table>
+<tr><th style="width:24%">File</th><th>What it does</th><th style="width:30%">Connected to</th></tr>
+<tr><td><code>demo.py</code> <span class="tag Demo">Demo</span></td><td>Command-line demo: one batch with a planted swap and ×10 error, and the re-test list.</td><td>method, KSSL data</td></tr>
+<tr><td><code>serve_demo.py</code> <span class="tag Demo">Demo</span></td><td>Small web server for the live demo page (photo + report → result).</td><td><code>demo_site/live.html</code>, <code>models/</code>, method</td></tr>
+<tr><td><code>train_colour_brain.py</code> <span class="tag Demo">Demo</span></td><td>Trains the colour → carbon/nitrogen model the live demo uses.</td><td>→ <code>models/colour_brain_*.joblib</code></td></tr>
+<tr><td><code>build_demo_page.py</code> <span class="tag Demo">Demo</span></td><td>Builds the offline presentation page with real demo batches and result charts.</td><td>run records → <code>demo_site/index.html</code>, <code>web.html</code></td></tr>
+<tr><td><code>process_photos.py</code> <span class="tag Future">Future</span></td><td>Turns a folder of real soil photos into witness values (doc 15).</td><td><code>phone.py</code>, <code>templates/</code></td></tr>
+<tr><td><code>app_*.py</code> (5 files) <span class="tag App">App</span></td><td>Build the crop list, give crop advice, audit leaf images, extract leaf features, train the leaf model.</td><td><code>app/</code>, <code>data/app_raw/</code></td></tr>
+</table>
+
+<h2>6. <code>configs/</code> and <code>tests/</code></h2>
+<div class="two">
+<table>
+<tr><th>Config <span class="tag Paper">Paper</span></th><th>Experiment</th></tr>
+<tr><td><code>sim_t0.yaml</code></td><td>Simulation</td></tr>
+<tr><td><code>real_icraf8.yaml</code></td><td>First real test (ICRAF)</td></tr>
+<tr><td><code>real_kssl3.yaml</code></td><td><b>Pre-registered KSSL test</b></td></tr>
+<tr><td><code>real_kssl3_mismatch.yaml</code></td><td>Unknown errors, 1 seed</td></tr>
+<tr><td><code>real_kssl3_mismatch5.yaml</code></td><td>Unknown errors, 5 seeds</td></tr>
+</table>
+<table>
+<tr><th>Test file (34 tests)</th><th>Checks</th></tr>
+<tr><td><code>test_core.py</code></td><td>Method, errors, swaps, false-alarm control</td></tr>
+<tr><td><code>test_real_data.py</code></td><td>Data loading, colour from spectra</td></tr>
+<tr><td><code>test_resume.py</code></td><td>Resumed run = same numbers (slow)</td></tr>
+<tr><td><code>test_phone.py</code>, <code>test_process_photos.py</code></td><td>Photo processing</td></tr>
+<tr><td><code>test_app_*.py</code></td><td>App crops, disease sources, server</td></tr>
+</table>
+</div>
+
+<h2>7. <code>docs/</code>: the written record, in the order things happened</h2>
+<table>
+<tr><th style="width:30%">Document</th><th>What it says</th><th style="width:18%">Leads to</th></tr>
+<tr><td><code>08</code> research and patent charter <span class="tag Record">Record</span></td><td>Goals and integrity rules: no invented results, rules fixed before tests, failures reported.</td><td>everything</td></tr>
+<tr><td><code>09</code>, <code>10</code> prior art <span class="tag Record">Record</span></td><td>What already exists (16 papers/patents/products compared) and what seemed new.</td><td>doc 11, paper §2</td></tr>
+<tr><td><code>11</code> problem specification <span class="tag Paper">Paper</span></td><td>The plan: model, error types, baselines, hypotheses H1–H6 and pass/fail rules (pre-registration v1).</td><td>docs 13, 17</td></tr>
+<tr><td><code>12</code> data audit <span class="tag Paper">Paper</span></td><td>Checked the soil data; includes a corrected counting mistake.</td><td>datasets</td></tr>
+<tr><td><code>13</code> simulation results <span class="tag Paper">Paper</span></td><td>The method works only when the witness is moderately informative; gains come from swaps.</td><td>paper §7.1</td></tr>
+<tr><td><code>14</code> witness ladder <span class="tag Paper">Paper</span></td><td>How much colour knows about real soils (mainly carbon).</td><td>paper §7.2</td></tr>
+<tr><td><code>15</code> step-6 protocol <span class="tag Future">Future</span></td><td>How to collect real photos + lab reports with blind duplicates.</td><td>paper 2</td></tr>
+<tr><td><code>16</code> paper skeleton <span class="tag Record">Record</span></td><td>Early outline of the paper.</td><td>draft_v0</td></tr>
+<tr><td><code>17</code> first real test (ICRAF) <span class="tag Paper">Paper</span></td><td>Failed; later traced to our calibration mistake (correction note inside).</td><td>docs 18, D-016</td></tr>
+<tr><td><code>18</code> amendment v2 <span class="tag Paper">Paper</span></td><td>New pre-registered rules for the KSSL test (A1–A4, 5% re-test budget).</td><td>doc 21</td></tr>
+<tr><td><code>19</code> detectability <span class="tag Paper">Paper</span></td><td>Which error types each witness can find.</td><td>paper §7.5</td></tr>
+<tr><td><code>20</code> amendment v3 draft <span class="tag Future">Future</span></td><td>Plan for the next test: a combined re-test policy, LUCAS confirmation.</td><td>next study</td></tr>
+<tr><td><code>21</code> KSSL verdict <span class="tag Paper">Paper</span></td><td><b>The main result:</b> A1 failed; A1-c, A2, A3 passed.</td><td>paper §7.4</td></tr>
+<tr><td><code>22</code> progress report <span class="tag Record">Record</span></td><td>Plain-language status on 2 October (source of the progress PDF).</td><td>reports/</td></tr>
+<tr><td><code>23</code> exploratory <span class="tag Paper">Paper</span></td><td>Why A1 failed: swaps vs values, ablations, pool size, unknown errors.</td><td>paper §7.5–7.7</td></tr>
+<tr><td><code>24</code>, <code>25</code> app design and data <span class="tag App">App</span></td><td>The farmer app's design and its data audit.</td><td>app/</td></tr>
+<tr><td><code>26</code> review fixes <span class="tag Paper">Paper</span></td><td>After the external review: gross errors, error mix, 5 seeds, text fixes.</td><td>paper v0.2</td></tr>
+<tr><td><code>decision_log.md</code> <span class="tag Record">Record</span></td><td>Every decision D-001 to D-025, dated, with the reason.</td><td>all docs</td></tr>
+<tr><td><code>search_log.csv</code> <span class="tag Record">Record</span></td><td>Literature-search log (the formal Scopus/WoS search must still be added).</td><td>paper §2</td></tr>
+<tr><td><code>paper/draft_v0.md</code> + <code>figures/</code> <span class="tag Paper">Paper</span></td><td><b>The paper</b> and its 6 figures (file numbers are one lower than figure numbers).</td><td>reports/ PDF</td></tr>
+<tr><td><code>invention_log.md</code> <span class="tag Record">Record</span></td><td>Invention notes; on your laptop only, never on GitHub.</td><td>IP office</td></tr>
+</table>
+
+<h2>8. <code>results/</code>, <code>data/</code>, <code>models/</code></h2>
+<table>
+<tr><th style="width:36%">Path</th><th>What is in it</th><th style="width:16%">On GitHub?</th></tr>
+<tr><td><code>results/runs/&lt;date&gt;_&lt;name&gt;_&lt;commit&gt;/</code> <span class="tag Paper">Paper</span></td><td>One folder per experiment: <code>config.json</code> (settings), <code>provenance.json</code> (code version), <code>metrics_by_setting.csv</code>, <code>attribution_by_setting.csv</code>, <code>predictions.csv.gz</code> (every report's score; laptop only).</td><td>yes, except predictions</td></tr>
+<tr><td><code>results/exploratory/&lt;run&gt;/</code> <span class="tag Paper">Paper</span></td><td>Tables from the analysis scripts.</td><td>yes</td></tr>
+<tr><td><code>results/data_audit/</code> <span class="tag Paper">Paper</span></td><td>Data audit and dataset build summaries.</td><td>yes</td></tr>
+<tr><td><code>results/*.log</code>, <code>results/logs/</code> <span class="tag Record">Record</span></td><td>Screen output of the long runs.</td><td>yes</td></tr>
+<tr><td><code>results/app_audit/</code>, <code>colour_brain_report.json</code></td><td>App image audits; demo colour-model accuracy.</td><td>yes</td></tr>
+<tr><td><code>data/ossl_manifest_md5.txt</code>, <code>data/splits/</code> <span class="tag Paper">Paper</span></td><td>Fingerprints of the 3 data files; which sample is in train / calibration / test.</td><td>yes</td></tr>
+<tr><td><code>data/raw/</code>, <code>data/processed/</code> <span class="tag Paper">Paper</span></td><td>The soil data files and clean datasets (≈ 200 MB; rebuild with <code>download_ossl.py</code>; rebuild checked identical).</td><td>no</td></tr>
+<tr><td><code>data/app_raw/</code> <span class="tag App">App</span></td><td>PlantVillage, PlantDoc, EcoCrop and leaf features.</td><td>no</td></tr>
+<tr><td><code>models/</code> <span class="tag Demo">Demo</span></td><td>Demo colour models (and the leaf model once trained).</td><td>no</td></tr>
+</table>
+
+<h2>9. <code>reports/</code>, <code>demo_site/</code>, <code>templates/</code>, <code>app/</code></h2>
+<table>
+<tr><th style="width:34%">File</th><th>What it is</th></tr>
+<tr><td><code>reports/EdaphNet_Paper_Draft_v0.pdf</code></td><td>The paper (v0.2) as PDF, with all 6 figures.</td></tr>
+<tr><td><code>reports/EdaphNet_Faculty_Discussion.pdf</code></td><td>Status, problems and decisions for your guide (written before the review fixes).</td></tr>
+<tr><td><code>reports/EdaphNet_Progress_Report.pdf</code></td><td>Earlier progress report (2 October).</td></tr>
+<tr><td><code>reports/EdaphNet_Project_Summary.pdf</code></td><td>The complete project summary (companion to this PDF).</td></tr>
+<tr><td><code>demo_site/index.html</code>, <code>web.html</code> <span class="tag Demo">Demo</span></td><td>Offline presentation page (double-click); <code>web.html</code> is the version for the web link; <code>template.html</code> is its template.</td></tr>
+<tr><td><code>demo_site/live.html</code> <span class="tag Demo">Demo</span></td><td>Live demo with animations and Guided demo; needs <code>serve_demo.py</code> running.</td></tr>
+<tr><td><code>templates/*.csv</code> <span class="tag Future">Future</span></td><td>Sheets for collecting samples, photos, lab results and the secret blind-duplicate key.</td></tr>
+<tr><td><code>app/server.py</code>, <code>app/web/index.html</code> <span class="tag App">App</span></td><td>App backend and 4-tab phone page (leaf, soil, crops, report check).</td></tr>
+<tr><td><code>app/crop/</code>, <code>app/leaf/</code>, <code>app/knowledge/</code> <span class="tag App">App</span></td><td>Crop scoring (FAO EcoCrop rules), leaf model, sourced crop and disease information.</td></tr>
+</table>
+
+<h2>10. Words you will see</h2>
+<table>
+<tr><th style="width:22%">Word</th><th>Meaning</th></tr>
+<tr><td>Witness</td><td>A cheap, independent look at the same soil sample (its colour, or a spectrum) that the lab cannot corrupt.</td></tr>
+<tr><td>Swap</td><td>A report that belongs to a different sample (labels or tray positions mixed up).</td></tr>
+<tr><td>Value error</td><td>One wrong number in a report (×10 slip, unit mix-up, swapped digits, gross error).</td></tr>
+<tr><td>Batch / pool</td><td>A batch is 24 reports (one lab tray); a pool is 50 batches (about one lab-day).</td></tr>
+<tr><td>Re-test budget</td><td>The share of reports the lab can afford to re-test; we use the top 5% most suspicious.</td></tr>
+<tr><td>Baseline (B0–B7)</td><td>An existing or simple method we compare against; B5 (supervised) was usually the strongest.</td></tr>
+<tr><td>Pre-registration</td><td>Writing the pass/fail rules down and committing them <i>before</i> running the test.</td></tr>
+<tr><td>Exploratory</td><td>An analysis done after seeing results; useful for ideas, not proof.</td></tr>
+<tr><td>FDR / false alarms</td><td>The share of flagged reports that were actually fine; we aim for 10%.</td></tr>
+<tr><td>Calibration</td><td>Clean reports used to decide how unusual a score is; reusing the same samples was our mistake.</td></tr>
+<tr><td>Run folder / provenance</td><td>The saved record of one experiment, including the exact code version.</td></tr>
+</table>
+</body></html>

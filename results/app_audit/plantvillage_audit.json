@@ -1,0 +1,28 @@
+{
+ "dataset": "plantvillage",
+ "images": 54305,
+ "unreadable": 0,
+ "unreadable_examples": [],
+ "classes": 38,
+ "per_split": {
+  "all": 54305
+ },
+ "per_class_min_max": [
+  152,
+  5507
+ ],
+ "duplicates": {
+  "md5": {
+   "duplicate_groups": 21,
+   "images_in_duplicate_groups": 42,
+   "groups_spanning_splits": 0,
+   "groups_with_conflicting_classes": 0
+  },
+  "dhash": {
+   "duplicate_groups": 24,
+   "images_in_duplicate_groups": 48,
+   "groups_spanning_splits": 0,
+   "groups_with_conflicting_classes": 0
+  }
+ }
+}

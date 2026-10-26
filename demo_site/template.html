@@ -1,0 +1,313 @@
+<title>EdaphNet Report Checker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a lab notebook. A narrow reading column carries the story; the batch "workbench"
+   breaks out to full width because it is a table people operate. */
+:root {
+  --bg: #f3f5f3;        /* cool bench grey */
+  --surface: #ffffff;
+  --ink: #1c2220;
+  --muted: #59645f;
+  --line: #d6ddd9;
+  --accent: #7a5520;    /* deep ochre, the colour of a Munsell 10YR soil chip */
+  --accent-soft: #efe4d2;
+  --flag: #a8261c;
+  --flag-soft: #f6dedb;
+  --ok: #2b6a4c;
+  --ok-soft: #dcefe5;
+  --bar: #c9b28c;
+  --display: "Spectral", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141918; --surface: #1b2220; --ink: #e5ebe8; --muted: #9ba7a2; --line: #2d3633;
+  --accent: #d9a560; --accent-soft: #3a2f1f; --flag: #ff8c80; --flag-soft: #3d2120;
+  --ok: #7cc9a3; --ok-soft: #1e3329; --bar: #8a7553; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #141918; --surface: #1b2220; --ink: #e5ebe8; --muted: #9ba7a2; --line: #2d3633;
+  --accent: #d9a560; --accent-soft: #3a2f1f; --flag: #ff8c80; --flag-soft: #3d2120;
+  --ok: #7cc9a3; --ok-soft: #1e3329; --bar: #8a7553; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--body); margin: 0; padding-inline: 16px; padding-block: 24px 56px; }
+.wrap { max-width: 1060px; margin: 0 auto; display: grid; gap: 56px; }
+.prose { max-width: 680px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.1rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.1rem; font-family: var(--body); font-weight: 600; }
+p { margin: 0; }
+.eyebrow { font: 500 0.75rem/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.stack { display: grid; gap: 14px; }
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+code, .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+header { display: grid; gap: 16px; padding-top: 12px; }
+.lede { font-size: 1.12rem; max-width: 640px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 0.9rem; color: var(--muted); }
+.facts b { color: var(--ink); font-weight: 600; }
+
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.mistake { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: grid; gap: 8px; min-width: 0; }
+.mistake .ex { font-family: var(--mono); font-size: 0.85rem; background: var(--bg); padding: 8px 10px; border-radius: 4px; overflow-x: auto; }
+.mistake .ex s { color: var(--flag); }
+
+.flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; }
+.flow .step { flex: 1 1 180px; min-width: 0; border-top: 3px solid var(--accent); background: var(--surface); padding: 12px 14px; display: grid; gap: 4px; }
+.flow .step .k { font: 500 0.72rem var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.flow .arrow { align-self: center; color: var(--muted); font-size: 1.2rem; }
+@media (max-width: 640px) { .flow .arrow { display: none; } }
+
+/* workbench */
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: grid; gap: 16px; min-width: 0; }
+.controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: end; }
+.ctl { display: grid; gap: 6px; }
+.ctl > span { font: 500 0.72rem var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; flex-wrap: wrap; }
+.seg button { font: 500 0.88rem var(--body); background: transparent; color: var(--ink); border: 0; padding: 7px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--surface); }
+.seg button:focus-visible, .btn:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: 500 0.88rem var(--body); background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 7px 12px; cursor: pointer; }
+select { font: 0.9rem var(--body); padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); }
+.reveal { display: inline-flex; gap: 8px; align-items: center; font-size: 0.9rem; cursor: pointer; }
+
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th { text-align: left; font: 500 0.72rem var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+tr.retest td { background: var(--flag-soft); }
+.chip { width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--line); display: inline-block; vertical-align: middle; }
+.chip.none { background: repeating-linear-gradient(45deg, var(--bg), var(--bg) 4px, var(--line) 4px, var(--line) 5px); }
+.score { display: flex; align-items: center; gap: 8px; min-width: 120px; }
+.score .track { flex: 1; height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.score .fill { height: 100%; background: var(--bar); }
+tr.retest .score .fill { background: var(--flag); }
+.pill { display: inline-block; font: 600 0.72rem var(--mono); padding: 2px 8px; border-radius: 999px; letter-spacing: 0.04em; white-space: nowrap; }
+.pill.flag { background: var(--flag); color: var(--surface); }
+.pill.pass { background: var(--ok-soft); color: var(--ok); }
+.pill.fail { background: var(--flag-soft); color: var(--flag); }
+.pill.planted { background: var(--accent-soft); color: var(--accent); }
+.truth { display: block; font-size: 0.78rem; color: var(--ok); }
+.why { color: var(--ink); }
+.why .fix { display: block; color: var(--muted); font-size: 0.82rem; }
+.summary { display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 0.92rem; border-top: 1px solid var(--line); padding-top: 14px; }
+.summary b { font-family: var(--mono); }
+
+/* results */
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+figcaption { font-size: 0.86rem; color: var(--muted); }
+svg text { fill: var(--muted); font: 11px var(--mono); }
+svg .lbl { fill: var(--ink); }
+svg .grid { stroke: var(--line); stroke-width: 1; }
+svg .b-colour { fill: var(--bar); }
+svg .b-spec { fill: var(--accent); }
+svg .b-full { fill: var(--accent); }
+svg .b-base { fill: var(--muted); opacity: 0.55; }
+svg .ci { stroke: var(--ink); stroke-width: 1.4; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.82rem; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+
+.verdicts { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.verdicts .row { display: grid; grid-template-columns: 7rem 1fr; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--line); align-items: start; }
+.verdicts .row:last-child { border-bottom: 0; }
+.det td.gain-pos { color: var(--ok); }
+.det td.gain-neg { color: var(--flag); }
+
+.status { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.status div { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.status ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
+@media (prefers-reduced-motion: no-preference) { .score .fill { transition: width .25s ease; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Soil laboratory report verification · research prototype</p>
+    <h1>EdaphNet</h1>
+    <p class="lede">Soil test reports are sometimes wrong: a sample is swapped with another, or a number is mistyped. EdaphNet asks whether a cheap, independent look at the same soil (its colour, as a phone camera sees it) can tell a lab <em>which reports to re-test</em> and <em>what went wrong</em>.</p>
+    <div class="facts">
+      <span><b>19,746</b> real soil samples (KSSL) · <b>3,473</b> (ICRAF-ISRIC)</span>
+      <span><b>Pre-registered</b> pass/fail rules</span>
+      <span>Every number traced to a run record</span>
+    </div>
+  </header>
+
+  <section class="stack prose" aria-labelledby="h-problem">
+    <h2 id="h-problem">Two kinds of mistakes</h2>
+    <div class="two" style="max-width:none">
+      <div class="mistake"><h3>Sample swap</h3><p class="small muted">The report is real, but it belongs to a different soil. Every value looks plausible, so simple checks cannot see it.</p><div class="ex">Tray #6 → report of tray #12</div></div>
+      <div class="mistake"><h3>Wrong value</h3><p class="small muted">One number is corrupted: a decimal slip, a unit mix-up, swapped digits or columns.</p><div class="ex">N = <s>7.29</s> 0.729 %</div></div>
+    </div>
+  </section>
+
+  <section class="stack" aria-labelledby="h-how">
+    <h2 id="h-how">How it works</h2>
+    <div class="flow">
+      <div class="step"><span class="k">Input</span><b>A lab batch</b><span class="small muted">24 reports, in tray order</span></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step"><span class="k">Witness</span><b>Each sample's colour</b><span class="small muted">phone photo with a colour card; or a spectrometer</span></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step"><span class="k">Joint model</span><b>All swaps × all error types</b><span class="small muted">scored together across the whole batch</span></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step"><span class="k">Output</span><b>Re-test list with reasons</b><span class="small muted">"swapped with #12", "N looks 10× too high"</span></div>
+    </div>
+  </section>
+
+  <section class="stack" aria-labelledby="h-try" id="demo">
+    <div class="prose stack">
+      <h2 id="h-try">Try it on real soil reports</h2>
+      <p class="muted">Each batch holds 12 real KSSL test samples the model never trained on. Two mistakes are planted: one swap and one ×10 slip. Pick a witness and a re-test budget, then reveal the planted mistakes. Results were computed with the actual model; one batch is an illustration, not evidence.</p>
+    </div>
+    <div class="bench">
+      <div class="controls">
+        <div class="ctl"><span>Witness</span><div class="seg" id="witness" role="group" aria-label="Witness"></div></div>
+        <div class="ctl"><span>Batch</span><div style="display:flex;gap:6px;align-items:center"><button class="btn" id="prev" aria-label="Previous batch">‹</button><select id="batch" aria-label="Batch"></select><button class="btn" id="next" aria-label="Next batch">›</button></div></div>
+        <div class="ctl"><span>Re-test budget</span><select id="budget" aria-label="Re-test budget"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div>
+        <label class="reveal"><input type="checkbox" id="reveal"> Reveal planted mistakes</label>
+      </div>
+      <div class="tablewrap"><table id="tbl"></table></div>
+      <div class="summary" id="summary"></div>
+    </div>
+  </section>
+
+  <section class="stack" aria-labelledby="h-res">
+    <div class="prose stack">
+      <h2 id="h-res">What the experiments show</h2>
+      <p class="muted">Pre-registered test on 19,746 KSSL samples with injected errors, 5 seeds, 300 batches per setting. The rules were committed before the results existed.</p>
+    </div>
+    <div class="charts">
+      <figure><div id="c-ladder"></div><div class="legend"><span><i style="background:var(--bar)"></i>colour, good phone (ΔE 2)</span><span><i style="background:var(--accent)"></i>spectrometer</span></div><figcaption>How much each witness reveals (R², unseen locations). Colour knows carbon; a spectrometer knows more.</figcaption></figure>
+      <figure><div id="c-a1"></div><div class="legend"><span><i style="background:var(--accent)"></i>EdaphNet</span><span><i style="background:var(--muted);opacity:.55"></i>best existing method</span></div><figcaption>Share of mistakes found when re-testing the top 5% of reports. Whiskers: 95% interval of the difference.</figcaption></figure>
+    </div>
+    <div class="verdicts" id="verdicts"></div>
+    <div class="stack">
+      <h3>Which mistakes can be found <span class="muted small">(ICRAF-ISRIC, exploratory)</span></h3>
+      <div class="tablewrap"><table class="det" id="det"></table></div>
+      <p class="small muted">Share of each mistake type found within a 5% re-test budget, and the difference to the best existing method for that type.</p>
+    </div>
+  </section>
+
+  <section class="stack" aria-labelledby="h-status">
+    <h2 id="h-status">Where the project stands</h2>
+    <div class="status">
+      <div><h3>Works</h3><ul><li>Finding swapped samples, which simple checks cannot see.</li><li>Explaining mistakes: right error type 97–100% vs 24–29% for rule-based repair (spectrometer witness).</li><li>Reliable false-alarm control once calibration uses thousands of distinct verified reports.</li></ul></div>
+      <div><h3>Did not pass</h3><ul><li>With a phone-grade colour witness, re-testing finds about as many mistakes as the best existing method (pre-registered claim failed).</li><li>Single wrong values are found better by simple checks.</li></ul></div>
+      <div><h3>Next</h3><ul><li>Combine EdaphNet (swaps) with a value checker (draft plan).</li><li>Real phone photos and real lab errors from Indian soils.</li><li>Confirmation on the LUCAS dataset.</li></ul></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Data: Open Soil Spectral Library v1.2 (KSSL, ICRAF-ISRIC; CC-BY). Colour witness computed from laboratory spectra, a best-case proxy for a phone photo.</span>
+    <span id="runs"></span>
+  </footer>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+const W = DATA.witnesses, B = DATA.batches, R = DATA.results;
+const state = { w: "W1_dE2", b: 0, budget: 2, reveal: false };
+const $ = id => document.getElementById(id);
+const fmt = v => (Math.abs(v) >= 10 ? v.toFixed(1) : Math.abs(v) >= 1 ? v.toFixed(2) : v.toFixed(3)).replace(/\.?0+$/, "");
+
+function rankOf(scores) { const o = scores.map((s, i) => [s, i]).sort((a, b) => b[0] - a[0]); const r = []; o.forEach(([, i], k) => r[i] = k + 1); return r; }
+
+function buildControls() {
+  Object.entries(W).forEach(([k, label]) => {
+    const btn = document.createElement("button"); btn.type = "button"; btn.textContent = label; btn.dataset.w = k;
+    btn.setAttribute("aria-pressed", k === state.w); btn.onclick = () => { state.w = k; render(); };
+    $("witness").appendChild(btn);
+  });
+  B.forEach((b, i) => { const o = document.createElement("option"); o.value = i; o.textContent = `Batch ${b.id}`; $("batch").appendChild(o); });
+  $("batch").onchange = e => { state.b = +e.target.value; render(); };
+  $("prev").onclick = () => { state.b = (state.b + B.length - 1) % B.length; render(); };
+  $("next").onclick = () => { state.b = (state.b + 1) % B.length; render(); };
+  $("budget").onchange = e => { state.budget = +e.target.value; render(); };
+  $("reveal").onchange = e => { state.reveal = e.target.checked; render(); };
+}
+
+function planted(b) { return { [b.planted.swap[0]]: "planted swap", [b.planted.swap[1]]: "planted swap", [b.planted.value[0]]: `planted ${b.planted.value[1]} ×10` }; }
+
+function render() {
+  document.querySelectorAll("#witness button").forEach(x => x.setAttribute("aria-pressed", x.dataset.w === state.w));
+  $("batch").value = state.b;
+  const b = B[state.b], rows = b.witness[state.w], names = b.names;
+  const rank = rankOf(rows.map(r => r.score)), rankLab = rankOf(b.lab_only_score), pl = planted(b);
+  const order = rows.map((r, i) => i).sort((x, y) => rank[x] - rank[y]);
+  let h = `<thead><tr><th>Rank</th><th>#</th><th>Soil</th>${names.map(n => `<th class="num">${n} %</th>`).join("")}<th>Suspicion</th><th>Why</th><th class="num">Simple check rank</th></tr></thead><tbody>`;
+  for (const i of order) {
+    const r = rows[i], re = rank[i] <= state.budget;
+    const fixCell = r.fix ? (() => { const k = r.fix.findIndex((v, j) => Math.abs(v - b.reports[i][j]) > 1e-9); return k >= 0 ? `<span class="fix">suggest ${names[k]} = ${fmt(r.fix[k])}</span>` : ""; })() : "";
+    const why = r.score > 0.15 && r.why ? `${r.why}${fixCell}` : `<span class="muted">—</span>`;
+    const chip = state.w === "W0" ? `<span class="chip none" title="no witness"></span>` : `<span class="chip" style="background:${b.colour[i]}" title="soil colour"></span>`;
+    const vals = b.reports[i].map((v, j) => `<td class="num">${fmt(v)}${state.reveal && pl[i] && Math.abs(v - b.truth[i][j]) > 1e-9 ? `<span class="truth">true ${fmt(b.truth[i][j])}</span>` : ""}</td>`).join("");
+    h += `<tr class="${re ? "retest" : ""}"><td class="num">${rank[i]}${re ? ' <span class="pill flag">RE-TEST</span>' : ""}</td><td class="num">${i + 1}${state.reveal && pl[i] ? ` <span class="pill planted">${pl[i]}</span>` : ""}</td><td>${chip}</td>${vals}<td><div class="score"><div class="track"><div class="fill" style="width:${Math.round(r.score * 100)}%"></div></div><span class="num small">${r.score.toFixed(2)}</span></div></td><td class="why">${why}</td><td class="num">${rankLab[i]}</td></tr>`;
+  }
+  $("tbl").innerHTML = h + "</tbody>";
+  const plantedIdx = [...b.planted.swap, b.planted.value[0]];
+  const got = plantedIdx.filter(i => rank[i] <= state.budget).length, gotLab = plantedIdx.filter(i => rankLab[i] <= state.budget).length;
+  let tot = 0, totLab = 0;
+  B.forEach(bb => { const rk = rankOf(bb.witness[state.w].map(r => r.score)), rl = rankOf(bb.lab_only_score), pi = [...bb.planted.swap, bb.planted.value[0]];
+    tot += pi.filter(i => rk[i] <= state.budget).length; totLab += pi.filter(i => rl[i] <= state.budget).length; });
+  $("summary").innerHTML = `<span>This batch, planted mistakes inside the budget: EdaphNet <b>${got}/3</b> · simple check <b>${gotLab}/3</b></span><span>All ${B.length} demo batches: EdaphNet <b>${tot}/${3 * B.length}</b> · simple check <b>${totLab}/${3 * B.length}</b></span>`;
+}
+
+function svgEl(w, h, inner) { return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img">${inner}</svg>`; }
+
+function ladderChart() {
+  const L = R.ladder.kssl, props = ["OC", "N", "Ctot"], labels = { OC: "Organic C", N: "Nitrogen", Ctot: "Total C" };
+  const w = 360, h = 220, x0 = 74, x1 = w - 16, y0 = 18, bh = 16, gap = 22;
+  const sx = v => x0 + Math.max(0, v) * (x1 - x0);
+  let s = "";
+  [0, 0.25, 0.5, 0.75, 1].forEach(t => { s += `<line class="grid" x1="${sx(t)}" x2="${sx(t)}" y1="${y0 - 6}" y2="${h - 26}"/><text x="${sx(t)}" y="${h - 10}" text-anchor="middle">${t}</text>`; });
+  props.forEach((p, k) => {
+    const y = y0 + k * (2 * bh + gap);
+    s += `<text class="lbl" x="${x0 - 8}" y="${y + bh + 4}" text-anchor="end">${labels[p]}</text>`;
+    s += `<rect class="b-colour" x="${x0}" y="${y}" width="${sx(L.W1_dE2[p]) - x0}" height="${bh}"/><text x="${sx(L.W1_dE2[p]) + 4}" y="${y + 12}">${L.W1_dE2[p].toFixed(2)}</text>`;
+    s += `<rect class="b-spec" x="${x0}" y="${y + bh + 2}" width="${sx(L.W3[p]) - x0}" height="${bh}"/><text x="${sx(L.W3[p]) + 4}" y="${y + bh + 14}">${L.W3[p].toFixed(2)}</text>`;
+  });
+  $("c-ladder").innerHTML = svgEl(w, h, s);
+}
+
+function a1Chart() {
+  const rows = R.a1, lab = { W0: "None", W1_dE0: "Colour", W1_dE2: "Phone", W1_dE4: "Noisy", W3: "Spectro" };
+  const w = 360, h = 230, x0 = 34, x1 = w - 10, y0 = 14, y1 = h - 34;
+  const sy = v => y1 - v * (y1 - y0) / 0.7;
+  const slot = (x1 - x0) / rows.length, bw = slot * 0.3;
+  let s = "";
+  [0, 0.2, 0.4, 0.6].forEach(t => { s += `<line class="grid" x1="${x0}" x2="${x1}" y1="${sy(t)}" y2="${sy(t)}"/><text x="${x0 - 6}" y="${sy(t) + 4}" text-anchor="end">${t}</text>`; });
+  rows.forEach((r, k) => {
+    const cx = x0 + slot * (k + 0.5);
+    s += `<rect class="b-base" x="${cx - bw - 1}" y="${sy(r.best_recall)}" width="${bw}" height="${y1 - sy(r.best_recall)}"/>`;
+    s += `<rect class="b-full" x="${cx + 1}" y="${sy(r.full_recall)}" width="${bw}" height="${y1 - sy(r.full_recall)}"/>`;
+    const lo = sy(r.best_recall + r.ci_low), hi = sy(r.best_recall + r.ci_high), xm = cx + 1 + bw / 2;
+    s += `<line class="ci" x1="${xm}" x2="${xm}" y1="${lo}" y2="${hi}"/><line class="ci" x1="${xm - 4}" x2="${xm + 4}" y1="${lo}" y2="${lo}"/><line class="ci" x1="${xm - 4}" x2="${xm + 4}" y1="${hi}" y2="${hi}"/>`;
+    s += `<text class="lbl" x="${cx}" y="${h - 18}" text-anchor="middle">${lab[r.rung]}</text><text x="${cx}" y="${h - 4}" text-anchor="middle">${r.diff >= 0 ? "+" : ""}${r.diff.toFixed(3)}</text>`;
+  });
+  $("c-a1").innerHTML = svgEl(w, h, s);
+}
+
+function verdicts() {
+  const v = R.verdict, items = [
+    ["A1", "Re-test ranking with a phone-grade colour witness beats the best existing method by ≥ 5 points", v.A1],
+    ["A1-c", "Not worse in batches of similar soils", v["A1-c"]],
+    ["A2", "False alarms stay ≤ 12% with shift-aware calibration", v.A2],
+    ["A3", "Explains mistakes ≥ 20 points better than rule-based repair (where testable)", v.A3]];
+  $("verdicts").innerHTML = items.map(([id, txt, ok]) => `<div class="row"><span><span class="pill ${ok === true ? "pass" : "fail"}">${ok === true ? "PASSED" : "FAILED"}</span></span><span><b class="num">${id}</b> ${txt}</span></div>`).join("");
+}
+
+function detTable() {
+  const nm = { "swap": "Sample swap", "column-swap": "Two columns swapped", "decimal": "Decimal slip (×10)", "unit": "Unit mix-up", "gross": "Analytical error", "digit-transposition": "Digits transposed" };
+  const c = (o) => `<td class="num">${Math.round(o.full * 100)}%</td><td class="num ${o.gain > 0.005 ? "gain-pos" : o.gain < -0.005 ? "gain-neg" : ""}">${o.gain >= 0 ? "+" : ""}${Math.round(o.gain * 100)}</td>`;
+  $("det").innerHTML = `<thead><tr><th>Mistake</th><th class="num">No witness</th><th class="num">±</th><th class="num">Colour</th><th class="num">±</th><th class="num">Spectrometer</th><th class="num">±</th></tr></thead><tbody>` +
+    R.detectability.map(r => `<tr><td>${nm[r.family] || r.family}</td>${c(r.W0)}${c(r.W1_dE0)}${c(r.W3)}</tr>`).join("") + "</tbody>";
+}
+
+buildControls(); render(); ladderChart(); a1Chart(); verdicts(); detTable();
+$("runs").textContent = `Run records: ${R.runs.kssl} (pre-registered KSSL test) · ${R.runs.icraf} (ICRAF detectability, exploratory).`;
+</script>

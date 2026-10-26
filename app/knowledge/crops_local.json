@@ -1,0 +1,5 @@
+{
+ "_readme": "Indian-specific crop ranges that override FAO EcoCrop values. Each entry MUST name its source and page (ICAR / state agricultural university package of practices, NBSS&LUP). Empty until values are collected from those documents.",
+ "_example_format": {"name": "Wheat", "values": {"ph_opt": [6.5, 8.0], "ph_abs": [5.5, 9.0]}, "source": "<document title, publisher, year>", "page": "<page or table>"},
+ "overrides": []
+}

@@ -1,0 +1,64 @@
+{
+ "C": 0.1,
+ "temperature": 0.797,
+ "threshold": 0.5,
+ "results": [
+  {
+   "set": "PlantVillage validation (optimistic)",
+   "n": 4185,
+   "accuracy": 0.9763,
+   "macro_f1": 0.9772,
+   "crop_accuracy": 0.9952,
+   "coverage_at_threshold": 0.9924,
+   "accuracy_when_confident": 0.9803,
+   "accuracy_when_not_sure": 0.4688
+  },
+  {
+   "set": "PlantDoc cross-dataset (headline)",
+   "n": 2497,
+   "accuracy": 0.1478,
+   "macro_f1": 0.1411,
+   "crop_accuracy": 0.3676,
+   "coverage_at_threshold": 0.8334,
+   "accuracy_when_confident": 0.1586,
+   "accuracy_when_not_sure": 0.0938
+  },
+  {
+   "set": "PlantDoc without the assumed pepper mapping",
+   "n": 2429,
+   "accuracy": 0.1433,
+   "macro_f1": 0.1381,
+   "crop_accuracy": 0.3693,
+   "coverage_at_threshold": 0.8337,
+   "accuracy_when_confident": 0.1531,
+   "accuracy_when_not_sure": 0.0941
+  }
+ ],
+ "plantdoc_coverage_curve": [
+  {
+   "threshold": 0.0,
+   "coverage": 1.0,
+   "accuracy": 0.148
+  },
+  {
+   "threshold": 0.3,
+   "coverage": 0.98,
+   "accuracy": 0.149
+  },
+  {
+   "threshold": 0.5,
+   "coverage": 0.833,
+   "accuracy": 0.159
+  },
+  {
+   "threshold": 0.7,
+   "coverage": 0.606,
+   "accuracy": 0.168
+  },
+  {
+   "threshold": 0.9,
+   "coverage": 0.355,
+   "accuracy": 0.192
+  }
+ ]
+}

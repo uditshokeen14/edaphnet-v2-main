@@ -1,0 +1,18 @@
+# Amendment v2 (doc 18): primary test of A1 on KSSL Vis-NIR (never used for evaluation before).
+name: real_kssl3
+tag: kssl3
+seeds: [11, 22, 33, 44, 55]
+batch_size: 24
+n_cal_batches: 400
+n_dev_batches: 200
+n_test_batches: 300
+bh_pool_batches: 50
+rungs: [W0, W1_dE0, W1_dE2, W1_dE4, W3]
+orderings: [random, clustered]
+inject:
+  swap_batch_prob: 0.2
+  value_error_rate: 0.025
+prior:
+  rho: 0.1
+  eps: 0.05
+q: 0.10

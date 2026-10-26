@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+data/raw/
+results/runs/*/predictions.csv.gz
+# confidential; keep out of any remote until a patent professional has advised
+docs/invention_log.md
+data/preview/
+data/processed/
+models/*
+!models/*.joblib
+data/app_raw/

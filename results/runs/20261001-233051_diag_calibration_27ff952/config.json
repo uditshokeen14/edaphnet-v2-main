@@ -1,0 +1,25 @@
+{
+  "tag": "icraf8",
+  "seeds": [
+    11,
+    22
+  ],
+  "rungs": [
+    "W1_dE0",
+    "W3"
+  ],
+  "ordering": "random",
+  "batch_size": 24,
+  "n_cal_batches": 200,
+  "n_test_batches": 150,
+  "bh_pool_batches": 25,
+  "inject": {
+    "swap_batch_prob": 0.2,
+    "value_error_rate": 0.025
+  },
+  "prior": {
+    "rho": 0.1,
+    "eps": 0.05
+  },
+  "q": 0.1
+}

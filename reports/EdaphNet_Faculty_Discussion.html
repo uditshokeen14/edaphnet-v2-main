@@ -1,0 +1,275 @@
+<title>EdaphNet Status and Open Problems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~70ch) with full-width tables; problems as a numbered register, since order = priority */
+:root{
+ --bg:#f4f6f3; --paper:#ffffff; --ink:#1b2420; --mute:#56625c; --line:#d6ddd8;
+ --accent:#1f5f55; --accent-soft:#e3efec;
+ --crit:#a8322a; --crit-soft:#f8e7e5; --major:#8a5a00; --major-soft:#f6eedc; --minor:#3d5a80; --minor-soft:#e6ecf4;
+ --display:"Literata",Georgia,"Times New Roman",serif;
+ --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+ --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#121614; --paper:#1a1f1c; --ink:#e3e8e4; --mute:#9aa6a0; --line:#2f3833;
+ --accent:#7cc4b5; --accent-soft:#1f2f2b;
+ --crit:#f08a80; --crit-soft:#3a2220; --major:#e3b45a; --major-soft:#352b17; --minor:#94b3dc; --minor-soft:#1f2836; color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#121614; --paper:#1a1f1c; --ink:#e3e8e4; --mute:#9aa6a0; --line:#2f3833;
+ --accent:#7cc4b5; --accent-soft:#1f2f2b;
+ --crit:#f08a80; --crit-soft:#3a2220; --major:#e3b45a; --major-soft:#352b17; --minor:#94b3dc; --minor-soft:#1f2836; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);padding-inline:16px;padding-block:28px 48px}
+.doc{max-width:860px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:40px clamp(18px,5vw,56px)}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.25;margin:0}
+h1{font-size:2rem;font-weight:700}
+h2{font-size:1.35rem;font-weight:700;margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+h3{font-size:1.05rem;font-weight:700}
+p,li{max-width:70ch}
+p{margin:.6rem 0}
+ul,ol{margin:.5rem 0;padding-left:1.3rem}
+li{margin:.25rem 0}
+a{color:var(--accent)}
+.meta{color:var(--mute);font-size:.9rem;margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.25rem 1.2rem}
+.eyebrow{font:600 .75rem/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lead{font-size:1.06rem}
+.callout{background:var(--accent-soft);border-radius:6px;padding:14px 18px;margin:1rem 0}
+.callout p{margin:.3rem 0}
+.tbl{overflow-x:auto;margin:1rem 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--mute);font-size:.8rem;letter-spacing:.03em;text-transform:uppercase}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pos{color:var(--accent);font-weight:600}
+.note{color:var(--mute);font-size:.85rem}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:1rem 0}
+.flow div{flex:1 1 140px;min-width:0;border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:.88rem}
+.flow b{display:block;font-family:var(--display);font-size:.95rem}
+.flow .arrow{flex:0 0 auto;border:0;padding:0;align-self:center;color:var(--mute)}
+.bars{display:grid;gap:10px;margin:1rem 0}
+.bar-row{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:12px;align-items:center;font-size:.88rem}
+.bar-pair{display:grid;gap:3px}
+.bar{height:14px;border-radius:2px;position:relative}
+.bar span{position:absolute;left:calc(100% + 6px);top:-2px;font:500 .78rem var(--mono);color:var(--ink);white-space:nowrap}
+.b-ours{background:var(--accent)}
+.b-best{background:var(--line)}
+.legend{display:flex;gap:16px;font-size:.82rem;color:var(--mute)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.problem{border:1px solid var(--line);border-radius:6px;padding:16px 18px;margin:14px 0;break-inside:avoid}
+.problem header{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between}
+.problem h3 .num{font-family:var(--mono);font-weight:500;color:var(--mute);margin-right:.4rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 .72rem/1 var(--body);letter-spacing:.04em;text-transform:uppercase;padding:5px 8px;border-radius:3px}
+.crit{background:var(--crit-soft);color:var(--crit)}
+.major{background:var(--major-soft);color:var(--major)}
+.minor{background:var(--minor-soft);color:var(--minor)}
+.who{background:var(--accent-soft);color:var(--accent)}
+dl{display:grid;grid-template-columns:minmax(0,120px) minmax(0,1fr);gap:6px 14px;margin:.8rem 0 0;font-size:.93rem}
+dt{font-weight:600;color:var(--mute)}
+dd{margin:0;min-width:0}
+.qs li{margin:.55rem 0}
+.qs b{font-family:var(--display)}
+footer{margin-top:2.4rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--mute);font-size:.82rem}
+@media (max-width:520px){dl{grid-template-columns:1fr}dt{margin-top:6px}.doc{padding:24px 16px}}
+@media print{
+ :root{--bg:#fff;--paper:#fff;--ink:#111;--mute:#555;--line:#ccc;--accent:#1f5f55;--accent-soft:#e8f1ef;color-scheme:light}
+ body{padding:0;font-size:11pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}.doc{border:0;padding:0;max-width:none}
+ h2{break-after:avoid}.problem,.tbl,.bars{break-inside:avoid}
+ @page{size:A4;margin:16mm 15mm}
+}
+</style>
+
+<article class="doc">
+<div class="eyebrow">For discussion with faculty</div>
+<h1>EdaphNet: where the project stands and what it needs</h1>
+<div class="meta"><span>3 October 2026</span><span>Project folder: <code>edaphnet-v2</code></span><span>Repository: github.com/Sudeep-Sharma1/edaphnet-v2 (private)</span></div>
+
+<p class="lead">EdaphNet checks soil laboratory reports for mistakes, such as two samples swapped or a value
+entered ten times too high, by comparing each report with a cheap, independent look at the same soil (its colour
+in a phone photo). This document summarises what has been done, what the results show, the problems
+that stand between the work and a paper, and the decisions we need from you.</p>
+
+<div class="callout">
+<p><b>Short version.</b> The research part is complete as a first study, and a full paper draft exists.
+The original main claim (colour alone beats the best existing check) <b>failed</b> its pre-registered test.
+The study is still publishable as an honest analysis of <i>when a cheap check is enough</i>, likely in a
+mid-tier applied journal, after about 1–2 weeks of fixes. Its biggest weakness is that the errors
+were planted and the photo colours were calculated from lab spectra, not real phone photos. Fixing that needs
+new data, which we need your help to obtain.</p>
+</div>
+
+<h2>1. What the project does</h2>
+<div class="flow">
+ <div><b>Soil sample</b>sent to a lab; a report comes back (organic carbon, nitrogen, total carbon …)</div>
+ <div class="arrow" aria-hidden="true">→</div>
+ <div><b>Witness</b>a cheap independent observation of the same soil: its colour, or a spectrometer reading</div>
+ <div class="arrow" aria-hidden="true">→</div>
+ <div><b>Batch check</b>the whole batch of reports is checked together for swaps and a library of error types</div>
+ <div class="arrow" aria-hidden="true">→</div>
+ <div><b>Result</b>which reports to re-test (5% budget), and what probably went wrong</div>
+</div>
+
+<h2>2. Data: what is real and what is simulated</h2>
+<div class="tbl"><table>
+<tr><th>Item</th><th>Real or simulated</th><th>Details</th></tr>
+<tr><td>Soil samples and lab values</td><td><b>Real</b></td><td>23,219 samples: KSSL, USA (19,746 samples, 6,999 locations) and ICRAF-ISRIC, worldwide (3,473). Measured in real laboratories.</td></tr>
+<tr><td>Spectra</td><td><b>Real</b></td><td>Each sample's Vis-NIR spectrum from a lab instrument (Open Soil Spectral Library, CC-BY).</td></tr>
+<tr><td>Errors in reports</td><td>Simulated</td><td>Swaps, ×10 slips, digit transpositions, unit and column errors planted by our code, so we know where they are. This is standard for measuring detection.</td></tr>
+<tr><td>"Phone photo" colour</td><td>Simulated</td><td>Calculated from each sample's spectrum, plus camera-like noise. A best case: dried, ground soil in perfect light.</td></tr>
+</table></div>
+
+<h2>3. Main results</h2>
+<p>All results are the share of erroneous reports found when the top 5% of reports are re-tested. The pass/fail rules were committed before the test data were used.</p>
+
+<h3>Pre-registered test on KSSL (doc 21)</h3>
+<div class="legend"><span><i class="b-ours"></i>EdaphNet</span><span><i class="b-best"></i>Best existing method</span></div>
+<div class="bars" role="img" aria-label="Errors found: no witness 0.24 vs 0.27; colour perfect 0.42 vs 0.42; colour good phone 0.41 vs 0.40; spectrometer 0.60 vs 0.51">
+ <div class="bar-row"><span>No witness</span><div class="bar-pair"><div class="bar b-ours" style="width:calc(24% * 1.4)"><span>0.24</span></div><div class="bar b-best" style="width:calc(27% * 1.4)"><span>0.27</span></div></div></div>
+ <div class="bar-row"><span>Colour, perfect</span><div class="bar-pair"><div class="bar b-ours" style="width:calc(42% * 1.4)"><span>0.42</span></div><div class="bar b-best" style="width:calc(42% * 1.4)"><span>0.42</span></div></div></div>
+ <div class="bar-row"><span>Colour, good phone</span><div class="bar-pair"><div class="bar b-ours" style="width:calc(41% * 1.4)"><span>0.41</span></div><div class="bar b-best" style="width:calc(40% * 1.4)"><span>0.40</span></div></div></div>
+ <div class="bar-row"><span>Spectrometer</span><div class="bar-pair"><div class="bar b-ours" style="width:calc(60% * 1.4)"><span>0.60</span></div><div class="bar b-best" style="width:calc(51% * 1.4)"><span>0.51</span></div></div></div>
+</div>
+<p><b>Verdict:</b> main claim A1 <b>failed</b>: with colour the difference is +0.00 [−0.02, 0.02] (perfect) and +0.01 [−0.01, 0.04] (good phone). With a spectrometer EdaphNet wins by +0.09 [0.07, 0.11]. False-alarm control (A2) and error explanation (A3) passed.</p>
+
+<h3>What the overall number hides (exploratory, doc 23)</h3>
+<div class="tbl"><table>
+<tr><th>Finding</th><th class="n">Result</th></tr>
+<tr><td>Swapped samples found, EdaphNet minus best method (good-phone colour)</td><td class="n pos">+0.10 [+0.06, +0.14]</td></tr>
+<tr><td>Wrong values found, same comparison</td><td class="n">−0.08 [−0.12, −0.05]</td></tr>
+<tr><td>Gross analytical errors found, EdaphNet vs best method</td><td class="n">0.03 vs 0.26</td></tr>
+<tr><td>Correct error type named (spectrometer, the only settings with enough flags to test)</td><td class="n pos">97–100% vs 24–29%</td></tr>
+<tr><td>Power when false alarms are controlled one batch at a time (colour)</td><td class="n">0.19–0.25 at FDR ≈ 0.10</td></tr>
+</table></div>
+<p>In plain words: colour helps find <b>swapped samples</b> but costs some <b>wrong values</b>, so the two cancel when errors are half swaps, half wrong values (as we planted them). A spectrometer helps overall. Reusing calibration samples, a design mistake of ours that we found and corrected, silently breaks false-alarm control. That lesson is itself a finding.</p>
+
+<h2>4. Problems and what we need to do</h2>
+<p class="note">Ordered by priority. <span class="chip crit">Must fix</span> before submission · <span class="chip major">Reviewers will attack</span> reduce or answer · <span class="chip minor">Housekeeping</span> needed but routine.</p>
+
+<section class="problem">
+<header><h3><span class="num">P1</span>No real phone photos</h3><div class="chips"><span class="chip major">Reviewers will attack</span><span class="chip who">Needs faculty</span></div></header>
+<dl>
+ <dt>Problem</dt><dd>The colour of every sample was calculated from its lab spectrum, not taken from a real phone photo. Real photos (moist soil, shadows, different phones) will be worse.</dd>
+ <dt>Why not fixed</dt><dd>Public soil photo sets have soil-type labels but no lab values, and we cannot photograph the US samples. We need photos of samples whose lab values are known.</dd>
+ <dt>What to do</dt><dd><ul>
+  <li><b>Public dataset (found):</b> a Zenodo dataset (CC BY 4.0, published 22 September 2026, DOI 10.5281/zenodo.22876123) has 84 soil samples photographed with four smartphones, with laboratory organic carbon. It allows a real-photo check without new collection. Limits: organic carbon only; soil location and use of a colour card not stated on the record page. Not yet downloaded (6 GB; one phone's photos ≈1.5 GB).</li>
+  <li><b>Indian pilot:</b> 30–50 already-tested soil samples, each photographed with a phone and a colour card, following the protocol already written (doc 15). Proposed partner: the soil science laboratory of VIT's School of Agricultural Innovations and Advanced Learning (VAIAL), Vellore. About 2–4 weeks; a colour card costs roughly ₹2,000–5,000 (estimate).</li>
+ </ul></dd>
+ <dt>Need from you</dt><dd>Approval and an introduction to the VIT VAIAL soil science faculty (or another laboratory you know). A draft request email is ready.</dd>
+</dl>
+</section>
+
+<section class="problem">
+<header><h3><span class="num">P2</span>No real errors</h3><div class="chips"><span class="chip major">Reviewers will attack</span><span class="chip who">Needs faculty</span></div></header>
+<dl>
+ <dt>Problem</dt><dd>All errors were planted by our code. We do not know how often real labs swap samples or mistype values, and the overall verdict depends on that mix.</dd>
+ <dt>Why not fixed</dt><dd>With ordinary reports nobody knows which ones are wrong. Finding out needs <b>blind duplicates</b> (the same soil sent twice under different names) or a lab's records of re-tests. Real errors are rare (perhaps 1–5%), so hundreds of samples are needed.</dd>
+ <dt>What to do</dt><dd>For this paper: state it clearly as the main limitation (already in the draft). For a second paper: blind-duplicate study with a partner lab (Step 6). Also ask whether proficiency-testing schemes (e.g. WEPAL, NAPT) or a lab's correction records can be shared; we have not yet checked whether such data are obtainable.</dd>
+ <dt>Need from you</dt><dd>A lab contact and a budget decision for Step 6.</dd>
+</dl>
+</section>
+
+<section class="problem">
+<header><h3><span class="num">P3</span>Unexplained gross-error result</h3><div class="chips"><span class="chip crit">Must fix</span><span class="chip who">Student</span></div></header>
+<dl>
+ <dt>Problem</dt><dd>EdaphNet finds only 0.03 of gross analytical errors versus 0.26 for the best method. A second review also reported that three different EdaphNet variants give exactly the same value (0.034); this still has to be checked against our run records.</dd>
+ <dt>Why it matters</dt><dd>It could be a real limitation (the rule-based method uses "organic carbon ≤ total carbon", which our model cannot express) or a scoring problem. If it is a bug, other numbers may change.</dd>
+ <dt>What to do</dt><dd>Pull the gross-error cases from the saved predictions, inspect their scores, and test the explanation. About half a day. This comes first.</dd>
+</dl>
+</section>
+
+<section class="problem">
+<header><h3><span class="num">P4</span>The error mix decides the winner</h3><div class="chips"><span class="chip major">Reviewers will attack</span><span class="chip who">Student</span></div></header>
+<dl>
+ <dt>Problem</dt><dd>We planted 50% swaps and 50% wrong values. That choice is arbitrary, and with colour the overall result depends on it.</dd>
+ <dt>What to do</dt><dd>Add a figure showing which method wins as the share of swaps goes from 10% to 90%, by re-scoring the saved predictions. Labelled exploratory. This turns a weakness into a practical guide for labs: "if your errors are mostly swaps, use this".</dd>
+</dl>
+</section>
+
+<section class="problem">
+<header><h3><span class="num">P5</span>"Why such a complex model?"</h3><div class="chips"><span class="chip major">Reviewers will attack</span><span class="chip who">Student</span></div></header>
+<dl>
+ <dt>Problem</dt><dd>Some parts of the method do not help: the error library costs swaps (−0.07) and the structured swap prior has no effect. A simple swap matcher may come close on swaps alone (to be confirmed from the records).</dd>
+ <dt>What to do</dt><dd>Present the model's real advantage, <b>explanation</b> (naming the correct error type 97–100% vs 24–29%), as a main result, and report the ablations openly. Note honestly that this was measurable only with a spectrometer.</dd>
+</dl>
+</section>
+
+<section class="problem">
+<header><h3><span class="num">P6</span>Only one main dataset, and no Indian soils</h3><div class="chips"><span class="chip major">Reviewers will attack</span><span class="chip who">Student + faculty</span></div></header>
+<dl>
+ <dt>Problem</dt><dd>The deciding test used KSSL (USA, carbon-related properties only). The ICRAF test was affected by our calibration mistake. None of the tested soils is known to be Indian, although India (large public soil-testing programmes) is the motivation.</dd>
+ <dt>What to do</dt><dd>Request LUCAS (about 40,000 European samples, free on request) and run a confirmation test, pre-registered first. For Indian soils: the VIT pilot (P1), and possibly the authors of a 2025 smartphone soil-carbon study in the Indo-Gangetic Plains (data availability unknown).</dd>
+ <dt>Need from you</dt><dd>Whether the paper must include Indian data, or India as motivation is acceptable. The LUCAS request may need an institutional email or supervisor name.</dd>
+</dl>
+</section>
+
+<section class="problem">
+<header><h3><span class="num">P7</span>Weak evidence on unknown error types</h3><div class="chips"><span class="chip crit">Must fix</span><span class="chip who">Student</span></div></header>
+<dl>
+ <dt>Problem</dt><dd>The test with error types the model does not know used only one random seed, so its intervals are wide.</dd>
+ <dt>What to do</dt><dd>Rerun with 5 seeds. Mostly computer time on the laptop (about a day).</dd>
+</dl>
+</section>
+
+<section class="problem">
+<header><h3><span class="num">P8</span>Draft corrections</h3><div class="chips"><span class="chip crit">Must fix</span><span class="chip who">Student</span></div></header>
+<dl>
+ <dt>What to do</dt><dd><ul>
+  <li>Abstract: mark the swap/value numbers as exploratory.</li>
+  <li>Replace "needs thousands of distinct verified reports" with the accurate statement (calibration size relative to pool size).</li>
+  <li>State that the best existing method keeps more power with colour at every pool size.</li>
+  <li>Fix overlapping labels in Figure 4.</li>
+  <li>Add a method diagram.</li>
+ </ul></dd>
+</dl>
+</section>
+
+<section class="problem">
+<header><h3><span class="num">P9</span>Literature search, reproducibility and disclosures</h3><div class="chips"><span class="chip minor">Housekeeping</span><span class="chip who">Student + faculty</span></div></header>
+<dl>
+ <dt>What to do</dt><dd><ul>
+  <li><b>Formal search</b> in Scopus or Web of Science through the library, logged, to back the "no prior work" claim, and check every citation marked [verify].</li>
+  <li><b>Reproducibility:</b> a data-download script so a fresh copy can reproduce the results, and a frozen release with a DOI on Zenodo.</li>
+  <li><b>AI-assistance statement:</b> the code and drafts were developed with an AI assistant (Claude); journals require this to be declared.</li>
+  <li><b>Patent:</b> the repository was public for a period before being made private (dates are in the GitHub history). Discuss with the IP office before any preprint.</li>
+ </ul></dd>
+</dl>
+</section>
+
+<section class="problem">
+<header><h3><span class="num">P10</span>App layer kept separate</h3><div class="chips"><span class="chip minor">Housekeeping</span><span class="chip who">Student</span></div></header>
+<dl>
+ <dt>Status</dt><dd>A separate farmer-facing app exists: leaf-disease photo check, crop suggestions from soil and climate, soil-colour estimate and report check, with a camera page. It is not part of this paper.</dd>
+ <dt>Limits</dt><dd><ul>
+  <li>The leaf model uses standard pretrained features with a simple classifier, not a custom model; its field-photo accuracy is still being measured.</li>
+  <li>Crop rankings use FAO EcoCrop ranges and have not been checked by an agronomist.</li>
+  <li>Soil-type prediction is on hold for lack of an audited image set.</li>
+ </ul></dd>
+</dl>
+</section>
+
+<h2>5. Proposed plan</h2>
+<div class="tbl"><table>
+<tr><th>Phase</th><th>Work</th><th>Time</th></tr>
+<tr><td><b>A. Fix the paper</b></td><td>P3 gross-error check, then P7 five seeds, P8 draft corrections, P4 error-mix figure, method diagram, reproducibility script</td><td>1–2 weeks</td></tr>
+<tr><td><b>B. Faculty actions</b></td><td>Review of the reframed claim, formal literature search, LUCAS request, IP office, journal choice</td><td>in parallel</td></tr>
+<tr><td><b>C. Real-photo check</b></td><td>Zenodo 84-sample smartphone dataset (P1), and/or 30–50 Indian samples photographed at VIT VAIAL; added to this paper if done in time</td><td>1–4 weeks</td></tr>
+<tr><td><b>D. Second paper</b></td><td>Real errors through blind duplicates with a partner lab (P2), plus LUCAS confirmation</td><td>2–4 months</td></tr>
+</table></div>
+
+<h2>6. Decisions we need from you</h2>
+<ol class="qs">
+ <li><b>Submit now or add a pilot?</b> Submit with planted errors and calculated colour (limitation stated), or wait about a month to add 30–50 real photos?</li>
+ <li><b>Indian data.</b> Must the paper include Indian soils, or is India acceptable as the motivation with testing on US and global data?</li>
+ <li><b>Soil samples with lab values.</b> Can you introduce me to the VIT VAIAL soil science laboratory (or another lab) for 30–50 already-tested samples? May I download the public Zenodo dataset for a real-photo check?</li>
+ <li><b>Framing.</b> Do you agree with presenting the work as a study of when a cheap witness is enough, rather than a new-method paper?</li>
+ <li><b>Target journal.</b> Suggested: SOIL, European Journal of Soil Science, or Computers and Electronics in Agriculture.</li>
+ <li><b>Patent, authorship and AI disclosure.</b> Whether to approach the IP office before a preprint (the repository was public for a period), who will be co-authors, and the wording of the AI-assistance statement.</li>
+ <li><b>Step 6 budget and lab partner</b> for the blind-duplicate study.</li>
+</ol>
+
+<footer>
+Every number in this document comes from the project's committed documents and run records: doc 21 (pre-registered KSSL results), doc 22 (progress report), doc 23 (exploratory analyses), doc 15 (data-collection protocol), doc 24–25 (app layer). The Zenodo dataset details are from its record page (accessed 3 October 2026). Items described as "to be checked" have not yet been verified against the records. This document was prepared with the help of an AI assistant (Claude).
+</footer>
+</article>

@@ -1,0 +1,6 @@
+run dir: D:\MY DATA\Downloads\new_to_do-main\edaphnet-v2\results\runs\20261002-172716_real_kssl3_mismatch_7099ff1  status: clean
+seed=11 random    W1_dE2   Full power=0.036 fdr=0.061 | best baseline B5_supervised 0.175 (141s)
+seed=11 random    W3       Full power=0.222 fdr=0.106 | best baseline B3_marginal 0.242 (138s)
+seed=11 clustered W1_dE2   Full power=0.014 fdr=0.000 | best baseline B5_supervised 0.178 (135s)
+seed=11 clustered W3       Full power=0.180 fdr=0.058 | best baseline B3_marginal 0.223 (146s)
+done: D:\MY DATA\Downloads\new_to_do-main\edaphnet-v2\results\runs\20261002-172716_real_kssl3_mismatch_7099ff1

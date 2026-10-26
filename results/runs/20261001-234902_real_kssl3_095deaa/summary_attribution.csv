@@ -1,0 +1,11 @@
+cal_mode,ordering,lambda,swap_kind_acc,swap_partner_acc,value_kind_acc,value_op_acc,b6_op_acc
+injected,clustered,W0,,,,,0.30315789473684207
+injected,clustered,W1_dE0,,,,,0.26228969860548806
+injected,clustered,W1_dE2,,,,,0.30866524779568255
+injected,clustered,W1_dE4,,,1.0,1.0,0.2983131742399477
+injected,clustered,W3,1.0,0.9528294145941205,1.0,1.0,0.3351476400837014
+injected,random,W0,,,,,0.40327672327672326
+injected,random,W1_dE0,,,,,0.353639846743295
+injected,random,W1_dE2,1.0,1.0,1.0,1.0,0.4678787878787879
+injected,random,W1_dE4,,,,,0.19738095238095238
+injected,random,W3,1.0,0.9798854647767692,0.9935483870967742,0.9696656032139904,0.24773327621903332

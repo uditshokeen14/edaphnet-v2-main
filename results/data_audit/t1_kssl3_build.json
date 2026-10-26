@@ -1,0 +1,82 @@
+{
+  "dataset": "KSSL.SSL",
+  "property_set": [
+    "OC",
+    "N",
+    "Ctot"
+  ],
+  "max_depth": null,
+  "eligible_ids_from_audit": 94654,
+  "in_dataset": 86603,
+  "all_properties_complete": 85668,
+  "after_depth_filter": 85668,
+  "with_nonempty_spectrum": 19746,
+  "physical_screen": {
+    "percentage > 100": 0,
+    "N > 5% with OC < 20%": 0,
+    "negative value": 0,
+    "total removed": 0
+  },
+  "after_screen": 19746,
+  "zeros_set_to_half_min_positive": {
+    "OC": 0,
+    "N": 323,
+    "Ctot": 0
+  },
+  "split_seed": 20261001,
+  "split_fractions_of_groups": {
+    "train": 0.5,
+    "cal": 0.15,
+    "test": 0.35
+  },
+  "split_samples": {
+    "train": 9873,
+    "test": 6949,
+    "cal": 2924
+  },
+  "split_groups": {
+    "train": 3499,
+    "cal": 1049,
+    "test": 2451
+  },
+  "split_file_md5": "ca59256dfd81c6f8bfa75e453f0a0594",
+  "witness_dims": {
+    "W1_lab": 3,
+    "W2_bands": 10,
+    "W3_full_10nm": 216
+  },
+  "lab_summary": {
+    "L*": [
+      21.618118057274845,
+      47.622000163560145,
+      70.89156055318676
+    ],
+    "a*": [
+      1.019454850432966,
+      4.033549013590932,
+      14.209744574851353
+    ],
+    "b*": [
+      2.913798153488735,
+      13.628879213178246,
+      29.38017533646117
+    ]
+  },
+  "property_summary": {
+    "OC": [
+      0.06,
+      1.5962,
+      55.36649999999998
+    ],
+    "N": [
+      0.0005,
+      0.176365,
+      3.0998269999999994
+    ],
+    "Ctot": [
+      0.07577650000000001,
+      2.0468200000000003,
+      55.363102499999975
+    ]
+  }
+}

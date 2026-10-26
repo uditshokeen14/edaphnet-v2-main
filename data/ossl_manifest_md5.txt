@@ -1,0 +1,3 @@
+e24b94605b0061add400cf3b617f1f18 *ossl_soillab_L1_v1.2.csv.gz
+e8c640a9e7b6f15c2dec0a7d2e445716 *ossl_soilsite_L0_v1.2.csv.gz
+8543cf2265bced21e6a4aab3758207f6 *ossl_visnir_L0_v1.2.csv.gz

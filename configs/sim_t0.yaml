@@ -1,0 +1,21 @@
+# Step 3 / T0 simulation study. Evidence tag of every result: MEASURED-SYNTHETIC.
+# Exploratory stage: settings may be tuned here; none of this is the pre-registered Step-5 test.
+name: sim_t0
+seeds: [11, 22, 33]
+batch_size: 24
+n_train: 5000            # clean samples for fitting witness / population / baseline models
+n_cal_batches: 400       # per calibration mode (clean / injected) -> conformal scores
+bh_pool_batches: 50      # BH applied per pool of 50 batches (~1,200 reports, one lab-day)
+n_dev_batches: 200       # injected batches -> training data for supervised baseline B5
+n_test_batches: 300      # injected batches -> evaluation
+lambdas: [0.0, 0.5, 1.0, 2.0, 4.0]   # witness strength (0 = uninformative)
+orderings: [random, clustered]
+farm_size: 6
+homogeneity: 0.6
+inject:                  # true error process (unknown to the method)
+  swap_batch_prob: 0.2   # P(one swap event in a batch)
+  value_error_rate: 0.025
+prior:                   # what the method assumes (deliberately not equal to the truth)
+  rho: 0.1
+  eps: 0.05
+q: 0.10

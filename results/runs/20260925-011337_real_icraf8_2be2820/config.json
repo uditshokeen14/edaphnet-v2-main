@@ -1,0 +1,38 @@
+{
+  "name": "real_icraf8",
+  "tag": "icraf8",
+  "seeds": [
+    11,
+    22,
+    33
+  ],
+  "batch_size": 24,
+  "n_cal_batches": 400,
+  "n_dev_batches": 200,
+  "n_test_batches": 300,
+  "bh_pool_batches": 50,
+  "rungs": [
+    "W0",
+    "W1_dE0",
+    "W1_dE2",
+    "W1_dE4",
+    "W1_dE8",
+    "W2",
+    "W3"
+  ],
+  "orderings": [
+    "random",
+    "clustered"
+  ],
+  "inject": {
+    "swap_batch_prob": 0.2,
+    "value_error_rate": 0.025
+  },
+  "prior": {
+    "rho": 0.1,
+    "eps": 0.05
+  },
+  "q": 0.1,
+  "config_hash": "092f1a9e6eac",
+  "smoke": false
+}

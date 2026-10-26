@@ -1,0 +1,117 @@
+{
+  "dataset": "ICRAF.ISRIC",
+  "property_set": [
+    "pH",
+    "OC",
+    "clay",
+    "sand",
+    "CEC",
+    "K",
+    "Ca",
+    "Mg"
+  ],
+  "max_depth": null,
+  "eligible_ids_from_audit": 94654,
+  "in_dataset": 3840,
+  "all_properties_complete": 3473,
+  "after_depth_filter": 3473,
+  "with_nonempty_spectrum": 3473,
+  "physical_screen": {
+    "pH outside [2, 11]": 0,
+    "percentage > 100": 0,
+    "sand + clay > 100.5": 0,
+    "negative value": 0,
+    "total removed": 0
+  },
+  "after_screen": 3473,
+  "zeros_set_to_half_min_positive": {
+    "OC": 15,
+    "clay": 15,
+    "sand": 4,
+    "CEC": 2,
+    "K": 769,
+    "Ca": 464,
+    "Mg": 564
+  },
+  "split_seed": 20260924,
+  "split_fractions_of_groups": {
+    "train": 0.5,
+    "cal": 0.15,
+    "test": 0.35
+  },
+  "split_samples": {
+    "train": 1726,
+    "test": 1236,
+    "cal": 511
+  },
+  "split_groups": {
+    "train": 276,
+    "cal": 82,
+    "test": 195
+  },
+  "split_file_md5": "eebf67d1e5cba7d0120caf951b8c5c06",
+  "witness_dims": {
+    "W1_lab": 3,
+    "W2_bands": 10,
+    "W3_full_10nm": 216
+  },
+  "lab_summary": {
+    "L*": [
+      28.575766090718787,
+      49.93120067588693,
+      75.85267336868739
+    ],
+    "a*": [
+      0.910082683670157,
+      6.839673458649442,
+      22.11965989129068
+    ],
+    "b*": [
+      5.548979117851635,
+      20.07267865388176,
+      34.64602519583407
+    ]
+  },
+  "property_summary": {
+    "pH": [
+      3.7,
+      5.9,
+      9.6
+    ],
+    "OC": [
+      0.02,
+      0.48,
+      8.563999999999988
+    ],
+    "clay": [
+      0.3719999999999999,
+      30.5,
+      87.32799999999997
+    ],
+    "sand": [
+      0.8,
+      32.5,
+      97.4
+    ],
+    "CEC": [
+      0.3,
+      11.4,
+      76.83999999999988
+    ],
+    "K": [
+      0.005,
+      0.2,
+      2.6
+    ],
+    "Ca": [
+      0.05,
+      3.5,
+      62.05599999999995
+    ],
+    "Mg": [
+      0.05,
+      1.0,
+      22.7
+    ]
+  }
+}

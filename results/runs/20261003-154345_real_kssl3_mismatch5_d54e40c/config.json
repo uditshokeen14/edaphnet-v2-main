@@ -1,0 +1,36 @@
+{
+  "name": "real_kssl3_mismatch5",
+  "tag": "kssl3",
+  "seeds": [
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "batch_size": 24,
+  "n_cal_batches": 400,
+  "n_dev_batches": 200,
+  "n_test_batches": 300,
+  "bh_pool_batches": 50,
+  "rungs": [
+    "W1_dE2",
+    "W3"
+  ],
+  "orderings": [
+    "random",
+    "clustered"
+  ],
+  "inject": {
+    "swap_batch_prob": 0.2,
+    "value_error_rate": 0.025,
+    "value_error_ops": "mismatch"
+  },
+  "prior": {
+    "rho": 0.1,
+    "eps": 0.05
+  },
+  "q": 0.1,
+  "config_hash": "8763cbbd8645",
+  "smoke": false
+}

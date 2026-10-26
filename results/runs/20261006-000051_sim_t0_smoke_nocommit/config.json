@@ -1,0 +1,33 @@
+{
+  "name": "sim_t0_smoke",
+  "seeds": [
+    11
+  ],
+  "batch_size": 24,
+  "n_train": 5000,
+  "n_cal_batches": 400,
+  "bh_pool_batches": 50,
+  "n_dev_batches": 200,
+  "n_test_batches": 300,
+  "lambdas": [
+    0.0,
+    2.0
+  ],
+  "orderings": [
+    "random",
+    "clustered"
+  ],
+  "farm_size": 6,
+  "homogeneity": 0.6,
+  "inject": {
+    "swap_batch_prob": 0.2,
+    "value_error_rate": 0.025
+  },
+  "prior": {
+    "rho": 0.1,
+    "eps": 0.05
+  },
+  "q": 0.1,
+  "config_hash": "d0e3677f250b",
+  "smoke": true
+}

@@ -1,0 +1,15 @@
+{
+  "git_commit": "7050ab63fea7a7e211947786e9d8e9bcb64e9ef8",
+  "git_dirty": false,
+  "status": "clean",
+  "python": "3.14.2",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "sklearn": "1.8.0",
+    "pandas": "3.0.0",
+    "lightgbm": "4.7.0"
+  },
+  "started": "2026-09-25T00:39:07"
+}

@@ -1,0 +1,8 @@
+date,database,query_string,hits,screened,included,notes
+2026-09-23,web (targeted),see docs/10_prior_art_matrix_v1.md,,,16,informal pre-search; not part of the systematic count
+2026-10-02,IEEE Xplore,("laboratory quality control" OR "analytical report" OR "delta check") AND ("conformal" OR "outlier detection" OR "label error"),48,22,6,Screened for batch-level verification and conformal inference in automated testing
+2026-10-02,IEEE Xplore,("soil" OR "spectroscopy" OR "photograph") AND ("error detection" OR "verification" OR "quality assurance"),34,18,5,Focus on optical sensor validation and laboratory instrument QA
+2026-10-02,Scopus,TITLE-ABS-KEY(("sample swap" OR "sample mislabeling" OR "specimen mix-up") AND ("detection" OR "verification")),112,41,8,Genomics and clinical delta checks (e.g. Broman 2014; Crosscheck; WBIT)
+2026-10-02,Scopus,TITLE-ABS-KEY(("conformal prediction" OR "false discovery rate") AND ("batch" OR "multivariate outlier")),215,35,7,Conformal FDR methodology (Bates et al. 2023; Jin & Candès 2023)
+2026-10-02,Web of Science,TS=(("soil spectroscopy" OR "diffuse reflectance") AND ("prediction uncertainty" OR "anomaly detection")),89,28,6,Uncertainty-guided rejection in spectroscopy (Schmidinger et al. 2026)
+2026-10-02,Web of Science,TS=(("label error" OR "cleanlab" OR "confident learning") AND ("tabular" OR "regression")),73,30,5,Zhou et al. 2023 and modern regression label-error scoring

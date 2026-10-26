@@ -1,0 +1,14 @@
+{
+  "dataset": "kssl3",
+  "witness": "W3",
+  "seed": 11,
+  "smoke": true,
+  "best_combined": "P1_fusion_student",
+  "combined_recall_all": 0.3103,
+  "full_recall_all": 0.3448,
+  "best_baseline_recall_all": 0.1379,
+  "gain_over_full": -0.0345,
+  "gain_over_best_baseline": 0.1724,
+  "swap_retention": -0.05,
+  "value_gain_vs_full": 0.0
+}

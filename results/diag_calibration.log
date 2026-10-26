@@ -1,0 +1,31 @@
+seed=11 W1_dE0 exchangeable done (34s)
+seed=11 W1_dE0 shift        done (34s)
+seed=11 W3 exchangeable done (37s)
+seed=11 W3 shift        done (33s)
+seed=22 W1_dE0 exchangeable done (33s)
+seed=22 W1_dE0 shift        done (34s)
+seed=22 W3 exchangeable done (33s)
+seed=22 W3 shift        done (36s)
+                                   fdr  power  auprc
+rung   mode         method                          
+W1_dE0 exchangeable B0_range     0.572  0.076  0.122
+                    B2_labonly   0.629  0.113  0.166
+                    B3_marginal  0.250  0.039  0.155
+                    B4_swaponly  0.186  0.022  0.152
+                    Full         0.048  0.118  0.333
+       shift        B0_range     0.362  0.137  0.176
+                    B2_labonly   0.369  0.143  0.207
+                    B3_marginal  0.383  0.112  0.198
+                    B4_swaponly  0.402  0.069  0.187
+                    Full         0.464  0.223  0.266
+W3     exchangeable B0_range     0.000  0.080  0.159
+                    B2_labonly   0.248  0.091  0.177
+                    B3_marginal  0.198  0.201  0.421
+                    B4_swaponly  0.007  0.269  0.528
+                    Full         0.045  0.493  0.711
+       shift        B0_range     0.000  0.073  0.154
+                    B2_labonly   0.385  0.113  0.177
+                    B3_marginal  0.261  0.272  0.407
+                    B4_swaponly  0.022  0.341  0.555
+                    Full         0.000  0.396  0.692
+run: D:\MY DATA\Downloads\new_to_do-main\edaphnet-v2\results\runs\20261001-233051_diag_calibration_27ff952

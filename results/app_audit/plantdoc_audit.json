@@ -1,0 +1,34 @@
+{
+ "dataset": "plantdoc",
+ "images": 2572,
+ "unreadable": 1,
+ "unreadable_examples": [
+  {
+   "path": "PlantDoc_Examples.png",
+   "error": "tuple index out of range"
+  }
+ ],
+ "classes": 28,
+ "per_split": {
+  "test": 236,
+  "train": 2336
+ },
+ "per_class_min_max": [
+  2,
+  191
+ ],
+ "duplicates": {
+  "md5": {
+   "duplicate_groups": 12,
+   "images_in_duplicate_groups": 24,
+   "groups_spanning_splits": 11,
+   "groups_with_conflicting_classes": 9
+  },
+  "dhash": {
+   "duplicate_groups": 47,
+   "images_in_duplicate_groups": 95,
+   "groups_spanning_splits": 14,
+   "groups_with_conflicting_classes": 27
+  }
+ }
+}

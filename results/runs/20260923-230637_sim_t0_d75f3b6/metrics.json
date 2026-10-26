@@ -1,0 +1,9 @@
+{
+  "evidence_tag": "MEASURED-SYNTHETIC",
+  "unit_of_analysis": "report; BH pooled over all test reports of a setting",
+  "files": [
+    "metrics_by_setting.csv",
+    "attribution_by_setting.csv",
+    "witness_oracle_r2.json"
+  ]
+}

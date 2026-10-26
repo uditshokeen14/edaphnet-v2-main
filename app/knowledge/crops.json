@@ -1,0 +1,1006 @@
+{
+ "source": "FAO EcoCrop via OpenCLIM/ecocrop EcoCrop_DB.csv (OGL v3)",
+ "source_md5": "35106eb349e9bfa0cc65c76ca4e43bc3",
+ "crops": [
+  {
+   "name": "Rice",
+   "scientific_name": "Oryza sativa",
+   "ecoport_code": 1574,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    20.0,
+    30.0
+   ],
+   "temp_abs": [
+    10.0,
+    36.0
+   ],
+   "rain_opt": [
+    1500.0,
+    2000.0
+   ],
+   "rain_abs": [
+    1000.0,
+    4000.0
+   ],
+   "ph_opt": [
+    5.5,
+    7.0
+   ],
+   "ph_abs": [
+    4.5,
+    9.0
+   ],
+   "texture_opt": "wide",
+   "texture_abs": "wide",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "poorly (saturated >50% of year)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Wheat",
+   "scientific_name": "Triticum aestivum",
+   "ecoport_code": 2114,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    15.0,
+    23.0
+   ],
+   "temp_abs": [
+    5.0,
+    27.0
+   ],
+   "rain_opt": [
+    750.0,
+    900.0
+   ],
+   "rain_abs": [
+    300.0,
+    1600.0
+   ],
+   "ph_opt": [
+    6.0,
+    7.0
+   ],
+   "ph_abs": [
+    5.5,
+    8.5
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "heavy, medium",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Maize",
+   "scientific_name": "Zea mays",
+   "ecoport_code": 2175,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    18.0,
+    33.0
+   ],
+   "temp_abs": [
+    10.0,
+    47.0
+   ],
+   "rain_opt": [
+    600.0,
+    1200.0
+   ],
+   "rain_abs": [
+    400.0,
+    1800.0
+   ],
+   "ph_opt": [
+    5.0,
+    7.0
+   ],
+   "ph_abs": [
+    4.5,
+    8.5
+   ],
+   "texture_opt": null,
+   "texture_abs": null,
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": null,
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Sorghum (jowar)",
+   "scientific_name": "Sorghum bicolor",
+   "ecoport_code": 48747,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    22.0,
+    35.0
+   ],
+   "temp_abs": [
+    8.0,
+    40.0
+   ],
+   "rain_opt": [
+    400.0,
+    600.0
+   ],
+   "rain_abs": [
+    300.0,
+    700.0
+   ],
+   "ph_opt": [
+    5.5,
+    7.5
+   ],
+   "ph_abs": [
+    5.0,
+    8.0
+   ],
+   "texture_opt": "heavy, medium",
+   "texture_abs": "wide",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Pearl millet (bajra)",
+   "scientific_name": "Pennisetum glaucum",
+   "ecoport_code": 8418,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    25.0,
+    35.0
+   ],
+   "temp_abs": [
+    12.0,
+    40.0
+   ],
+   "rain_opt": [
+    400.0,
+    900.0
+   ],
+   "rain_abs": [
+    200.0,
+    1700.0
+   ],
+   "ph_opt": [
+    5.0,
+    6.5
+   ],
+   "ph_abs": [
+    4.5,
+    8.3
+   ],
+   "texture_opt": "medium, light",
+   "texture_abs": "medium, light",
+   "depth_opt": "deep (>>150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Finger millet (ragi)",
+   "scientific_name": "Eleusine coracana ssp. coracana",
+   "ecoport_code": 5657,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    18.0,
+    30.0
+   ],
+   "temp_abs": [
+    8.0,
+    35.0
+   ],
+   "rain_opt": [
+    500.0,
+    1100.0
+   ],
+   "rain_abs": [
+    300.0,
+    4300.0
+   ],
+   "ph_opt": [
+    6.0,
+    7.0
+   ],
+   "ph_abs": [
+    5.5,
+    8.2
+   ],
+   "texture_opt": "medium",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Chickpea (chana)",
+   "scientific_name": "Cicer arietinum",
+   "ecoport_code": 2479,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    15.0,
+    29.0
+   ],
+   "temp_abs": [
+    7.0,
+    35.0
+   ],
+   "rain_opt": [
+    600.0,
+    1000.0
+   ],
+   "rain_abs": [
+    300.0,
+    1800.0
+   ],
+   "ph_opt": [
+    6.0,
+    8.5
+   ],
+   "ph_abs": [
+    4.7,
+    9.5
+   ],
+   "texture_opt": "heavy, medium",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Pigeon pea (arhar/tur)",
+   "scientific_name": "Cajanus cajan",
+   "ecoport_code": 576,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    18.0,
+    38.0
+   ],
+   "temp_abs": [
+    10.0,
+    45.0
+   ],
+   "rain_opt": [
+    600.0,
+    1500.0
+   ],
+   "rain_abs": [
+    400.0,
+    4000.0
+   ],
+   "ph_opt": [
+    5.0,
+    7.0
+   ],
+   "ph_abs": [
+    4.5,
+    8.4
+   ],
+   "texture_opt": "medium, light",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "deep (>>150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Green gram (moong)",
+   "scientific_name": "Vigna radiata",
+   "ecoport_code": 2150,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    21.0,
+    36.0
+   ],
+   "temp_abs": [
+    8.0,
+    40.0
+   ],
+   "rain_opt": [
+    650.0,
+    900.0
+   ],
+   "rain_abs": [
+    500.0,
+    1250.0
+   ],
+   "ph_opt": [
+    5.5,
+    6.2
+   ],
+   "ph_abs": [
+    4.3,
+    8.3
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Black gram (urad)",
+   "scientific_name": "Vigna mungo",
+   "ecoport_code": 2149,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    22.0,
+    35.0
+   ],
+   "temp_abs": [
+    8.0,
+    40.0
+   ],
+   "rain_opt": [
+    650.0,
+    900.0
+   ],
+   "rain_abs": [
+    530.0,
+    2430.0
+   ],
+   "ph_opt": [
+    5.5,
+    6.5
+   ],
+   "ph_abs": [
+    4.5,
+    7.5
+   ],
+   "texture_opt": "heavy, medium",
+   "texture_abs": "heavy, medium",
+   "depth_opt": "deep (>>150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Groundnut",
+   "scientific_name": "Arachis hypogaea",
+   "ecoport_code": 2199,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    22.0,
+    32.0
+   ],
+   "temp_abs": [
+    10.0,
+    45.0
+   ],
+   "rain_opt": [
+    600.0,
+    1500.0
+   ],
+   "rain_abs": [
+    400.0,
+    4000.0
+   ],
+   "ph_opt": [
+    5.5,
+    6.5
+   ],
+   "ph_abs": [
+    4.5,
+    8.5
+   ],
+   "texture_opt": "medium",
+   "texture_abs": "heavy, medium, light, organic",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Soybean",
+   "scientific_name": "Glycine max",
+   "ecoport_code": 1150,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    20.0,
+    33.0
+   ],
+   "temp_abs": [
+    10.0,
+    38.0
+   ],
+   "rain_opt": [
+    600.0,
+    1500.0
+   ],
+   "rain_abs": [
+    450.0,
+    1800.0
+   ],
+   "ph_opt": [
+    5.5,
+    6.5
+   ],
+   "ph_abs": [
+    4.5,
+    8.4
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Mustard",
+   "scientific_name": "Brassica juncea",
+   "ecoport_code": 548,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    15.0,
+    28.0
+   ],
+   "temp_abs": [
+    7.0,
+    40.0
+   ],
+   "rain_opt": [
+    700.0,
+    2400.0
+   ],
+   "rain_abs": [
+    500.0,
+    4200.0
+   ],
+   "ph_opt": [
+    5.5,
+    6.5
+   ],
+   "ph_abs": [
+    5.0,
+    8.0
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "shallow (20-50 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Sesame (til)",
+   "scientific_name": "Sesamum indicum",
+   "ecoport_code": 1937,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    20.0,
+    30.0
+   ],
+   "temp_abs": [
+    10.0,
+    40.0
+   ],
+   "rain_opt": [
+    500.0,
+    1000.0
+   ],
+   "rain_abs": [
+    300.0,
+    1500.0
+   ],
+   "ph_opt": [
+    5.5,
+    7.5
+   ],
+   "ph_abs": [
+    4.5,
+    8.0
+   ],
+   "texture_opt": "medium",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "deep (>>150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Cotton",
+   "scientific_name": "Gossypium hirsutum",
+   "ecoport_code": 1160,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    22.0,
+    36.0
+   ],
+   "temp_abs": [
+    15.0,
+    42.0
+   ],
+   "rain_opt": [
+    750.0,
+    1200.0
+   ],
+   "rain_abs": [
+    450.0,
+    1500.0
+   ],
+   "ph_opt": [
+    6.0,
+    7.5
+   ],
+   "ph_abs": [
+    5.0,
+    9.5
+   ],
+   "texture_opt": "heavy, medium",
+   "texture_abs": "heavy, medium, light, organic",
+   "depth_opt": "deep (>>150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Sugarcane",
+   "scientific_name": "Saccharum officinarum",
+   "ecoport_code": 1884,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    24.0,
+    37.0
+   ],
+   "temp_abs": [
+    15.0,
+    41.0
+   ],
+   "rain_opt": [
+    1500.0,
+    2000.0
+   ],
+   "rain_abs": [
+    1000.0,
+    5000.0
+   ],
+   "ph_opt": [
+    5.0,
+    8.0
+   ],
+   "ph_abs": [
+    4.5,
+    9.0
+   ],
+   "texture_opt": null,
+   "texture_abs": null,
+   "depth_opt": "deep (>>150 cm)",
+   "drainage_opt": null,
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Potato",
+   "scientific_name": "Solanum tuberosum",
+   "ecoport_code": 1971,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    15.0,
+    25.0
+   ],
+   "temp_abs": [
+    7.0,
+    30.0
+   ],
+   "rain_opt": [
+    500.0,
+    800.0
+   ],
+   "rain_abs": [
+    250.0,
+    2000.0
+   ],
+   "ph_opt": [
+    5.0,
+    6.2
+   ],
+   "ph_abs": [
+    4.2,
+    8.5
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Tomato",
+   "scientific_name": "Lycopersicon esculentum",
+   "ecoport_code": 1379,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    20.0,
+    27.0
+   ],
+   "temp_abs": [
+    7.0,
+    35.0
+   ],
+   "rain_opt": [
+    600.0,
+    1300.0
+   ],
+   "rain_abs": [
+    400.0,
+    1800.0
+   ],
+   "ph_opt": [
+    5.5,
+    6.8
+   ],
+   "ph_abs": [
+    5.0,
+    7.5
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "shallow (20-50 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Onion",
+   "scientific_name": "Allium cepa",
+   "ecoport_code": 364,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    12.0,
+    25.0
+   ],
+   "temp_abs": [
+    4.0,
+    30.0
+   ],
+   "rain_opt": [
+    350.0,
+    600.0
+   ],
+   "rain_abs": [
+    300.0,
+    2800.0
+   ],
+   "ph_opt": [
+    6.0,
+    7.0
+   ],
+   "ph_abs": [
+    4.3,
+    8.3
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "wide, organic",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Chilli",
+   "scientific_name": "Capsicum annuum",
+   "ecoport_code": 618,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    17.0,
+    30.0
+   ],
+   "temp_abs": [
+    8.0,
+    35.0
+   ],
+   "rain_opt": [
+    600.0,
+    1250.0
+   ],
+   "rain_abs": [
+    500.0,
+    1700.0
+   ],
+   "ph_opt": [
+    5.5,
+    6.8
+   ],
+   "ph_abs": [
+    4.5,
+    7.0
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "medium, light",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Okra (bhindi)",
+   "scientific_name": "Abelmoschus esculentus",
+   "ecoport_code": 289,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    20.0,
+    30.0
+   ],
+   "temp_abs": [
+    12.0,
+    35.0
+   ],
+   "rain_opt": [
+    600.0,
+    1200.0
+   ],
+   "rain_abs": [
+    300.0,
+    2500.0
+   ],
+   "ph_opt": [
+    5.5,
+    7.0
+   ],
+   "ph_abs": [
+    4.5,
+    8.7
+   ],
+   "texture_opt": "heavy, medium, light, organic",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "shallow (20-50 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Banana",
+   "scientific_name": "Musa acuminata",
+   "ecoport_code": 7848,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    23.0,
+    33.0
+   ],
+   "temp_abs": [
+    12.0,
+    42.0
+   ],
+   "rain_opt": [
+    1200.0,
+    3600.0
+   ],
+   "rain_abs": [
+    650.0,
+    5000.0
+   ],
+   "ph_opt": [
+    5.5,
+    7.5
+   ],
+   "ph_abs": [
+    4.0,
+    8.4
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "deep (>>150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Mango",
+   "scientific_name": "Mangifera indica",
+   "ecoport_code": 1416,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    24.0,
+    30.0
+   ],
+   "temp_abs": [
+    8.0,
+    48.0
+   ],
+   "rain_opt": [
+    600.0,
+    1500.0
+   ],
+   "rain_abs": [
+    300.0,
+    2600.0
+   ],
+   "ph_opt": [
+    5.5,
+    7.5
+   ],
+   "ph_abs": [
+    4.3,
+    8.5
+   ],
+   "texture_opt": "medium, light",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "deep (>>150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "moderate"
+  },
+  {
+   "name": "Tea",
+   "scientific_name": "Camellia sinensis",
+   "ecoport_code": 599,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    20.0,
+    30.0
+   ],
+   "temp_abs": [
+    8.0,
+    35.0
+   ],
+   "rain_opt": [
+    1400.0,
+    2000.0
+   ],
+   "rain_abs": [
+    1000.0,
+    5000.0
+   ],
+   "ph_opt": [
+    4.5,
+    5.5
+   ],
+   "ph_abs": [
+    4.0,
+    6.0
+   ],
+   "texture_opt": "heavy, medium, light",
+   "texture_abs": "heavy, medium, light",
+   "depth_opt": "deep (>>150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  },
+  {
+   "name": "Turmeric",
+   "scientific_name": "Curcuma longa",
+   "ecoport_code": 828,
+   "units": {
+    "temp": "degC",
+    "rain": "mm/year",
+    "ph": "pH"
+   },
+   "temp_opt": [
+    20.0,
+    28.0
+   ],
+   "temp_abs": [
+    18.0,
+    32.0
+   ],
+   "rain_opt": [
+    1000.0,
+    2000.0
+   ],
+   "rain_abs": [
+    800.0,
+    3000.0
+   ],
+   "ph_opt": [
+    6.0,
+    7.0
+   ],
+   "ph_abs": [
+    5.5,
+    7.5
+   ],
+   "texture_opt": "medium, organic",
+   "texture_abs": "medium, light",
+   "depth_opt": "medium (50-150 cm)",
+   "drainage_opt": "well (dry spells)",
+   "salinity_opt": "low (<4 dS/m)",
+   "fertility_opt": "high"
+  }
+ ]
+}
