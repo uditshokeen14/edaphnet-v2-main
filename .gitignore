@@ -11,3 +11,4 @@ data/processed/
 models/*
 !models/*.joblib
 data/app_raw/
+~$*

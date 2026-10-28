@@ -47,23 +47,61 @@ SOIL_BOX = [150, 230, 490, 420]
 class Engine:
     def __init__(self):
         import joblib
+        from edaphnet2.real_data import LatentTransform
+        from edaphnet2.space import RealSpace
+
         if not BRAIN.exists():
             raise SystemExit("models/colour_brain_kssl3.joblib missing: run  python scripts/train_colour_brain.py")
-        self.D, self.Wt, self.space = load("kssl3")
-        self.names = list(self.space.names)
         self.brain = joblib.load(BRAIN)
-        self.S = self.Wt[f"{WITNESS}__S"]
+        self.names = list(self.brain.get("names", ["OC", "N", "Ctot"]))
+
+        data_t1 = ROOT / "data" / "processed" / "t1_kssl3.npz"
+        data_wt = ROOT / "data" / "processed" / "witness_kssl3.npz"
+
+        if data_t1.exists() and data_wt.exists():
+            self.D, self.Wt, self.space = load("kssl3")
+            self.S = self.Wt[f"{WITNESS}__S"]
+            train_lab = self.D["lab"][self.D["split"] == "train"]
+            self.lab_lo, self.lab_hi = np.percentile(train_lab, 0.5, axis=0), np.percentile(train_lab, 99.5, axis=0)
+            self.Y = self.space.print_values(self.D["X"])
+            test = np.where(self.D["split"] == "test")[0]
+            rng = np.random.default_rng(2026)
+            self.batch_idx = rng.choice(test, 11, replace=False)      # fixed neighbours for the batch view
+            order = test[np.argsort(self.D["lab"][test, 0])]           # examples from dark to light soil
+            self.examples = [int(order[int(q * (len(order) - 1))]) for q in (0.04, 0.2, 0.4, 0.6, 0.8, 0.96)]
+            self.batch_Y = self.Y[self.batch_idx]
+            self.batch_mu = self.Wt[f"{WITNESS}__mu"][self.batch_idx]
+            self.batch_colours = [lab_to_hex(l) for l in self.D["lab"][self.batch_idx]]
+            self.examples_lab = self.D["lab"][self.examples]
+            self.examples_Y = self.Y[self.examples]
+        else:
+            ref_path = ROOT / "models" / "kssl3_demo_reference.joblib"
+            ref_data = joblib.load(ref_path) if ref_path.exists() else self.brain
+            tf = LatentTransform(self.names)
+            tf.mu, tf.sd = ref_data.get("tf_mu", self.brain["tf_mu"]), ref_data.get("tf_sd", self.brain["tf_sd"])
+            if "kinds" in ref_data or "kinds" in self.brain:
+                tf.kinds = ref_data.get("kinds", self.brain.get("kinds"))
+            self.space = RealSpace(tf)
+            self.S = ref_data.get("S", np.array([[0.29418977, 0.27194545, 0.28235194],
+                                                [0.27194545, 0.46263381, 0.26608215],
+                                                [0.28235194, 0.26608215, 0.33317023]]))
+            self.lab_lo = ref_data.get("lab_lo", np.array([20.49576728, 0.76249022, 2.35545518]))
+            self.lab_hi = ref_data.get("lab_hi", np.array([72.38519024, 16.22262296, 30.19602133]))
+            self.batch_Y = ref_data.get("batch_Y")
+            self.batch_mu = ref_data.get("batch_mu")
+            self.batch_colours = ref_data.get("batch_colours")
+            if self.batch_colours is None and "batch_lab" in ref_data:
+                self.batch_colours = [lab_to_hex(l) for l in ref_data["batch_lab"]]
+            self.examples_lab = ref_data.get("examples_lab")
+            self.examples_Y = ref_data.get("examples_Y")
+            self.examples = list(range(len(self.examples_lab))) if self.examples_lab is not None else []
+            self.D = None
+            self.Wt = None
+            self.Y = None
+
         self.sd = np.sqrt(np.diag(self.S))
         self.model = FixedGaussianModel(self.S)
         self.cfg = InferenceConfig(rho=0.1, eps=0.05, space=self.space)
-        self.Y = self.space.print_values(self.D["X"])
-        train_lab = self.D["lab"][self.D["split"] == "train"]
-        self.lab_lo, self.lab_hi = np.percentile(train_lab, 0.5, axis=0), np.percentile(train_lab, 99.5, axis=0)
-        test = np.where(self.D["split"] == "test")[0]
-        rng = np.random.default_rng(2026)
-        self.batch_idx = rng.choice(test, 11, replace=False)      # fixed neighbours for the batch view
-        order = test[np.argsort(self.D["lab"][test, 0])]           # examples from dark to light soil
-        self.examples = [int(order[int(q * (len(order) - 1))]) for q in (0.04, 0.2, 0.4, 0.6, 0.8, 0.96)]
 
     # ---------------- simulated photo of one real soil sample
     def photo(self, i, seed):
@@ -75,7 +113,8 @@ class Engine:
             x, y = int(x), int(y)
             lin[y - half:y + half, x - half:x + half] = ref[k]
         x0, y0, x1, y1 = SOIL_BOX
-        soil = lab_to_lin(self.D["lab"][i])
+        soil_lab = self.D["lab"][i] if (self.D is not None and "lab" in self.D) else self.examples_lab[i]
+        soil = lab_to_lin(soil_lab)
         grain = np.exp(rng.normal(0, 0.10, (y1 - y0, x1 - x0, 1)))   # granular texture
         lin[y0:y1, x0:x1] = soil * grain
         cast = np.diag(rng.uniform(0.92, 1.08, 3))                     # lighting colour cast
@@ -85,10 +124,12 @@ class Engine:
 
     def example_list(self):
         out = []
-        for n, i in enumerate(self.examples):
-            out.append({"id": n, "label": f"Soil {chr(65 + n)}", "png": png_b64(self.photo(i, 100 + n)),
+        for n in range(len(self.examples)):
+            rep_vals = self.Y[self.examples[n]] if self.Y is not None else self.examples_Y[n]
+            idx_for_photo = self.examples[n] if self.D is not None else n
+            out.append({"id": n, "label": f"Soil {chr(65 + n)}", "png": png_b64(self.photo(idx_for_photo, 100 + n)),
                         "corners": CHART, "soil_box": SOIL_BOX,
-                        "report": {k: float(v) for k, v in zip(self.names, self.Y[i])}})
+                        "report": {k: float(v) for k, v in zip(self.names, rep_vals)}})
         return {"names": self.names, "units": {"OC": "%", "N": "%", "Ctot": "%"}, "examples": out,
                 "witness": WITNESS}
 
@@ -169,9 +210,9 @@ class Engine:
                               "status": "consistent" if a < 1.645 else ("unusual" if a < 2.576 else "suspicious")})
 
         # 4 batch check: this report at position 12 among 11 real reports
-        R = np.vstack([self.Y[self.batch_idx], self.space.print_values(rep[None, :])])
-        MU = np.vstack([self.Wt[f"{WITNESS}__mu"][self.batch_idx], mu[None, :]])
-        colours = [lab_to_hex(l) for l in self.D["lab"][self.batch_idx]] + [lab_to_hex(lab)]
+        R = np.vstack([self.batch_Y, self.space.print_values(rep[None, :])])
+        MU = np.vstack([self.batch_mu, mu[None, :]])
+        colours = list(self.batch_colours) + [lab_to_hex(lab)]
         out = infer_batch(R, MU, self.model, self.cfg)
         rank = np.empty(len(R), int)
         rank[np.argsort(-out["score"])] = np.arange(1, len(R) + 1)

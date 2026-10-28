@@ -1,0 +1,133 @@
+flowchart TD
+%% ============================================================================
+%% EDAPHNET v2: COMPLETE SYSTEM WORKFLOW & DATA FLOW DIAGRAM
+%% ============================================================================
+
+    subgraph User_Entry["1. User Trigger & Client-Side Preprocessing"]
+        User(["👤 User Action: Farmer / Lab Tech"])
+        Select_Action{"Select Workflow Tab"}
+        User --> Select_Action
+
+        Select_Action -->|Tab 1: Leaf Photo| In_Leaf["Capture / Select Leaf Image"]
+        Select_Action -->|Tab 2: Soil Photo| In_Soil["Capture / Select Soil Image (Card Optional)"]
+        Select_Action -->|Tab 3: Crop Planning| In_Crops["Input Climate & Soil Parameters"]
+        Select_Action -->|Tab 4: Lab Report Audit| In_Report["Upload Soil Photo + Enter Lab Test Values"]
+
+        In_Leaf --> Canvas_Leaf["Canvas 2D: Resize (Max 1024px) & Compress to JPEG"]
+        In_Soil --> Canvas_Soil["Canvas 2D: Resize (Max 1024px) & Compress to JPEG"]
+        In_Report --> Canvas_Rep["Canvas 2D: Resize (Max 1024px) & Compress to JPEG"]
+    end
+
+    subgraph API_Transport["2. API Transport & Payload Validation"]
+        Canvas_Leaf -->|POST /api/leaf| V_Size1{"Payload <= 12MB?"}
+        Canvas_Soil -->|POST /api/soil| V_Size2{"Payload <= 12MB?"}
+        In_Crops -->|POST /api/crops| V_Param{"Valid Numbers?"}
+        Canvas_Rep -->|POST /api/report-check| V_Size3{"Payload <= 12MB?"}
+
+        V_Size1 -->|No| Err_413_1["Return 413: Photo Too Large"]
+        V_Size2 -->|No| Err_413_2["Return 413: Photo Too Large"]
+        V_Size3 -->|No| Err_413_3["Return 413: Photo Too Large"]
+        V_Param -->|No| Err_400_1["Return 400: Invalid Parameter Format"]
+
+        V_Size1 -->|Yes| Dec_Leaf["Base64 Decode & Pillow EXIF Transpose"]
+        V_Size2 -->|Yes| Dec_Soil["Base64 Decode & Pillow EXIF Transpose"]
+        V_Size3 -->|Yes| Dec_Rep["Base64 Decode & Pillow EXIF Transpose"]
+        V_Param -->|Yes| Route_Crop["Route to Crop Suitability Engine"]
+    end
+
+    subgraph Pipeline_Leaf["Pipeline A: Leaf Disease Classification & Abstention Triage"]
+        Dec_Leaf --> Check_Leaf_Model{"models/leaf_head.joblib Exists?"}
+        Check_Leaf_Model -->|No| Err_Missing_Leaf["Return Error: Leaf Model Missing"]
+        Check_Leaf_Model -->|Yes| Load_Leaf["Lazy Load MobileNetV3 + Logistic Head"]
+        
+        Load_Leaf --> Extr_Feat["Extract 960-d Embeddings via MobileNetV3 Backbone"]
+        Extr_Feat --> Head_Logits["StandardScaler + Logistic Regression Head"]
+        Head_Logits --> Temp_Scale["Apply Temperature Scaling (z / 0.797)"]
+        Temp_Scale --> Softmax_P["Softmax Probabilities Across 38 Classes"]
+        
+        Softmax_P --> Check_Conf{"Max Probability >= 0.50 Threshold?"}
+        Check_Conf -->|No: Low Confidence| Leaf_Abstain["Flag as 'Not Sure' (Abstention Gate)<br/>Advise Retake or Expert Consultation"]
+        Check_Conf -->|Yes: Confident| Leaf_Match["Identify Top-3 Predicted Conditions"]
+        
+        Leaf_Match --> Query_Disease[(app/knowledge/diseases.json)]
+        Query_Disease --> Leaf_Payload["Assemble Diagnosis, Etiology & Treatment URL"]
+    end
+
+    subgraph Pipeline_Soil["Pipeline B: Optical Soil Carbon & Nitrogen Estimation"]
+        Dec_Soil --> Check_Soil_Model{"models/colour_brain_kssl3.joblib Exists?"}
+        Check_Soil_Model -->|No| Err_Missing_Soil["Return Error: Soil Model Missing"]
+        Check_Soil_Model -->|Yes| Load_Soil["Lazy Load LightGBM Colour Brain"]
+
+        Load_Soil --> Check_ROI{"Soil ROI Area >= 50px?"}
+        Check_ROI -->|No| Err_ROI["Return Error: Selected Area Too Small"]
+        Check_ROI -->|Yes| Check_Card{"ColorChecker Corners Provided?"}
+
+        Check_Card -->|Yes: Card Present| Calib_Card["Sample 24 Chart Patch Medians<br/>Fit Degree-2 Root-Poly CCM Matrix"]
+        Calib_Card --> Check_DeltaE{"Chart Residual DeltaE00 <= 3.0 & No Clipping?"}
+        Check_DeltaE -->|Yes: Calibrated| Soil_Corrected["Compute True CIELAB (L*, a*, b*)<br/>Status: Calibrated & Reliable"]
+        Check_DeltaE -->|No: High Distortion| Soil_Warn_Card["Compute CIELAB + Append Lighting Warning"]
+        Check_Card -->|No: No Card| Soil_Raw["Crop Central 50% Soil Area<br/>Convert Uncorrected Linear RGB to CIELAB<br/>Status: Uncalibrated (Heuristic)"]
+
+        Soil_Corrected --> Check_Moist{"Soil L* < 30 (Very Dark)?"}
+        Soil_Warn_Card --> Check_Moist
+        Soil_Raw --> Check_Moist
+
+        Check_Moist -->|Yes| Warn_Moist["Append Warning: Dark/Moist Soil May Overestimate SOC"]
+        Check_Moist -->|No| Predict_GBDT["Pass CIELAB to LightGBM Regressors"]
+        Warn_Moist --> Predict_GBDT
+
+        Predict_GBDT --> Invert_Latent["Invert LatentTransform: Z -> Natural Scale %"]
+        Invert_Latent --> Calc_Intervals["Compute 90% Prediction Intervals (mu +/- 1.645*sd)"]
+        Calc_Intervals --> Check_Extrap{"Color Outside KSSL Range (L: 37-88)?"}
+        Check_Extrap -->|Yes| Warn_Extrap["Append Warning: Color Out of Distribution"]
+        Check_Extrap -->|No| Soil_Payload["Assemble Soil Estimates & Uncertainty"]
+        Warn_Extrap --> Soil_Payload
+    end
+
+    subgraph Pipeline_Crops["Pipeline C: Agronomic Crop Suitability Advisory"]
+        Route_Crop --> Query_Crops[(app/knowledge/crops.json)]
+        Route_Crop --> Query_Local[(app/knowledge/crops_local.json)]
+        Query_Crops & Query_Local --> Parse_EcoCrop["Load 25 Crop Limits & Validated Local Overrides"]
+
+        Parse_EcoCrop --> Check_pH_Mode{"Explicit pH Provided?"}
+        Check_pH_Mode -->|Yes: Exact pH| Single_Field["Instantiate Single Field Scenario"]
+        Check_pH_Mode -->|No: pH Unknown| Multi_Field["Generate 5 Scenarios Across pH 5.0 - 8.5<br/>(Multi-Soil Uncertainty Propagation)"]
+
+        Single_Field --> Liebig_Eval["Evaluate Trapezoidal Scores: pH, Rain, Temp, Texture<br/>Apply Liebig's Law of the Minimum: S = min(Factors)"]
+        Multi_Field --> Liebig_Eval
+
+        Liebig_Eval --> Rank_Sort["Compute Weighted Mean Score & Worst-Case Scenario<br/>Sort Crops Descending by Suitability"]
+        Rank_Sort --> Crop_Payload["Assemble Ranked Crops + Limiting Constraints"]
+    end
+
+    subgraph Pipeline_Audit["Pipeline D: Cyber-Physical Lab Report Audit & Swap Detection"]
+        Dec_Rep --> Extr_Rep_Color["Execute Pipeline B Color Extraction on Soil Photo"]
+        Extr_Rep_Color --> Comp_Z["Compute Per-Property Standardized Z-Scores:<br/>z_k = (z_reported - mu_predicted) / sigma"]
+        Comp_Z --> Classify_Marginal["Classify Marginal Consistency:<br/>|z| < 1.645: Consistent | 1.645-2.576: Unusual | > 2.576: Suspicious"]
+
+        Classify_Marginal --> Batch_Embed["Insert Report into Reference Batch of 11 Real KSSL Soils (n=12)"]
+        Batch_Embed --> Query_Wit[(data/processed/witness_kssl3.npz)]
+        Query_Wit --> Gen_Hyp["Construct Hypothesis Space:<br/>• S_tray (281 Permutations)<br/>• C (Decimal, Unit, Digit Swap, ColSwap, Gross)"]
+
+        Gen_Hyp --> Infer_Engine["Bayesian Batch Inference Engine (inference.py)<br/>Compute Likelihood Tensor ell(j, i)<br/>Evaluate Marginal Swap Posterior P(moved)<br/>Evaluate Marginal Value Posterior P(val_err)"]
+
+        Infer_Engine --> Batch_Rank["Rank Batch Reports by Error Score: 1 - P(clean)"]
+        Batch_Rank --> Check_Target_Suspect{"Target Report Ranked in Top Suspicious?"}
+        Check_Target_Suspect -->|Yes: Swap Suspect| Attrib_Swap["MAP Attribution: Identify Swapped Partner Vial"]
+        Check_Target_Suspect -->|Yes: Value Suspect| Attrib_Val["MAP Attribution: Identify Corrupted Property & Inverse Op"]
+        Check_Target_Suspect -->|No: Clean Report| Attrib_Clean["Report Validated as Physically Consistent"]
+
+        Attrib_Swap --> Calib_FDR["Pass Through Split-Conformal p-Value & BH Gate (q=0.10)"]
+        Attrib_Val --> Calib_FDR
+        Attrib_Clean --> Calib_FDR
+        Calib_FDR --> Audit_Payload["Assemble Audit Report: Rank, Explanation, Recommended Fix"]
+    end
+
+    subgraph UI_Response["3. UI Rendering & User Presentation"]
+        Leaf_Payload & Leaf_Abstain --> Render_Leaf["Update Tab 1:<br/>Disease Status Chip, Confidence Bar, Treatment Info"]
+        Soil_Payload --> Render_Soil["Update Tab 2:<br/>CIELAB Swatches, OC/N/Ctot Bars with 90% Ranges, Warnings"]
+        Crop_Payload --> Render_Crop["Update Tab 3:<br/>Suitability Score Bars, Limiting Factor Badges, Advisory Warning"]
+        Audit_Payload --> Render_Rep["Update Tab 4:<br/>Batch Rank Grid, Swap Partner Diagram, Correction Preview"]
+
+        Err_413_1 & Err_413_2 & Err_413_3 & Err_400_1 & Err_Missing_Leaf & Err_Missing_Soil & Err_ROI --> Render_Err["Render Error Banner in Current Tab"]
+    end

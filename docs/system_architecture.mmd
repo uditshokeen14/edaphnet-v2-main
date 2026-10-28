@@ -1,0 +1,158 @@
+flowchart TB
+%% ============================================================================
+%% EDAPHNET v2: COMPLETE SYSTEM ARCHITECTURE DIAGRAM
+%% ============================================================================
+
+    subgraph Client_Layer["1. User & Client Layer"]
+        direction LR
+        Farmer["👨‍🌾 Smallholder Farmer<br/>(Field Mobile Camera / Web Browser)"]
+        LabTech["🔬 Analytical Lab Technician<br/>(LIMS Batch Data Entry / QA Review)"]
+        Researcher["🎓 Researcher & Student Evaluator<br/>(Benchmark Evaluation & Viva Presentation)"]
+    end
+
+    subgraph Presentation_Layer["2. Frontend & Presentation Layer"]
+        direction TB
+        subgraph Web_UI["Farmer Field Assistant Web SPA (app/web/index.html)"]
+            direction LR
+            SPA_Leaf["Tab 1: Leaf Scanner<br/>(Camera / Upload Picker)"]
+            SPA_Soil["Tab 2: Soil Estimator<br/>(Central ROI Box)"]
+            SPA_Crop["Tab 3: Crop Advisor<br/>(pH, Climate, Texture)"]
+            SPA_Report["Tab 4: Lab Audit<br/>(Photo + Lab Form)"]
+            Canvas_Downsampler["Canvas 2D Downsampler<br/>(Max 1024px JPEG Compression)"]
+        end
+        Streamlit_Dash["Streamlit Intelligence Dashboard<br/>(streamlit_app.py)<br/>Unified 4-Module Web App"]
+        Demo_Site["Research Demo Portal<br/>(demo_site/live.html & index.html)<br/>Interactive Batch Visualizer"]
+    end
+
+    subgraph API_Layer["3. API & Communication Layer (HTTP / JSON / WebSockets)"]
+        direction TB
+        Server["Multi-Threaded HTTP Server (app/server.py)<br/>Python ThreadingHTTPServer (Port 8001)"]
+        subgraph Endpoints["REST API Endpoints"]
+            EP_Status["GET /api/status<br/>Health & Catalogue Check"]
+            EP_Leaf["POST /api/leaf<br/>Base64 Image Payload (Max 12MB)"]
+            EP_Soil["POST /api/soil<br/>Base64 Image + ROI Corners"]
+            EP_Crops["POST /api/crops<br/>pH, Rain, Temp, Texture JSON"]
+            EP_Report["POST /api/report-check<br/>Soil Photo + Lab Report JSON"]
+        end
+        Streamlit_RPC["Streamlit WebSocket Engine<br/>Tornado Runtime (Port 8501)"]
+    end
+
+    subgraph Backend_Layer["4. Backend & Business Logic Layer"]
+        direction TB
+        Decoder["Image Decoder & Validator<br/>Base64 Decode & Pillow EXIF Normalizer"]
+        Lazy_Mgr["Thread-Safe Lazy Model Loader<br/>(Lazy Loader with Error Caching)"]
+        Crop_Engine["Crop Suitability Engine (app/crop/suitability.py)<br/>Liebig's Law of the Minimum<br/>Multi-Soil pH Range Scenario Averager"]
+        Demo_Engine["Interactive Demo Engine (scripts/serve_demo.py)<br/>Batch Synthesizer & Consistency Z-Scorer"]
+    end
+
+    subgraph Auth_Layer["5. Authentication & Authorization Layer"]
+        Auth_Status["🔓 Open Access / Unauthenticated<br/>(Designed for field farmers & offline research)"]
+    end
+
+    subgraph AIML_Layer["6. AI / ML & Scientific Processing Layer"]
+        direction TB
+        subgraph Sub_CV["1. Optical Witness & Computer Vision Engine"]
+            Phone_CV["Physical Colorimetry (src/edaphnet2/phone.py)<br/>• 24-Patch ColorChecker Grid Interpolation<br/>• Root-Polynomial Degree-2 CCM Fitting<br/>• CIE DeltaE00 Calibration Residual<br/>• Laplacian Blur & Pixel Clipping Checks"]
+            Spec_CV["Spectral Witness Engine (src/edaphnet2/real_data.py)<br/>• CIE 1931 2° / D65 Spectral Integration<br/>• Reflectance to CIELAB (L*, a*, b*)<br/>• Vis-NIR W3 SVD/PCA-30 Embedding"]
+        end
+
+        subgraph Sub_Predictors["2. Machine Learning Predictors"]
+            Leaf_Net["Leaf Disease Classifier (app/leaf/model.py)<br/>• Backbone: Frozen MobileNetV3-Large (960-d)<br/>• Head: StandardScaler + LogisticRegression (C=0.1)<br/>• Post-Hoc NLL Temperature Scaling (T=0.797)<br/>• Abstention Gate: Threshold tau = 0.50"]
+            Soil_Brain["Soil Property Witness Brain (models/colour_brain_*.joblib)<br/>• Multi-Output LightGBM Regressors<br/>• Phone Noise Data Augmentation (dE=2)<br/>• LatentTransform (Log, Logit, Standardization)"]
+            Ladder_Models["Witness Ladder Regressors (scripts/fit_witness_ladder.py)<br/>• 5 Rungs: W0, W1(dE 0,2,4,8), W2, W3<br/>• 5-Fold GroupKFold OOF Residual Covariance S"]
+        end
+
+        subgraph Sub_QA["3. Cyber-Physical Batch QA Engine"]
+            Bayes_Engine["Bayesian Inference Engine (src/edaphnet2/inference.py)<br/>• Exact Batch MAP Log-Likelihood ell(j, i)<br/>• Marginal Swap Posterior P(moved)<br/>• Marginal Value Posterior P(val_err)"]
+            Perm_Space["Structured Permutation Subgroup S_tray (src/edaphnet2/swaps.py)<br/>• 281 Hypotheses (n=24): S0(Id), S1(Adj), S2(Shift), S3(Pair)"]
+            Corrupt_Lib["Typed Corruption Library C (src/edaphnet2/operators.py)<br/>• Decimal (x10, /10), Unit, Transposition, ColSwap, Gross"]
+            Conformal_Eval["Conformal Calibration & FDR Control (src/edaphnet2/conformal.py)<br/>• De-duplicated Split-Conformal Calibration<br/>• Benjamini-Hochberg FDR Control (q=0.10)<br/>• Covariate Shift Density-Ratio Weighting"]
+            Hybrid_Policy["Combined Re-Test Policy (src/edaphnet2/combined_policy.py)<br/>• P1: Reciprocal Rank Fusion<br/>• P2: 50/50 Swap/Value Budget Split"]
+        end
+    end
+
+    subgraph Storage_Layer["7. Database & Storage Layer (File-Based & In-Memory)"]
+        direction TB
+        subgraph Artifacts["Model Artifacts (models/)"]
+            M_Leaf["leaf_head.joblib (183.8 KB)"]
+            M_KSSL["colour_brain_kssl3.joblib (1.32 MB)"]
+            M_ICRAF["colour_brain_icraf8.joblib (3.47 MB)"]
+        end
+        subgraph Processed_Data["Processed NumPy Archives (data/processed/)"]
+            D_T1["t1_kssl3.npz (18.4 MB)<br/>t1_icraf8.npz (3.3 MB)"]
+            D_Wit["witness_kssl3.npz (10.0 MB)<br/>witness_icraf8.npz (2.6 MB)"]
+        end
+        subgraph Knowledge_Data["Agronomic Knowledge Bases (app/knowledge/)"]
+            K_Crops["crops.json (25 FAO EcoCrop Profiles)<br/>crops_local.json (ICAR Overrides)"]
+            K_Dis["diseases.json (26 Disease Etiologies)<br/>class_map.json (28 Mapped Classes)"]
+        end
+        subgraph Raw_Data["Raw Datasets (data/raw/, app_raw/)"]
+            R_OSSL["OSSL v1.2 Raw Spectra<br/>(19,746 KSSL + 3,473 ICRAF)"]
+            R_Leaf["PlantVillage (20,924 Images)<br/>PlantDoc (2,497 In-Field Images)"]
+        end
+    end
+
+    subgraph External_Layer["8. External Services & Third-Party Integrations"]
+        PyTorch_Zoo["PyTorch CDN / TorchVision Model Zoo<br/>MobileNetV3-Large Weights (IMAGENET1K_V2)"]
+        GCP_OSSL["Google Cloud Storage (soilspec4gg-public)<br/>OSSL v1.2 Soil Spectra & Lab Data"]
+        Human_Escalation["Certified Soil Testing Labs & Extension Officers<br/>(Human-in-the-Loop Escalation)"]
+    end
+
+    subgraph Infra_Layer["9. Deployment & Infrastructure Layer"]
+        Local_Host["Local Workstation / Field Laptop<br/>Windows 11 / Python 3.13-3.14<br/>CPU-Only Standard Library HTTP Runtime"]
+        Cloud_Deploy["Cloud Deployment<br/>Dockerfile (Python 3.11-slim)<br/>Render PaaS / Streamlit Community Cloud"]
+    end
+
+    %% Client Interactions
+    Farmer -->|Mobile Camera / Web| Web_UI
+    LabTech -->|Batch Reports / QA| Web_UI
+    LabTech -->|Streamlit Dashboard| Streamlit_Dash
+    Researcher -->|Offline Presentation| Demo_Site
+
+    %% Presentation to API
+    Canvas_Downsampler -->|POST JSON Base64| EP_Leaf
+    Canvas_Downsampler -->|POST JSON Base64| EP_Soil
+    SPA_Crop -->|POST Climate JSON| EP_Crops
+    SPA_Report -->|POST Report JSON| EP_Report
+    Web_UI -->|GET Poll Status| EP_Status
+    Streamlit_Dash -->|Internal RPC / WebSockets| Streamlit_RPC
+
+    %% API to Backend
+    EP_Leaf -->|Route Request| Decoder
+    EP_Soil -->|Route Request| Decoder
+    EP_Report -->|Route Request| Decoder
+    EP_Crops -->|Route Parameters| Crop_Engine
+    Decoder -->|Manage Models| Lazy_Mgr
+    Streamlit_RPC -->|Direct In-Process Calls| Backend_Layer
+
+    %% Backend to AI/ML
+    Lazy_Mgr -->|Invoke Classifier| Leaf_Net
+    Lazy_Mgr -->|Invoke Soil Regressor| Demo_Engine
+    Demo_Engine -->|Extract Color| Phone_CV
+    Demo_Engine -->|Predict Properties| Soil_Brain
+    Demo_Engine -->|Run Batch QA| Bayes_Engine
+
+    %% AI/ML Interactions
+    Bayes_Engine -->|Enumerate Permutations| Perm_Space
+    Bayes_Engine -->|Evaluate Corruptions| Corrupt_Lib
+    Bayes_Engine -->|Calibrate Anomaly Scores| Conformal_Eval
+    Bayes_Engine -->|Apply Combined Policy| Hybrid_Policy
+
+    %% AI/ML to Storage
+    Leaf_Net -.->|Loads Weights| M_Leaf
+    Soil_Brain -.->|Loads Regressors| M_KSSL
+    Soil_Brain -.->|Loads Regressors| M_ICRAF
+    Crop_Engine -.->|Queries Agronomic Rules| K_Crops
+    Leaf_Net -.->|Queries Disease Advice| K_Dis
+    Bayes_Engine -.->|Reads Covariance S| D_Wit
+    Ladder_Models -.->|Reads Datasets| D_T1
+
+    %% External Connections
+    PyTorch_Zoo -.->|One-time Pretrained Download| Leaf_Net
+    GCP_OSSL -.->|Offline Ingestion| R_OSSL
+    Leaf_Net -->|Low Confidence / Abstention| Human_Escalation
+    Bayes_Engine -->|Flagged Swap / Error Alert| Human_Escalation
+
+    %% Infra Mapping
+    Server -.->|Hosted on| Local_Host
+    Server -.->|Packaged by| Cloud_Deploy

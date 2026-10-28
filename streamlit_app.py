@@ -122,8 +122,17 @@ def get_disease_knowledge():
 
 # ------------------------------------------------------------------ Sidebar
 with st.sidebar:
-    st.image("https://raw.githubusercontent.com/google/material-design-icons/master/png/image/eco/materialicons/48dp/2x/baseline_eco_black_48dp.png", width=50)
-    st.markdown("### 🌱 EdaphNet v2")
+    st.markdown("""
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <div style="background: linear-gradient(135deg, #16a34a, #15803d); width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);">
+                🌱
+            </div>
+            <div>
+                <h3 style="margin: 0; padding: 0; font-size: 1.35rem; font-weight: 700; color: #166534; line-height: 1.2;">EdaphNet v2</h3>
+                <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">Agritech & Soil Intelligence</span>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
     st.markdown("**Dual-Witness Soil & Agritech Intelligence**")
     st.markdown("---")
 
@@ -138,9 +147,13 @@ with st.sidebar:
     with col2:
         st.metric("FAO Crops", len(crops_d) if crops_d else "N/A")
 
-    st.caption("✅ MobileNetV3 + Logistic Calibration")
-    st.caption("✅ KSSL Vis-NIR Colour Brain")
-    st.caption("✅ FAO EcoCrop Suitability Engine")
+    leaf_st = "✅" if leaf_m else "❌"
+    soil_st = "✅" if soil_e else "❌"
+    crop_st = "✅" if crops_d else "❌"
+
+    st.caption(f"{leaf_st} MobileNetV3 + Logistic Calibration")
+    st.caption(f"{soil_st} KSSL Vis-NIR Colour Brain")
+    st.caption(f"{crop_st} FAO EcoCrop Suitability Engine")
 
     st.markdown("---")
     st.markdown("#### About")

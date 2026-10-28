@@ -55,10 +55,31 @@ def main():
             for de in (0.0, 2.0, 4.0):
                 pred = m.predict(noisy(lab[te], de, rng))
                 res[n][f"r2_test_dE{de:g}"] = float(1 - np.mean((Z[te, k] - pred) ** 2) / np.var(Z[te, k]))
-        joblib.dump({"models": models, "names": names, "tf_mu": tf.mu, "tf_sd": tf.sd,
-                     "kinds": tf.kinds, "train_dE": TRAIN_DE, "seed": SEED,
-                     "features": ["L*", "a*", "b*"], "source": f"t1_{tag} train split"},
-                    ROOT / "models" / f"colour_brain_{tag}.joblib")
+        meta = {"models": models, "names": names, "tf_mu": tf.mu, "tf_sd": tf.sd,
+                "kinds": tf.kinds, "train_dE": TRAIN_DE, "seed": SEED,
+                "features": ["L*", "a*", "b*"], "source": f"t1_{tag} train split"}
+        wt_path = ROOT / "data" / "processed" / f"witness_{tag}.npz"
+        if wt_path.exists():
+            Wt = np.load(wt_path, allow_pickle=True)
+            if "W1_dE2__S" in Wt:
+                meta["S"] = Wt["W1_dE2__S"]
+            lab_tr = lab[tr]
+            meta["lab_lo"] = np.percentile(lab_tr, 0.5, axis=0)
+            meta["lab_hi"] = np.percentile(lab_tr, 99.5, axis=0)
+            test_idx = np.where(te)[0]
+            rng_demo = np.random.default_rng(2026)
+            b_idx = rng_demo.choice(test_idx, min(11, len(test_idx)), replace=False)
+            order = test_idx[np.argsort(lab[test_idx, 0])]
+            ex_idx = [int(order[int(q * (len(order) - 1))]) for q in (0.04, 0.2, 0.4, 0.6, 0.8, 0.96)]
+            from edaphnet2.space import RealSpace
+            sp = RealSpace(tf)
+            Y_all = sp.print_values(X)
+            meta["batch_Y"] = Y_all[b_idx]
+            meta["batch_mu"] = Wt["W1_dE2__mu"][b_idx] if "W1_dE2__mu" in Wt else None
+            meta["batch_lab"] = lab[b_idx]
+            meta["examples_Y"] = Y_all[ex_idx]
+            meta["examples_lab"] = lab[ex_idx]
+        joblib.dump(meta, ROOT / "models" / f"colour_brain_{tag}.joblib")
         report[tag] = res
         print(tag, json.dumps({n: {k: round(v, 3) for k, v in r.items()} for n, r in res.items()}, indent=1))
     (ROOT / "results" / "colour_brain_report.json").write_text(json.dumps(report, indent=2))
